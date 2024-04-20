@@ -7,7 +7,7 @@ use App\Http\Requests\FileUploadRequest;
 use App\Http\Resources\FileUploadResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Tightenco\Ziggy\Ziggy;
+use Tighten\Ziggy\Ziggy;
 
 class DashboardController extends BaseController
 {
@@ -16,8 +16,6 @@ class DashboardController extends BaseController
     public function __construct(DashboardActions $dashboardActions)
     {
         parent::__construct();
-
-        $this->middleware('auth');
 
         $this->dashboardActions = $dashboardActions;
     }

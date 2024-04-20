@@ -18,7 +18,6 @@ class CompanyController extends BaseController
     {
         parent::__construct();
 
-        $this->middleware('auth');
         $this->companyActions = $companyActions;
     }
 

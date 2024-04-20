@@ -18,7 +18,6 @@ class UserController extends BaseController
     {
         parent::__construct();
 
-        $this->middleware('auth');
         $this->userActions = $userActions;
     }
 

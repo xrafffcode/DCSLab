@@ -17,7 +17,6 @@ class BranchController extends BaseController
     {
         parent::__construct();
 
-        $this->middleware('auth');
         $this->branchActions = $branchActions;
     }
 

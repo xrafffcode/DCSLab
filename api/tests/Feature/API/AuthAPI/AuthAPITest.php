@@ -27,6 +27,26 @@ class AuthAPITest extends APITestCase
         $api->assertCreated();
     }
 
+    public function test_auth_api_call_register_expect_new_record_in_database()
+    {
+        $userArr = [
+            'name' => User::factory()->make()->only('name')['name'],
+            'email' => User::factory()->make()->only('email')['email'],
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'terms' => true,
+        ];
+
+        $api = $this->json('POST', '/register', $userArr);
+
+        $api->assertCreated();
+        
+        $this->assertDatabaseHas('users', [
+            'name' => $userArr["name"],
+            'email' => $userArr['email'],
+        ]);
+    }
+
     public function test_auth_api_call_register_without_terms_expect_unsuccessful()
     {
         $userArr = [
@@ -64,5 +84,15 @@ class AuthAPITest extends APITestCase
         $api = $this->json('POST', '/logout');
 
         $api->assertNoContent();
+    }
+
+    public function test_auth_api_call_rejected_because_password_is_expired()
+    {
+        $this->markTestSkipped('Under Constructions');
+    }
+
+    public function test_auth_api_call_rejected_because_user_id_is_inactive()
+    {
+        $this->markTestSkipped('Under Constructions');
     }
 }

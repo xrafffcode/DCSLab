@@ -82,6 +82,8 @@ class BranchAPICreateTest extends APITestCase
 
         $api = $this->json('POST', route('api.post.db.company.branch.save'), $branchArr);
 
+        dd($api);
+
         $api->assertSuccessful();
         $this->assertDatabaseHas('branches', [
             'company_id' => $company->id,

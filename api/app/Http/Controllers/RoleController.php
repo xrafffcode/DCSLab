@@ -17,7 +17,6 @@ class RoleController extends BaseController
     {
         parent::__construct();
 
-        $this->middleware('auth');
         $this->roleActions = $roleActions;
     }
 
