@@ -82,15 +82,14 @@ class ProfileAPITest extends APITestCase
 
         $this->actingAs($user);
 
+        $default_user_factory_password = 'password';
         $password = 'test123';
 
         $changePasswordArr = [
-            'current_password' => $user->password,
+            'current_password' => $default_user_factory_password,
             'password' => $password,
             'password_confirmation' => $password,
         ];
-
-        $user['password'] = $password;
 
         $api = $this->json('POST', route('api.post.db.module.profile.update.password'), $changePasswordArr);
 
