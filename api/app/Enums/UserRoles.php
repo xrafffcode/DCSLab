@@ -13,6 +13,6 @@ enum UserRoles: string
     case ADMINISTRATOR = 'administrator';
 
     //region Extensions
-
+    case POS_OWNER = 'POS-owner';
     //endregion
 }
