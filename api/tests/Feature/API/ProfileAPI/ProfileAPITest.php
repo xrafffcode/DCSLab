@@ -22,7 +22,7 @@ class ProfileAPITest extends APITestCase
         $this->markTestSkipped('Test under construction');
     }
 
-    public function test_profile_api_call_update_user_expect_successful()
+    public function test_profile_api_call_update_user_profile_expect_successful()
     {
         $user = User::factory()
             ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
@@ -32,7 +32,7 @@ class ProfileAPITest extends APITestCase
 
         $userArr = User::factory()->make()->toArray();
 
-        $api = $this->json('POST', route('api.post.db.module.profile.update.user'), $userArr);
+        $api = $this->json('POST', route('api.post.db.module.profile.update.user_profile'), $userArr);
 
         $api->assertSuccessful();
 
@@ -42,7 +42,30 @@ class ProfileAPITest extends APITestCase
         ]);
     }
 
-    public function test_profile_api_call_update_profile_expect_successful()
+    public function test_profile_api_call_update_user_profile_other_than_alpha_numeric_expect_unsuccessful()
+    {
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+            ->create();
+
+        $this->actingAs($user);
+
+        $userArr = User::factory()->make()->toArray();
+
+        $userArr['name'] = 'test!?%';
+        $api = $this->json('POST', route('api.post.db.module.profile.update.user_profile'), $userArr);
+        $api->assertUnprocessable();
+
+        $userArr['name'] = 'with space';
+        $api = $this->json('POST', route('api.post.db.module.profile.update.user_profile'), $userArr);
+        $api->assertUnprocessable();
+
+        $userArr['name'] = 'with[bracket]';
+        $api = $this->json('POST', route('api.post.db.module.profile.update.user_profile'), $userArr);
+        $api->assertUnprocessable();
+    }
+
+    public function test_profile_api_call_update_personal_info_expect_successful()
     {
         $user = User::factory()
             ->has(Profile::factory())
@@ -56,7 +79,7 @@ class ProfileAPITest extends APITestCase
 
         $profileArr = Profile::factory()->make()->toArray();
 
-        $api = $this->json('POST', route('api.post.db.module.profile.update.profile'), $profileArr);
+        $api = $this->json('POST', route('api.post.db.module.profile.update.personal_info'), $profileArr);
 
         $api->assertSuccessful();
 
@@ -98,7 +121,7 @@ class ProfileAPITest extends APITestCase
         $this->assertTrue(Hash::check($password, $user->password));
     }
 
-    public function test_profile_api_call_update_settings_expect_successful()
+    public function test_profile_api_call_update_account_settings_expect_successful()
     {
         $this->markTestSkipped('Test under construction');
 
@@ -126,7 +149,7 @@ class ProfileAPITest extends APITestCase
             ],
         ];
 
-        $api = $this->json('POST', route('api.post.db.module.profile.update.setting'), $settingsArr);
+        $api = $this->json('POST', route('api.post.db.module.profile.update.account_setting'), $settingsArr);
 
         $api->assertSuccessful();
 

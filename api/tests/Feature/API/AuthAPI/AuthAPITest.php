@@ -47,6 +47,32 @@ class AuthAPITest extends APITestCase
         ]);
     }
 
+    public function test_auth_api_call_register_only_allow_name_with_alpha_numeric()
+    {
+        $userArr = [
+            'name' => 'test!?&',
+            'email' => User::factory()->make()->only('email')['email'],
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'terms' => true,
+        ];
+
+        $api = $this->json('POST', '/register', $userArr);
+        $api->assertUnprocessable();
+
+        $userArr['name'] = 'with space';
+        $api = $this->json('POST', '/register', $userArr);
+        $api->assertUnprocessable();
+
+        $userArr['name'] = 'with[bracket]';
+        $api = $this->json('POST', '/register', $userArr);
+        $api->assertUnprocessable();
+
+        $userArr['name'] = 'with[bracket]';
+        $api = $this->json('POST', '/register', $userArr);
+        $api->assertUnprocessable();
+    }
+
     public function test_auth_api_call_register_without_terms_expect_unsuccessful()
     {
         $userArr = [
