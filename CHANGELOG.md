@@ -4,6 +4,7 @@
     * Upgrade to Laravel 11
     * Upgrade to latest Midone
     * Change how we create Vue components with our structures
+    * Align migration file naming with Laravel 11
 
   * **v0.7.3 (2023-08-17)**
     * Replace Vee-Validate with Vuelidate
