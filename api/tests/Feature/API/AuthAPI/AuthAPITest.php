@@ -121,4 +121,14 @@ class AuthAPITest extends APITestCase
     {
         $this->markTestSkipped('Under Constructions');
     }
+
+    public function test_auth_api_call_api_auth_expect_token_created()
+    {
+        $this->markTestSkipped('Under Constructions');
+    }
+
+    public function test_auth_api_call_api_auth_where_token_already_created_twice_expect_unsuccesful()
+    {
+        $this->markTestSkipped('Under Constructions');
+    }
 }
