@@ -6,7 +6,7 @@ export interface ZiggyState {
 }
 
 const getDomain = () => {
-  const domain = (new URL(process.env.BACKEND_URL));
+  const domain = (new URL(import.meta.env.BACKEND_URL));
 
   if (!domain) return 'localhost';
 
@@ -14,7 +14,7 @@ const getDomain = () => {
 }
 
 const getDomainPort = () => {
-  const domain = (new URL(process.env.BACKEND_URL));
+  const domain = (new URL(import.meta.env.BACKEND_URL));
 
   if (!domain) return 8000;
 

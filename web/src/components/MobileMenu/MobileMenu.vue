@@ -65,7 +65,7 @@ onMounted(() => {
     <div class="h-[70px] px-3 sm:px-8 flex items-center">
       <a href="" class="flex mr-auto">
         <img
-          alt="Midone Tailwind HTML Admin Template"
+          alt="DCSLab"
           class="w-6"
           :src="logoUrl"
         />

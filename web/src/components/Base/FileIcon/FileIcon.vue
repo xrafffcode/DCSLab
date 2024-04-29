@@ -42,7 +42,7 @@ const { variant, type, src } = defineProps<FileIconProps>();
       >
         <img
           class="rounded-md"
-          alt="Midone Tailwind HTML Admin Template"
+          alt="DCSLab"
           :src="src"
         />
       </div>
