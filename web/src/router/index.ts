@@ -4,7 +4,7 @@ import Layout from "@/themes";
 import LoginPage from "../pages/auth/LoginPage.vue";
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: "/",
