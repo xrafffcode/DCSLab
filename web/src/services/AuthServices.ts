@@ -32,6 +32,7 @@ export default class AuthService {
 
     public useLoginForm() {
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', import.meta.env.VITE_BACKEND_URL + '/login', {
             email: '',
             password: '',
@@ -43,6 +44,7 @@ export default class AuthService {
 
     public useTwoFactorLoginForm() {
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', import.meta.env.VITE_BACKEND_URL + '/two-factor-challenge', {
             code: '',
             recovery_code: '',
@@ -53,6 +55,7 @@ export default class AuthService {
 
     public useRegisterForm() {
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', import.meta.env.VITE_BACKEND_URL + '/register', {
             name: '',
             email: '',
@@ -66,6 +69,7 @@ export default class AuthService {
 
     public useRequestResetPasswordForm() {
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', import.meta.env.VITE_BACKEND_URL + '/forgot-password', {
             email: '',
         });
@@ -75,6 +79,7 @@ export default class AuthService {
 
     public useResetPasswordForm() {
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', import.meta.env.VITE_BACKEND_URL + '/reset-password', {
             email: '',
         });

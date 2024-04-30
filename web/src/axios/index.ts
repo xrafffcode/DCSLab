@@ -11,6 +11,7 @@ const defaultAxiosInstance = axios.create({
 });
 
 defaultAxiosInstance.defaults.withCredentials = true;
+defaultAxiosInstance.defaults.withXSRFToken = true;
 
 defaultAxiosInstance.interceptors.request.use(function (config) {
     config.headers['X-Localization'] = localStorage.getItem('DCSLAB_LANG') == null ? document.documentElement.lang : localStorage.getItem('DCSLAB_LANG');
@@ -40,13 +41,6 @@ const authAxiosInstance = axios.create({
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json'
     }
-});
-
-authAxiosInstance.defaults.withCredentials = true;
-
-authAxiosInstance.interceptors.request.use(function (config) {
-    config.headers['X-Localization'] = localStorage.getItem('DCSLAB_LANG') == null ? document.documentElement.lang : localStorage.getItem('DCSLAB_LANG');
-    return config;
 });
 
 const axiosInstance = axios.create();
