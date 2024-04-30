@@ -20,7 +20,7 @@ class RedirectIfAuthenticatedJson
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return response()->json(['message' => 'Already Authenticated'], 200);
+                return response()->json(['message' => 'authenticated'], 200);
             }
         }
 

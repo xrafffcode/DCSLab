@@ -41,19 +41,19 @@ const router = createRouter({
           */
       ]
   },
-  /*
   {
       path: "/dashboard",
-      component: SideMenu,
+      component: Layout,
       children: [
           {
               path: "/dashboard/main",
               name: "side-menu-dashboard-maindashboard",
-              component: MainDashboard,
+              component: () => import("../pages/dashboard/MainDashboard.vue"),
               meta: {
                   remember: true,
               },
           },
+          /*
           {
               path: "/dashboard/profile",
               name: "side-menu-dashboard-profile",
@@ -213,8 +213,10 @@ const router = createRouter({
                   remember: false,
               },
           }
+          */
       ],
   },
+  /*
   {
       path: "/:pathMatch(.*)*",
       component: ErrorPage,
