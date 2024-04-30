@@ -24,10 +24,9 @@ class ProfilePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Profile $profile = null)
+    public function view(User $user, ?Profile $profile = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -55,10 +54,9 @@ class ProfilePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\Profile  $profile
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Profile $profile = null)
+    public function update(User $user, ?Profile $profile = null)
     {
         if ($user->roles->isEmpty()) {
             return false;

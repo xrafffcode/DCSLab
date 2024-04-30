@@ -282,7 +282,7 @@ class CompanyActions
         return $code;
     }
 
-    public function isUniqueCode(string $code, int $userId, int $exceptId = null): bool
+    public function isUniqueCode(string $code, int $userId, ?int $exceptId = null): bool
     {
         $user = User::find($userId);
 

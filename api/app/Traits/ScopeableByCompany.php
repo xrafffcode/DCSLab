@@ -8,7 +8,7 @@ use Illuminate\Support\Number;
 
 trait ScopeableByCompany
 {
-    public function scopeWhereCompanyId(Builder $query, Collection | Array | Number | null $companyId = null)
+    public function scopeWhereCompanyId(Builder $query, Collection|array|Number|null $companyId = null)
     {
         if ($companyId != null) {
             if (is_a($companyId, 'Illuminate\Support\Collection')) {

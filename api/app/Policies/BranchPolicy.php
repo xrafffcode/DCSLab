@@ -34,10 +34,9 @@ class BranchPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Branch $branch = null)
+    public function view(User $user, ?Branch $branch = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -75,10 +74,9 @@ class BranchPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Branch $branch = null)
+    public function update(User $user, ?Branch $branch = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -96,10 +94,9 @@ class BranchPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Branch $branch = null)
+    public function delete(User $user, ?Branch $branch = null)
     {
         if ($user->roles->isEmpty()) {
             return false;

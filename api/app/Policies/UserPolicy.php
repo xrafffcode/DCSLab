@@ -33,10 +33,9 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model = null)
+    public function view(User $user, ?User $model = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -74,10 +73,9 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model = null)
+    public function update(User $user, ?User $model = null)
     {
         if ($user->roles->isEmpty()) {
             return false;

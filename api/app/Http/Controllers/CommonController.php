@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PaymentTermType;
 use App\Enums\RecordStatus;
 
 class CommonController extends BaseController

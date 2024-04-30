@@ -40,9 +40,9 @@ class AuthAPITest extends APITestCase
         $api = $this->json('POST', '/register', $userArr);
 
         $api->assertCreated();
-        
+
         $this->assertDatabaseHas('users', [
-            'name' => $userArr["name"],
+            'name' => $userArr['name'],
             'email' => $userArr['email'],
         ]);
     }
@@ -93,7 +93,7 @@ class AuthAPITest extends APITestCase
 
         $userArr = [
             'email' => $user->email,
-            'password' => 'password'
+            'password' => 'password',
         ];
 
         $api = $this->json('POST', '/login', $userArr);

@@ -50,7 +50,7 @@ class ProfileFactory extends Factory
         });
     }
 
-    public function setCreatedAt(Carbon $date = null)
+    public function setCreatedAt(?Carbon $date = null)
     {
         return $this->state(function (array $attributes) use ($date) {
             return [
@@ -59,7 +59,7 @@ class ProfileFactory extends Factory
         });
     }
 
-    public function setUpdatedAt(Carbon $date = null)
+    public function setUpdatedAt(?Carbon $date = null)
     {
         return $this->state(function (array $attributes) use ($date) {
             return [

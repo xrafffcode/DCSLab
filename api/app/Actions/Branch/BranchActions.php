@@ -150,7 +150,7 @@ class BranchActions
         return $branch->load('company');
     }
 
-    public function getBranchByCompany(int $companyId = 0, Company $company = null): Collection
+    public function getBranchByCompany(int $companyId = 0, ?Company $company = null): Collection
     {
         if (! is_null($company)) {
             return $company->branches;
@@ -163,7 +163,7 @@ class BranchActions
         return null;
     }
 
-    public function getMainBranchByCompany(int $companyId = 0, Company $company = null): Branch
+    public function getMainBranchByCompany(int $companyId = 0, ?Company $company = null): Branch
     {
         if (! is_null($company)) {
             return $company->branches()->where('is_main', '=', true)->first();
@@ -219,7 +219,7 @@ class BranchActions
         }
     }
 
-    public function resetMainBranch(int $companyId = 0, Company $company = null): bool
+    public function resetMainBranch(int $companyId = 0, ?Company $company = null): bool
     {
         DB::beginTransaction();
         $timer_start = microtime(true);
@@ -278,7 +278,7 @@ class BranchActions
         return $code;
     }
 
-    public function isUniqueCode(string $code, int $companyId, int $exceptId = null): bool
+    public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool
     {
         $result = Branch::whereCompanyId($companyId)->where('code', '=', $code);
 

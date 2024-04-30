@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 trait ScopeableByStatus
 {
-    public function scopeWhereStatus(Builder $query, Array | RecordStatus | null $status = null)
+    public function scopeWhereStatus(Builder $query, array|RecordStatus|null $status = null)
     {
         if ($status != null) {
             if (is_array($status)) {

@@ -34,10 +34,9 @@ class CompanyPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\Company  $company
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Company $company = null)
+    public function view(User $user, ?Company $company = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -75,10 +74,9 @@ class CompanyPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\Company  $company
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Company $company = null)
+    public function update(User $user, ?Company $company = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -96,10 +94,9 @@ class CompanyPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\Company  $company
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Company $company = null)
+    public function delete(User $user, ?Company $company = null)
     {
         if ($user->roles->isEmpty()) {
             return false;

@@ -40,7 +40,7 @@ class SystemActions
         return DB::connection();
     }
 
-    public function isExistTable(string $tableName = null): bool
+    public function isExistTable(?string $tableName = null): bool
     {
         if ($tableName == null) {
             return Schema::hasTable('users');
