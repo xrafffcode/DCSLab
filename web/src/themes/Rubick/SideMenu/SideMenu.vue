@@ -70,11 +70,11 @@ onMounted(() => {
         class="side-nav hidden w-[80px] overflow-x-hidden pb-16 pr-5 md:block xl:w-[230px]"
       >
         <RouterLink
-          :to="{ name: 'dashboard-overview-1' }"
+          :to="{ name: 'side-menu-dashboard-maindashboard' }"
           class="flex items-center pt-4 pl-5 intro-x"
         >
           <img
-            alt="Midone - Tailwind Admin Dashboard Template"
+            alt="DCSLab"
             class="w-6"
             :src="logoUrl"
           />

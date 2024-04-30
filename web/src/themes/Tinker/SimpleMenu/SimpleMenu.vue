@@ -65,7 +65,7 @@ onMounted(() => {
         class="side-nav side-nav--simple hidden md:block md:w-[100px] xl:w-[100px] px-5 pb-16 overflow-x-hidden z-10"
       >
         <RouterLink
-          :to="{ name: 'dashboard-overview-1' }"
+          :to="{ name: 'side-menu-dashboard-maindashboard' }"
           class="flex items-center pt-4 pl-5 mt-3 intro-x"
         >
           <img

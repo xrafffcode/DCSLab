@@ -6,6 +6,7 @@ import { FormInput } from "@/components/Base/Form";
 import { Menu, Popover } from "@/components/Base/Headless";
 import _ from "lodash";
 import { TransitionRoot } from "@headlessui/vue";
+import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
 
 const searchDropdown = ref(false);
 const showSearchDropdown = () => {
@@ -20,5 +21,6 @@ const hideSearchDropdown = () => {
   <div
     class="relative z-[51] flex h-[67px] items-center border-b border-slate-200"
   >
+
   </div>
 </template>

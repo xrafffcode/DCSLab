@@ -17,6 +17,7 @@ import Table from "@/components/Base/Table";
       <div class="col-span-12 2xl:col-span-9">
         <div class="grid grid-cols-12 gap-6">
 
+
         </div>
       </div>
     </div>

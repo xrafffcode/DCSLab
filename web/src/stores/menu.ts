@@ -19,7 +19,20 @@ export interface MenuState {
 
 export const useMenuStore = defineStore("menu", {
   state: (): MenuState => ({
-    menuValue: [],
+    menuValue: [
+      {
+        icon: 'Home',
+        pageName: 'side-menu-dashboard',
+        title: 'Dashboard',
+        subMenu: [
+          {
+            icon: "ChevronRight",
+            pageName: "side-menu-dashboard-maindashboard",
+            title: "Main Dashboard",
+          }
+        ]
+      }
+    ],
   }),
   getters: {
     menu: (state) => (layout: Themes["layout"]) => {
@@ -34,4 +47,9 @@ export const useMenuStore = defineStore("menu", {
       return sideMenu;
     },
   },
+  actions: {
+    setUserMenu(userMenu: Array<Menu>) {
+      this.menuValue = userMenu;
+    }
+  }
 });
