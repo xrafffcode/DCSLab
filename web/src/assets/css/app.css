@@ -28,6 +28,9 @@
 @import "./components/base/_zoom-in.css";
 @import "./components/base/_intro.css";
 
+@import "./customs/_loading-overlay.css";
+@import "./customs/_loading-line.css";
+
 /*
  |--------------------------------------------------------------------------
  | TailwindCSS Directives
@@ -43,3 +46,4 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+

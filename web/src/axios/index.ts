@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const defaultAxiosInstance = axios.create({
-    baseURL: import.meta.env.BACKEND_URL,
+    baseURL: import.meta.env.VITE_BACKEND_URL,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json',
@@ -35,7 +35,7 @@ defaultAxiosInstance.interceptors.response.use(response => {
 });
 
 const authAxiosInstance = axios.create({
-    baseURL: import.meta.env.BACKEND_URL,
+    baseURL: import.meta.env.VITE_BACKEND_URL,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json'
