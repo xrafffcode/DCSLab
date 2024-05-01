@@ -2,6 +2,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import Layout from "@/themes";
 
 import LoginPage from "../pages/auth/LoginPage.vue";
+import RegisterPage from "../pages/auth/RegisterPage.vue";
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.vue";
+import ResetPasswordPage from "../pages/auth/ResetPasswordPage.vue";
+
+import MainDashboard from "../pages/dashboard/MainDashboard.vue";
+import ProfileView from "../pages/dashboard/ProfileView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -22,12 +28,13 @@ const router = createRouter({
               name: "login",
               component: LoginPage,
           },
-          /*
+
           {
               path: "/auth/register",
               name: 'register',
               component: RegisterPage,
           },
+
           {
               path: "/auth/forgot-password",
               name: 'forgot-password',
@@ -38,7 +45,6 @@ const router = createRouter({
               name: 'reset-password',
               component: ResetPasswordPage,
           },
-          */
       ]
   },
   {
@@ -48,12 +54,12 @@ const router = createRouter({
           {
               path: "/dashboard/main",
               name: "side-menu-dashboard-maindashboard",
-              component: () => import("../pages/dashboard/MainDashboard.vue"),
+              component: MainDashboard,
               meta: {
                   remember: true,
               },
           },
-          /*
+
           {
               path: "/dashboard/profile",
               name: "side-menu-dashboard-profile",
@@ -62,6 +68,7 @@ const router = createRouter({
                   remember: true,
               },
           },
+          /*
           {
               path: "/dashboard/company",
               children: [

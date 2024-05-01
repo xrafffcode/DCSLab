@@ -47,7 +47,7 @@ class UserProfileResource extends JsonResource
 
         $diff = Carbon::now()->diffInDays(Carbon::parse($this->password_changed_at)->addDays(config('dcslab.PASSWORD_EXPIRY_DAYS')), false);
 
-        return $diff <= 0 ? 0 : $diff;
+        return $diff <= 0 ? 0 : floor($diff);
     }
 
     private function getTwoFactorStatus()

@@ -82,6 +82,9 @@ export default class AuthService {
         client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', import.meta.env.VITE_BACKEND_URL + '/reset-password', {
             email: '',
+            token: '',
+            password: '',
+            password_confirmation: '',
         });
 
         return form;
