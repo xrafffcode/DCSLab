@@ -67,7 +67,6 @@ onMounted(() => {
     ]"
   >
     <MobileMenu />
-    <!-- BEGIN: Top Menu -->
     <nav class="relative z-50 hidden top-nav md:block">
       <ul class="pb-3 xl:pb-0 xl:px-[50px] flex flex-wrap">
         <li v-for="(menu, menuKey) in formattedMenu" :key="menuKey">
@@ -187,13 +186,10 @@ onMounted(() => {
         </li>
       </ul>
     </nav>
-    <!-- END: Top Menu -->
-    <!-- BEGIN: Content -->
     <div
       class="rounded-[30px] min-w-0 min-h-screen flex-1 pb-10 bg-slate-100 dark:bg-darkmode-700 px-4 md:px-[22px] max-w-full md:max-w-auto before:content-[''] before:w-full before:h-px before:block"
     >
       <RouterView />
     </div>
-    <!-- END: Content -->
   </div>
 </template>

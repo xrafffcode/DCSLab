@@ -54,6 +54,8 @@ onMounted(() => {
     windowWidth.value = window.innerWidth;
   });
 });
+
+const appName = import.meta.env.VITE_APP_NAME;
 </script>
 
 <template>
@@ -65,7 +67,6 @@ onMounted(() => {
   >
     <MobileMenu />
     <div class="mt-[4.7rem] flex md:mt-0">
-      <!-- BEGIN: Side Menu -->
       <nav
         class="side-nav hidden w-[80px] overflow-x-hidden pb-16 pr-5 md:block xl:w-[230px]"
       >
@@ -78,7 +79,7 @@ onMounted(() => {
             class="w-6"
             :src="logoUrl"
           />
-          <span class="hidden ml-3 text-lg text-white xl:block"> Rubick </span>
+          <span class="hidden ml-3 text-lg text-white xl:block"> {{ appName }} </span>
         </RouterLink>
         <div class="my-6 side-nav__divider"></div>
         <ul>
@@ -256,15 +257,12 @@ onMounted(() => {
           </template>
         </ul>
       </nav>
-      <!-- END: Side Menu -->
-      <!-- BEGIN: Content -->
       <div
         class="md:max-w-auto min-h-screen min-w-0 max-w-full flex-1 rounded-[30px] bg-slate-100 px-4 pb-10 before:block before:h-px before:w-full before:content-[''] dark:bg-darkmode-700 md:px-[22px]"
       >
         <TopBar />
         <RouterView />
       </div>
-      <!-- END: Content -->
     </div>
   </div>
 </template>

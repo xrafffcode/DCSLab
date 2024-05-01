@@ -57,7 +57,6 @@ onMounted(() => {
   >
     <MobileMenu />
     <TopBar />
-    <!-- BEGIN: Top Menu -->
     <nav
       class="top-nav relative z-50 -mt-2 hidden translate-y-[35px] opacity-0 md:block xl:-mt-[3px] xl:px-6 xl:pt-[12px]"
     >
@@ -179,8 +178,6 @@ onMounted(() => {
         </li>
       </ul>
     </nav>
-    <!-- END: Top Menu -->
-    <!-- BEGIN: Content -->
     <div
       :class="[
         'wrapper relative',
@@ -193,15 +190,12 @@ onMounted(() => {
           'before:hidden xl:before:block before:absolute before:inset-0 before:bg-black/[0.15] before:rounded-[1.3rem] before:z-[-1]',
         ]"
       >
-        <!-- BEGIN: Content -->
         <div
           class="md:max-w-auto min-h-screen min-w-0 max-w-full flex-1 rounded-[1.3rem] bg-slate-100 px-4 pb-10 shadow-sm before:block before:h-px before:w-full before:content-[''] dark:bg-darkmode-700 md:px-[22px]"
         >
           <RouterView />
         </div>
-        <!-- END: Content -->
       </div>
     </div>
-    <!-- END: Content -->
   </div>
 </template>

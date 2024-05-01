@@ -54,6 +54,8 @@ onMounted(() => {
     windowWidth.value = window.innerWidth;
   });
 });
+
+const appName = import.meta.env.VITE_APP_NAME;
 </script>
 
 <template>
@@ -65,7 +67,6 @@ onMounted(() => {
   >
     <MobileMenu />
     <div class="flex mt-[4.7rem] md:mt-0 overflow-hidden">
-      <!-- BEGIN: Side Menu -->
       <nav
         class="side-nav hidden md:block md:w-[100px] xl:w-[250px] px-5 pb-16 overflow-x-hidden z-10"
       >
@@ -74,11 +75,11 @@ onMounted(() => {
           class="flex items-center pt-4 pl-5 mt-3 intro-x"
         >
           <img
-            alt="Tinker Tailwind HTML Admin Template"
+            alt="DCSLab"
             class="w-6"
             :src="logoUrl"
           />
-          <span class="hidden ml-3 text-lg text-white xl:block"> Tinker </span>
+          <span class="hidden ml-3 text-lg text-white xl:block"> {{ appName }} </span>
         </RouterLink>
         <div class="my-6 side-nav__divider"></div>
         <ul>
@@ -256,8 +257,6 @@ onMounted(() => {
           </template>
         </ul>
       </nav>
-      <!-- END: Side Menu -->
-      <!-- BEGIN: Content -->
       <div
         :class="[
           'rounded-[30px] md:rounded-[35px/50px_0px_0px_0px] min-w-0 min-h-screen max-w-full md:max-w-none bg-slate-100 flex-1 pb-10 px-4 md:px-6 relative md:ml-4 dark:bg-darkmode-700',
@@ -268,7 +267,6 @@ onMounted(() => {
         <TopBar />
         <RouterView />
       </div>
-      <!-- END: Content -->
     </div>
   </div>
 </template>

@@ -57,12 +57,9 @@ onMounted(() => {
   >
     <MobileMenu />
     <TopBar layout="top-menu" />
-    <!-- BEGIN: Top Menu -->
     <nav
       :class="[
         'top-nav relative z-50 hidden pt-32 -mt-4 md:block',
-
-        // Animation
         'opacity-0 animate-[0.4s_ease-in-out_0.2s_intro-top-menu] animate-fill-mode-forwards',
       ]"
     >
@@ -184,8 +181,6 @@ onMounted(() => {
         </li>
       </ul>
     </nav>
-    <!-- END: Top Menu -->
-    <!-- BEGIN: Content -->
     <div
       :class="[
         'max-w-full md:max-w-none rounded-[30px] md:rounded-[35px_35px_0_0] px-4 md:px-[22px] min-w-0 min-h-screen bg-slate-100 flex-1 pb-10 mt-5 relative dark:bg-darkmode-700',
@@ -194,6 +189,5 @@ onMounted(() => {
     >
       <RouterView />
     </div>
-    <!-- END: Content -->
   </div>
 </template>

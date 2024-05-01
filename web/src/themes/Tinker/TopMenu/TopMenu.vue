@@ -70,7 +70,6 @@ onMounted(() => {
     <MainColorSwitcher />
     <MobileMenu />
 
-    <!-- BEGIN: Top Menu -->
     <nav
       class="top-nav relative z-50 -mt-[3px] hidden translate-y-[50px] opacity-0 md:block"
     >
@@ -192,8 +191,6 @@ onMounted(() => {
         </li>
       </ul>
     </nav>
-    <!-- END: Top Menu -->
-    <!-- BEGIN: Content -->
     <div
       :class="[
         'rounded-[30px] md:rounded-[35px_35px_0px_0px] min-w-0 min-h-screen max-w-full md:max-w-none bg-slate-100 flex-1 pb-10 px-4 md:px-6 relative mt-8 dark:bg-darkmode-700',
@@ -203,6 +200,5 @@ onMounted(() => {
     >
       <RouterView />
     </div>
-    <!-- END: Content -->
   </div>
 </template>

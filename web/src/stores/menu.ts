@@ -1,9 +1,6 @@
 import { type Icon } from "@/components/Base/Lucide/Lucide.vue";
 import { type Themes } from "@/stores/theme";
 import { defineStore } from "pinia";
-import sideMenu from "@/main/side-menu";
-import simpleMenu from "@/main/simple-menu";
-import topMenu from "@/main/top-menu";
 
 export interface Menu {
   icon: Icon;
@@ -37,14 +34,14 @@ export const useMenuStore = defineStore("menu", {
   getters: {
     menu: (state) => (layout: Themes["layout"]) => {
       if (layout == "top-menu") {
-        return topMenu;
+        return state.menuValue;
       }
 
       if (layout == "simple-menu") {
-        return simpleMenu;
+        return state.menuValue;
       }
 
-      return sideMenu;
+      return state.menuValue;
     },
   },
   actions: {

@@ -71,12 +71,10 @@ onMounted(() => {
           'before:block before:absolute before:inset-0 before:bg-black/[0.15] before:rounded-[1.3rem] before:z-[-1]',
         ]"
       >
-        <!-- BEGIN: Simple Menu -->
         <nav
           class="side-nav side-nav--simple hidden md:block w-[100px] px-5 pt-8 pb-16 overflow-x-hidden"
         >
           <ul>
-            <!-- BEGIN: First Child -->
             <template v-for="(menu, menuKey) in formattedMenu">
               <li
                 v-if="menu == 'divider'"
@@ -248,17 +246,13 @@ onMounted(() => {
                 </Transition>
               </li>
             </template>
-            <!-- END: First Child -->
           </ul>
         </nav>
-        <!-- END: Simple Menu -->
-        <!-- BEGIN: Content -->
         <div
           class="md:max-w-auto min-h-screen min-w-0 max-w-full flex-1 rounded-[1.3rem] bg-slate-100 px-4 pb-10 shadow-sm before:block before:h-px before:w-full before:content-[''] dark:bg-darkmode-700 md:px-[22px]"
         >
           <RouterView />
         </div>
-        <!-- END: Content -->
       </div>
     </div>
   </div>

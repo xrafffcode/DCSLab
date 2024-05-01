@@ -60,20 +60,16 @@ onMounted(() => {
     <MobileMenu />
     <TopBar layout="simple-menu" />
     <div class="flex overflow-hidden">
-      <!-- BEGIN: Simple Menu -->
       <nav
         class="side-nav side-nav--simple w-[100px] px-5 pb-16 overflow-x-hidden z-50 pt-32 -mt-4 hidden md:block"
       >
         <ul>
-          <!-- BEGIN: First Child -->
           <template v-for="(menu, menuKey) in formattedMenu">
             <li
               v-if="menu == 'divider'"
               type="li"
               :class="[
                 'side-nav__divider my-6',
-
-                // Animation
                 `opacity-0 animate-[0.4s_ease-in-out_0.1s_intro-divider] animate-fill-mode-forwards animate-delay-${
                   (menuKey + 1) * 10
                 }`,
@@ -107,8 +103,6 @@ onMounted(() => {
                 }"
                 :class="[
                   menu.active ? 'side-menu side-menu--active' : 'side-menu',
-
-                  // Animation
                   {
                     [`opacity-0 translate-x-[50px] animate-[0.4s_ease-in-out_0.1s_intro-menu] animate-fill-mode-forwards animate-delay-${
                       (menuKey + 1) * 10
@@ -164,8 +158,6 @@ onMounted(() => {
                         subMenu.active
                           ? 'side-menu side-menu--active'
                           : 'side-menu',
-
-                        // Animation
                         {
                           [`opacity-0 translate-x-[50px] animate-[0.4s_ease-in-out_0.1s_intro-menu] animate-fill-mode-forwards animate-delay-${
                             (subMenuKey + 1) * 10
@@ -236,8 +228,6 @@ onMounted(() => {
                               lastSubMenu.active
                                 ? 'side-menu side-menu--active'
                                 : 'side-menu',
-
-                              // Animation
                               {
                                 [`opacity-0 translate-x-[50px] animate-[0.4s_ease-in-out_0.1s_intro-menu] animate-fill-mode-forwards animate-delay-${
                                   (lastSubMenuKey + 1) * 10
@@ -265,11 +255,8 @@ onMounted(() => {
               </Transition>
             </li>
           </template>
-          <!-- END: First Child -->
         </ul>
       </nav>
-      <!-- END: Simple Menu -->
-      <!-- BEGIN: Content -->
       <div
         :class="[
           'max-w-full md:max-w-none rounded-[30px] md:rounded-none px-4 md:px-[22px] min-w-0 min-h-screen bg-slate-100 flex-1 md:pt-20 pb-10 mt-5 md:mt-1 relative dark:bg-darkmode-700',
@@ -278,7 +265,6 @@ onMounted(() => {
       >
         <RouterView />
       </div>
-      <!-- END: Content -->
     </div>
   </div>
 </template>

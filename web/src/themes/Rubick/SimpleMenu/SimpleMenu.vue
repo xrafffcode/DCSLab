@@ -60,7 +60,6 @@ onMounted(() => {
   >
     <MobileMenu />
     <div class="flex mt-[4.7rem] md:mt-0">
-      <!-- BEGIN: Simple Menu -->
       <nav
         class="side-nav side-nav--simple pr-5 pb-16 overflow-x-hidden hidden md:block w-[80px]"
       >
@@ -246,18 +245,14 @@ onMounted(() => {
               </Transition>
             </li>
           </template>
-          <!-- END: First Child -->
         </ul>
       </nav>
-      <!-- END: Simple Menu -->
-      <!-- BEGIN: Content -->
       <div
         class="rounded-[30px] min-w-0 min-h-screen flex-1 pb-10 bg-slate-100 dark:bg-darkmode-700 px-4 md:px-[22px] max-w-full md:max-w-auto before:content-[''] before:w-full before:h-px before:block"
       >
         <TopBar />
         <RouterView />
       </div>
-      <!-- END: Content -->
     </div>
   </div>
 </template>

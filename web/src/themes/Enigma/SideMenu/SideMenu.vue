@@ -65,7 +65,6 @@ onMounted(() => {
     <MobileMenu />
     <TopBar layout="side-menu" />
     <div class="flex overflow-hidden">
-      <!-- BEGIN: Side Menu -->
       <nav
         class="side-nav w-[100px] xl:w-[260px] px-5 pb-16 overflow-x-hidden z-50 pt-32 -mt-4 hidden md:block"
       >
@@ -246,8 +245,6 @@ onMounted(() => {
           </template>
         </ul>
       </nav>
-      <!-- END: Side Menu -->
-      <!-- BEGIN: Content -->
       <div
         :class="[
           'max-w-full md:max-w-none rounded-[30px] md:rounded-none px-4 md:px-[22px] min-w-0 min-h-screen bg-slate-100 flex-1 md:pt-20 pb-10 mt-5 md:mt-1 relative dark:bg-darkmode-700',
@@ -256,7 +253,6 @@ onMounted(() => {
       >
         <RouterView />
       </div>
-      <!-- END: Content -->
     </div>
   </div>
 </template>

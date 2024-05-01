@@ -60,7 +60,6 @@ onMounted(() => {
   >
     <MobileMenu />
     <div class="flex mt-[4.7rem] md:mt-0 overflow-hidden">
-      <!-- BEGIN: Simple Menu -->
       <nav
         class="side-nav side-nav--simple hidden md:block md:w-[100px] xl:w-[100px] px-5 pb-16 overflow-x-hidden z-10"
       >
@@ -69,14 +68,13 @@ onMounted(() => {
           class="flex items-center pt-4 pl-5 mt-3 intro-x"
         >
           <img
-            alt="Tinker Tailwind HTML Admin Template"
+            alt="DCSLab"
             class="w-6"
             :src="logoUrl"
           />
         </RouterLink>
         <div class="my-6 side-nav__divider"></div>
         <ul>
-          <!-- BEGIN: First Child -->
           <template v-for="(menu, menuKey) in formattedMenu">
             <li
               v-if="menu == 'divider'"
@@ -246,11 +244,8 @@ onMounted(() => {
               </Transition>
             </li>
           </template>
-          <!-- END: First Child -->
         </ul>
       </nav>
-      <!-- END: Simple Menu -->
-      <!-- BEGIN: Content -->
       <div
         :class="[
           'rounded-[30px] md:rounded-[35px/50px_0px_0px_0px] min-w-0 min-h-screen max-w-full md:max-w-none bg-slate-100 flex-1 pb-10 px-4 md:px-6 relative md:ml-4 dark:bg-darkmode-700',
@@ -261,7 +256,6 @@ onMounted(() => {
         <TopBar />
         <RouterView />
       </div>
-      <!-- END: Content -->
     </div>
   </div>
 </template>
