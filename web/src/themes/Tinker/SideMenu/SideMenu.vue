@@ -18,6 +18,18 @@ import {
   leave,
 } from "./side-menu";
 import { watch, reactive, ref, computed, onMounted, provide } from "vue";
+import ScrollToTop from "@/components/Base/ScrollToTop";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import NotificationWidget from "@/components/NotificationWidget";
+import { EmailVerificationAlert } from "@/components/AlertPlaceholder";
+import { useDashboardStore } from "@/stores/dashboard";
+import DashboardService from "@/services/DashboardService";
+import { useZiggyRouteStore } from "@/stores/ziggy-route";
+import { Config } from "ziggy-js";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const dashboardServices = new DashboardService();
 
 const route: Route = useRoute();
 const router = useRouter();
@@ -124,7 +136,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                   <Lucide :icon="menu.icon" />
                 </div>
                 <div class="side-menu__title">
-                  {{ menu.title }}
+                  {{ t(menu.title) }}
                   <div
                     v-if="menu.subMenu"
                     :class="[
@@ -180,7 +192,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                         <Lucide :icon="subMenu.icon" />
                       </div>
                       <div class="side-menu__title">
-                        {{ subMenu.title }}
+                        {{ t(subMenu.title) }}
                         <div
                           v-if="subMenu.subMenu"
                           :class="[
@@ -244,7 +256,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                               <Lucide :icon="lastSubMenu.icon" />
                             </div>
                             <div class="side-menu__title">
-                              {{ lastSubMenu.title }}
+                              {{ t(lastSubMenu.title) }}
                             </div>
                           </Tippy>
                         </li>

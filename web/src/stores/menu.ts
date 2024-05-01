@@ -45,8 +45,8 @@ export const useMenuStore = defineStore("menu", {
     },
   },
   actions: {
-    setUserMenu(userMenu: Array<Menu>) {
-      this.menuValue = userMenu;
+    setMenu(menu: Array<Menu>) {
+      this.menuValue = menu;
     }
   }
 });

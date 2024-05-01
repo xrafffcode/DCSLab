@@ -9,8 +9,10 @@ import { useI18n } from "vue-i18n";
 import Lucide from "@/components/Base/Lucide";
 import { useDashboardStore } from "../../stores/dashboard";
 import axios from "../../axios";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
+const router = useRouter();
 
 interface ProfileMenuProps {
     visible: boolean,
@@ -56,7 +58,6 @@ const logout = () => {
     window.location.href = '/';
   });
 }
-
 </script>
 
 <template>
@@ -79,7 +80,7 @@ const logout = () => {
                 </div>
             </Menu.Header>
             <Menu.Divider class="bg-white/[0.08]" />
-            <Menu.Item class="hover:bg-white/5">
+            <Menu.Item class="hover:bg-white/5" @click="router.push({ name: 'side-menu-dashboard-profile' })">
                 <Lucide icon="User" class="w-4 h-4 mr-2" /> {{ t('components.top-bar.profile_ddl.profile') }}
             </Menu.Item>
             <Menu.Item class="hover:bg-white/5">

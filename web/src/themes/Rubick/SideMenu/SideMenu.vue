@@ -6,7 +6,7 @@ import Tippy from "@/components/Base/Tippy";
 import Lucide from "@/components/Base/Lucide";
 import TopBar from "@/components/Themes/Rubick/TopBar";
 import MobileMenu from "@/components/MobileMenu";
-import { useMenuStore } from "@/stores/menu";
+import { useMenuStore, Menu as sMenu } from "@/stores/menu";
 import {
   type ProvideForceActiveMenu,
   forceActiveMenu,
@@ -18,6 +18,18 @@ import {
   leave,
 } from "./side-menu";
 import { watch, reactive, ref, computed, onMounted, provide } from "vue";
+import ScrollToTop from "@/components/Base/ScrollToTop";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import NotificationWidget from "@/components/NotificationWidget";
+import { EmailVerificationAlert } from "@/components/AlertPlaceholder";
+import { useDashboardStore } from "@/stores/dashboard";
+import DashboardService from "@/services/DashboardService";
+import { useZiggyRouteStore } from "@/stores/ziggy-route";
+import { Config } from "ziggy-js";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const dashboardServices = new DashboardService();
 
 const route: Route = useRoute();
 const router = useRouter();
@@ -30,6 +42,8 @@ const setFormattedMenu = (
 const menuStore = useMenuStore();
 const menu = computed(() => nestedMenu(menuStore.menu("side-menu"), route));
 const windowWidth = ref(window.innerWidth);
+
+const ziggyRouteStore = useZiggyRouteStore();
 
 provide<ProvideForceActiveMenu>("forceActiveMenu", (pageName: string) => {
   forceActiveMenu(route, pageName);
@@ -47,7 +61,13 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  let menuResult = await dashboardServices.readUserMenu();
+  menuStore.setMenu(menuResult.data as Array<sMenu>);
+
+  let apiResult = await dashboardServices.readUserApi();
+  ziggyRouteStore.setZiggy(apiResult.data as Config);
+
   setFormattedMenu(menu.value);
 
   window.addEventListener("resize", () => {
@@ -124,7 +144,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                   <Lucide :icon="menu.icon" />
                 </div>
                 <div class="side-menu__title">
-                  {{ menu.title }}
+                  {{ t(menu.title) }}
                   <div
                     v-if="menu.subMenu"
                     :class="[
@@ -180,7 +200,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                         <Lucide :icon="subMenu.icon" />
                       </div>
                       <div class="side-menu__title">
-                        {{ subMenu.title }}
+                        {{ t(subMenu.title) }}
                         <div
                           v-if="subMenu.subMenu"
                           :class="[
@@ -244,7 +264,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                               <Lucide :icon="lastSubMenu.icon" />
                             </div>
                             <div class="side-menu__title">
-                              {{ lastSubMenu.title }}
+                              {{ t(lastSubMenu.title) }}
                             </div>
                           </Tippy>
                         </li>

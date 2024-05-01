@@ -17,6 +17,18 @@ import {
   leave,
 } from "./simple-menu";
 import { watch, reactive, computed, onMounted, provide } from "vue";
+import ScrollToTop from "@/components/Base/ScrollToTop";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import NotificationWidget from "@/components/NotificationWidget";
+import { EmailVerificationAlert } from "@/components/AlertPlaceholder";
+import { useDashboardStore } from "@/stores/dashboard";
+import DashboardService from "@/services/DashboardService";
+import { useZiggyRouteStore } from "@/stores/ziggy-route";
+import { Config } from "ziggy-js";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const dashboardServices = new DashboardService();
 
 const route: Route = useRoute();
 const router = useRouter();
@@ -114,7 +126,7 @@ onMounted(() => {
                   <Lucide :icon="menu.icon" />
                 </div>
                 <div class="side-menu__title">
-                  {{ menu.title }}
+                  {{ t(menu.title) }}
                   <div
                     v-if="menu.subMenu"
                     :class="[
@@ -174,7 +186,7 @@ onMounted(() => {
                         <Lucide :icon="subMenu.icon" />
                       </div>
                       <div class="side-menu__title">
-                        {{ subMenu.title }}
+                        {{ t(subMenu.title) }}
                         <div
                           v-if="subMenu.subMenu"
                           :class="[
@@ -244,7 +256,7 @@ onMounted(() => {
                               <Lucide :icon="lastSubMenu.icon" />
                             </div>
                             <div class="side-menu__title">
-                              {{ lastSubMenu.title }}
+                              {{ t(lastSubMenu.title) }}
                             </div>
                           </Tippy>
                         </li>

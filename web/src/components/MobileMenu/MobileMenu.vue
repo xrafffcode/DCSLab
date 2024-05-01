@@ -16,6 +16,9 @@ import {
 } from "./mobile-menu";
 import { watch, reactive, computed, onMounted, ref } from "vue";
 import SimpleBar from "simplebar";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -52,7 +55,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- BEGIN: Mobile Menu -->
   <div
     :class="[
       'mobile-menu group top-0 inset-x-0 fixed bg-theme-1/90 z-[60] border-b border-white/[0.08] dark:bg-darkmode-800/90 md:hidden',
@@ -143,7 +145,7 @@ onMounted(() => {
                 <Lucide :icon="menu.icon" />
               </div>
               <div class="menu__title">
-                {{ menu.title }}
+                {{ t(menu.title) }}
                 <div
                   v-if="menu.subMenu"
                   :class="[
@@ -191,7 +193,7 @@ onMounted(() => {
                       <Lucide :icon="subMenu.icon" />
                     </div>
                     <div class="menu__title">
-                      {{ subMenu.title }}
+                      {{ t(subMenu.title) }}
                       <div
                         v-if="subMenu.subMenu"
                         :class="[
@@ -240,7 +242,7 @@ onMounted(() => {
                           <div class="menu__icon">
                             <Lucide :icon="lastSubMenu.icon" />
                           </div>
-                          <div class="menu__title">{{ lastSubMenu.title }}</div>
+                          <div class="menu__title">{{ t(lastSubMenu.title) }}</div>
                         </a>
                       </li>
                     </ul>
@@ -250,9 +252,7 @@ onMounted(() => {
             </Transition>
           </li>
         </template>
-        <!-- END: First Child -->
       </ul>
     </div>
   </div>
-  <!-- END: Mobile Menu -->
 </template>
