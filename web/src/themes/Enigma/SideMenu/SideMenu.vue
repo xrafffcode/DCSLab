@@ -17,6 +17,11 @@ import {
   leave,
 } from "./side-menu";
 import { watch, reactive, ref, computed, onMounted, provide } from "vue";
+import ScrollToTop from "@/components/Base/ScrollToTop";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import NotificationWidget from "@/components/NotificationWidget";
+import { EmailVerificationAlert } from "@/components/AlertPlaceholder";
+import { useDashboardStore } from "@/stores/dashboard";
 
 const route: Route = useRoute();
 const router = useRouter();
