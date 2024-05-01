@@ -1,6 +1,6 @@
 import axios from "../axios";
 import { useZiggyRouteStore } from "../stores/ziggy-route";
-import route, { Config } from "ziggy-js";
+import { route, Config } from "ziggy-js";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import { Role } from "../types/models/Role";
 import { Resource } from "../types/resources/Resource";

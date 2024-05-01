@@ -1,6 +1,6 @@
 import axios from "../axios";
 import { useZiggyRouteStore } from "../stores/ziggy-route";
-import route, { Config } from "ziggy-js";
+import { route, Config } from "ziggy-js";
 import { Branch } from "../types/models/Branch";
 import { Resource } from "../types/resources/Resource";
 import { Collection } from "../types/resources/Collection";

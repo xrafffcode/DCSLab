@@ -2,7 +2,7 @@
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import logoUrl from "@/assets/images/logo.svg";
 import illustrationUrl from "@/assets/images/illustration.svg";
-import { FormInput, FormCheck } from "@/components/Base/Form";
+import { FormInput, FormCheck, FormErrorMessages } from "@/components/Base/Form";
 import Button from "@/components/Base/Button";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";

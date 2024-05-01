@@ -1,19 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import Lucide from "@/components/Base/Lucide";
-import Breadcrumb from "@/components/Base/Breadcrumb";
-import { FormInput } from "@/components/Base/Form";
-import { Menu, Popover } from "@/components/Base/Headless";
-import _ from "lodash";
-import { TransitionRoot } from "@headlessui/vue";
-
-const searchDropdown = ref(false);
-const showSearchDropdown = () => {
-  searchDropdown.value = true;
-};
-const hideSearchDropdown = () => {
-  searchDropdown.value = false;
-};
+import UserLocation from "@/components/UserLocation/UserLocation.vue";
+import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
 </script>
 
 <template>

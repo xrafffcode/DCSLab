@@ -1,10 +1,10 @@
 import axios from "../axios";
 import { useZiggyRouteStore } from "../stores/ziggy-route";
-import route, { Config } from "ziggy-js";
+import { route, Config } from "ziggy-js";
 import CacheService from "./CacheService";
 import { AxiosResponse, AxiosError, isAxiosError } from "axios";
 import { ServiceResponse } from "../types/services/ServiceResponse";
-import { Menu as sMenu } from "../stores/side-menu";
+import { Menu as sMenu } from "../stores/menu";
 import ErrorHandlerService from "./ErrorHandlerService";
 import { Resource } from "../types/resources/Resource";
 import { DropDownOption } from "../types/models/DropDownOption";

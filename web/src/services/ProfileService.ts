@@ -1,5 +1,5 @@
 import { useZiggyRouteStore } from "../stores/ziggy-route";
-import route, { Config } from "ziggy-js";
+import { route, Config } from "ziggy-js";
 import { client, useForm } from "laravel-precognition-vue";
 import { ServiceResponse } from "../types/services/ServiceResponse";
 import { AxiosResponse, isAxiosError, AxiosError } from "axios";

@@ -10,9 +10,9 @@ const switchLanguage = (lang: "en" | "id"): void => {
 }
 </script>
 
-<tempate>
+<template>
     <Menu class="mr-4 intro-x sm:mr-6">
-        <Menu.Button :as="Button" variant="primary">
+        <Menu.Button variant="primary">
             <Lucide icon="Globe" />
         </Menu.Button>
         <Menu.Items class="w-48 h-24 overflow-y-auto" placement="bottom-end">
@@ -24,4 +24,4 @@ const switchLanguage = (lang: "en" | "id"): void => {
             </Menu.Item>
         </Menu.Items>
     </Menu>
-</tempate>
+</template>

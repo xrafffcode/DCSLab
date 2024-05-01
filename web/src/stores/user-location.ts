@@ -89,7 +89,7 @@ export const useSelectedUserLocationStore = defineStore("selectedUserLocation", 
 
             this.isUserLocationSelected = false;
         },
-        setSelectedUserLocation(companyId: string, companyUlid: string, companyCode: string, companyName: string, branchId: string, branchUlid: string, branchCode: string, branchName: string) {
+        setSelectedUserLocation(companyId: string, companyUlid: string, companyCode: string, companyName: string, branchId?: string, branchUlid?: string, branchCode?: string, branchName?: string) {
             this.clearSelectedUserLocation();
 
             this.selectedUserLocation.company.id = companyId;
@@ -97,10 +97,17 @@ export const useSelectedUserLocationStore = defineStore("selectedUserLocation", 
             this.selectedUserLocation.company.code = companyCode;
             this.selectedUserLocation.company.name = companyName;
 
-            this.selectedUserLocation.branch.id = branchId;
-            this.selectedUserLocation.branch.ulid = branchUlid;
-            this.selectedUserLocation.branch.code = branchCode;
-            this.selectedUserLocation.branch.name = branchName;
+            if (branchId)
+                this.selectedUserLocation.branch.id = branchId;
+
+            if (branchUlid)
+                this.selectedUserLocation.branch.ulid = branchUlid;
+            
+            if (branchCode)
+                this.selectedUserLocation.branch.code = branchCode;
+            
+            if (branchName)
+                this.selectedUserLocation.branch.name = branchName;
 
             const debug = import.meta.env.VITE_APP_DEBUG === 'true';
             sessionStorage.setItem('selectedUserLocation', debug ? JSON.stringify(this.selectedUserLocation) : btoa(JSON.stringify(this.selectedUserLocation)));

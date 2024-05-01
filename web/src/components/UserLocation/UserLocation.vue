@@ -55,6 +55,8 @@ const setNewUserLocation = (companyId: string, branchId: string) => {
 
   if (branch) {
     selectedUserLocationStore.setSelectedUserLocation(company.id, company.ulid, company.code, company.name, branch.id, branch.ulid, branch.code, branch.name);
+  } else {
+    selectedUserLocationStore.setSelectedUserLocation(company.id, company.ulid, company.code, company.name);
   }
 }
 </script>
