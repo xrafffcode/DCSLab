@@ -2,12 +2,13 @@
 import { ref, onMounted } from "vue";
 import logoUrl from "@/assets/images/logo.svg";
 import illustrationUrl from "@/assets/images/illustration.svg";
-import { FormInput, FormCheck } from "@/components/Base/Form";
+import { FormInput, FormErrorMessages } from "@/components/Base/Form";
 import Button from "@/components/Base/Button";
 import { useI18n } from "vue-i18n";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import AuthService from "@/services/AuthServices";
 import { useRouter } from "vue-router";
+import Alert from "@/components/Base/Alert";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -16,6 +17,8 @@ const authService = new AuthService();
 
 const appName = import.meta.env.VITE_APP_NAME;
 const loading = ref<boolean>(false);
+const status = ref<'onLoad' | 'finishSending' | 'sendingError'>('onLoad');
+const alertMessage = ref<string>('');
 
 const forgotPasswordForm = authService.useRequestResetPasswordForm();
 
@@ -27,8 +30,10 @@ const onSubmit = async () => {
     loading.value = true;
 
     forgotPasswordForm.submit().then(() => {
-        console.log('success');
+        status.value = 'finishSending';
+        alertMessage.value = t('views.forgot_password.alert.successfully_send_link');
     }).catch(error => {
+        status.value = 'sendingError';
         console.error(error.response.data.message);
     }).finally(() => {
         loading.value = false;
@@ -71,16 +76,17 @@ const onSubmit = async () => {
                                 &nbsp;
                             </div>
                             <form id="forgotPasswordForm" @submit.prevent="onSubmit">
+                                <Alert v-if="status != 'onLoad'" :variant="status == 'finishSending' ? 'success' : 'danger'" class="mt-2">{{ alertMessage }}</Alert>
                                 <div class="mt-8 intro-x">
-                                    <FormInput v-model="forgotPasswordForm.email" type="text" name="email"
+                                    <FormInput v-model="forgotPasswordForm.email" type="text"
                                         class="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
                                         :class="{ 'border-danger': forgotPasswordForm.invalid('email') }"
                                         :placeholder="t('views.forgot_password.fields.email')"
                                         @focus="forgotPasswordForm.forgetError('email')" />
-                                    <span class="ml-1 text-danger">{{ forgotPasswordForm.errors.email }}</span>
+                                    <FormErrorMessages :messages="forgotPasswordForm.errors.email" />
                                 </div>
                                 <div class="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-                                    <Button type="submit" variant="primary"
+                                    <Button v-if="status == 'onLoad'" type="submit" variant="primary"
                                         class="w-full px-4 py-3 align-top xl:w-32 xl:mr-3">
                                         {{ t("components.buttons.submit") }}
                                     </Button>

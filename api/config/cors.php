@@ -21,6 +21,7 @@ return [
         'login',
         'logout',
         'forgot-password',
+        'reset-password',
         'user/confirmed-password-status',
         'user/confirm-password',
         'user/two-factor-authentication',
