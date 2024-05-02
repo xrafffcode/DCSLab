@@ -11,8 +11,8 @@ import { twMerge } from "tailwind-merge";
 
 interface UserLocationProps {
     visible: boolean,
-    theme: 'rubick' | 'icewall' | 'enigma' | 'tinker',
-    layout: "side-menu" | "simple-menu" | "top-menu",
+    theme?: 'rubick' | 'icewall' | 'enigma' | 'tinker',
+    layout?: "side-menu" | "simple-menu" | "top-menu",
 }
 
 const props = withDefaults(defineProps<UserLocationProps>(), {
@@ -61,47 +61,36 @@ const userLocationLength = computed((): number => {
 
 const computedClass = computed(() =>
   twMerge([
-    theme.value == 'rubick'  && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'rubick'  && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'rubick'  && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
-    theme.value == 'icewall' && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'icewall' && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'icewall' && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
-    theme.value == 'enigma'  && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'enigma'  && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'enigma'  && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
-    theme.value == 'tinker'  && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'tinker'  && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
-    theme.value == 'tinker'  && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x'
+    theme.value == 'rubick' && (layout.value == 'side-menu' || layout.value == 'simple-menu') && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'rubick' && layout.value == 'top-menu' && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
+
+    theme.value == 'icewall' && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
+
+    theme.value == 'enigma' && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
+
+    theme.value == 'tinker' && (layout.value == 'side-menu' || layout.value == 'simple-menu') && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'tinker' && layout.value == 'top-menu' && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x'
   ])
 );
 
 const computedLight = computed(() => {
   switch (true) {
-    case theme.value == 'rubick' && layout.value == 'side-menu':
-      return false;
-    case theme.value == 'rubick' && layout.value == 'simple-menu':
+    case theme.value == 'rubick' && (layout.value == 'side-menu' || layout.value == 'simple-menu'):
       return false;
     case theme.value == 'rubick' && layout.value == 'top-menu':
       return true;
-    case theme.value == 'icewall' && layout.value == 'side-menu':
-      return false;
-    case theme.value == 'icewall' && layout.value == 'simple-menu':
-      return false;
-    case theme.value == 'icewall' && layout.value == 'top-menu':
+
+    case theme.value == 'icewall':
       return true;
-    case theme.value == 'enigma' && layout.value == 'side-menu':
-      return false;
-    case theme.value == 'enigma' && layout.value == 'simple-menu':
-      return false;
-    case theme.value == 'enigma' && layout.value == 'top-menu':
+
+    case theme.value == 'enigma':
       return true;
-    case theme.value == 'tinker' && layout.value == 'side-menu':
+
+    case theme.value == 'tinker' && (layout.value == 'side-menu' || layout.value == 'simple-menu'):
       return false;
-    case theme.value == 'tinker' && layout.value == 'simple-menu':
-      return false;
-    case theme.value == 'rubick' && layout.value == 'top-menu':
+    case theme.value == 'tinker' && layout.value == 'top-menu':
       return true;
+
     default:
       return false;
   }

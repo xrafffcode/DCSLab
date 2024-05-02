@@ -27,6 +27,8 @@ import HomeLogo from "@/components/HomeLogo/HomeLogo.vue";
 import UserLocation from "@/components/UserLocation/UserLocation.vue";
 import SearchBox from "@/components/SearchBox/SearchBox.vue";
 import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
+import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher.vue";
+import SidebarPop from "@/components/SidebarPop/SidebarPop.vue";
 
 const { t } = useI18n();
 const dashboardServices = new DashboardService();
@@ -93,6 +95,8 @@ onMounted(async () => {
       <div class="flex items-center h-[70px] z-[51] relative">
         <HomeLogo layout="top-menu"/>
         <UserLocation theme="rubick" layout="top-menu" />
+        <SidebarPop />
+        <LanguageSwitcher />
         <ProfileMenu theme="rubick" layout="top-menu" />
       </div>
     </div>

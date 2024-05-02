@@ -2,6 +2,7 @@
 import { Menu } from "@/components/Base/Headless";
 import { switchLang } from "@/lang";
 import { useI18n } from "vue-i18n";
+import Lucide from "@/components/Base/Lucide";
 
 const { t } = useI18n();
 

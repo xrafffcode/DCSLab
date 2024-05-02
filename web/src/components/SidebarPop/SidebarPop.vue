@@ -1,0 +1,42 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import Lucide from "@/components/Base/Lucide";
+import { Menu, Slideover } from "@/components/Base/Headless";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+const showSlideover = ref(false);
+const toggleSlideover = (value: boolean) => {
+  showSlideover.value = value;
+};
+</script>
+
+<template>
+    <Menu class="mr-4 intro-x sm:mr-6">
+        <Menu.Button variant="primary" @click="(event: MouseEvent) => { event.preventDefault(); toggleSlideover(true); }">
+            <Lucide icon="Archive" />
+        </Menu.Button>
+    </Menu>
+
+    <Slideover :open="showSlideover" @close="() => { toggleSlideover(false); }">
+        <Slideover.Panel>
+            <Slideover.Title class="p-5">
+                <h2 class="mr-auto text-base font-medium">
+                    &nbsp;
+                </h2>
+            </Slideover.Title>
+            <Slideover.Description>
+                &nbsp;
+            </Slideover.Description>
+            <Slideover.Footer>
+                <strong>{{ t('components.top-bar.slide_over.footer.copyright') }} &copy; {{ (new Date()).getFullYear() }}
+                    <a href="https://www.github.com/GitzJoey">{{ t('components.top-bar.slide_over.footer.copyright_name') }}</a>
+                    &nbsp;&amp;&nbsp;
+                    <a href="https://github.com/GitzJoey/DCSLab/graphs/contributors">{{ t('components.top-bar.slide_over.footer.contributors') }}</a>.
+                </strong>
+                {{ t('components.top-bar.slide_over.footer.rights') }} <br /> {{ t('components.top-bar.slide_over.footer.powered_by') }}
+            </Slideover.Footer>
+        </Slideover.Panel>
+    </Slideover>
+</template>

@@ -24,6 +24,12 @@ import DashboardService from "@/services/DashboardService";
 import { useZiggyRouteStore } from "@/stores/ziggy-route";
 import { Config } from "ziggy-js";
 import { useI18n } from "vue-i18n";
+import HomeLogo from "@/components/HomeLogo/HomeLogo.vue";
+import UserLocation from "@/components/UserLocation/UserLocation.vue";
+import SearchBox from "@/components/SearchBox/SearchBox.vue";
+import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
+import LanguageSwitcher from "@/components/LanguageSwitcher/LanguageSwitcher.vue";
+import SidebarPop from "@/components/SidebarPop/SidebarPop.vue";
 
 const { t } = useI18n();
 const dashboardServices = new DashboardService();
@@ -88,6 +94,11 @@ onMounted(async () => {
       class="h-[70px] z-[51] relative border-b border-white/[0.08] mt-12 md:mt-0 -mx-3 sm:-mx-8 md:mx-0 px-4 sm:px-8 md:px-6 mb-10 md:mb-8"
     >
       <div class="flex items-center h-full">
+        <HomeLogo />
+        <UserLocation theme="tinker" layout="top-menu" />
+        <SidebarPop />
+        <LanguageSwitcher />
+        <ProfileMenu />
       </div>
     </div>
 
