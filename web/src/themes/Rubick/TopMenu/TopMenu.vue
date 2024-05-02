@@ -53,6 +53,18 @@ const menu = computed(() => nestedMenu(menuStore.menu("top-menu"), route));
 
 const ziggyRouteStore = useZiggyRouteStore();
 
+const showBackToTop = ref<boolean>(false);
+
+const handlescroll = () => {
+  if (window.scrollY > 100) {
+    showBackToTop.value = true;
+  } else {
+    showBackToTop.value = false;
+  }
+}
+
+window.addEventListener('scroll', handlescroll);
+
 provide<ProvideForceActiveMenu>("forceActiveMenu", (pageName: string) => {
   forceActiveMenu(route, pageName);
   setFormattedMenu(menu.value);
@@ -224,6 +236,8 @@ onMounted(async () => {
       class="rounded-[30px] min-w-0 min-h-screen flex-1 pb-10 bg-slate-100 dark:bg-darkmode-700 px-4 md:px-[22px] max-w-full md:max-w-auto before:content-[''] before:w-full before:h-px before:block"
     >
       <RouterView />
+      <br v-for="i in 3" :key="i" />
+      <ScrollToTop :visible="showBackToTop" />
     </div>
   </div>
 </template>

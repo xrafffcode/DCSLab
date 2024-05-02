@@ -254,7 +254,7 @@ const layoutImages = import.meta.glob<{
         setThemeSwitcherSlideover(true);
     }"
     >
-      <Lucide class="w-5 h-5 animate-spin" icon="Settings" />
+      <Lucide class="w-5 h-5 hover:animate-spin" icon="Settings" />
     </div>
   </div>
 </template>
