@@ -8,6 +8,7 @@ import { useI18n } from "vue-i18n";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import AuthService from "@/services/AuthServices";
 import { useRouter } from "vue-router";
+import Alert from "@/components/Base/Alert";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -90,7 +91,8 @@ const doReset = () => {
                                 &nbsp;
                             </div>
                             <form id="forgotPasswordForm" @submit.prevent="onSubmit">
-                                <div class="mt-8 intro-x">
+                                <Alert v-if="status != 'onLoad'" :variant="status == 'finishResetting' ? 'success' : 'danger'" class="mt-2">{{ statusMessage }}</Alert>
+                                <div v-if="status == 'onLoad'" class="mt-8 intro-x">
                                     <input type="hidden" v-model="resetPasswordForm.token" />
                                     <input type="hidden" v-model="resetPasswordForm.email" />
                                     <FormInput v-model="resetPasswordForm.password" type="password"

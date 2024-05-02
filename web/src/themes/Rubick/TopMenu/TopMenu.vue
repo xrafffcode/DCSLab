@@ -75,6 +75,15 @@ onMounted(() => {
     ]"
   >
     <MobileMenu />
+
+    <div
+      class="border-b border-white/[0.08] mt-[2.2rem] md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-10"
+    >
+      <div class="flex items-center h-[70px] z-[51] relative">
+
+      </div>
+    </div>
+
     <nav class="relative z-50 hidden top-nav md:block">
       <ul class="pb-3 xl:pb-0 xl:px-[50px] flex flex-wrap">
         <li v-for="(menu, menuKey) in formattedMenu" :key="menuKey">

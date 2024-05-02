@@ -74,9 +74,14 @@ onMounted(() => {
       'after:content-[\'\'] after:bg-gradient-to-b after:from-theme-1 after:to-theme-2 dark:after:from-darkmode-800 dark:after:to-darkmode-800 after:fixed after:inset-0 after:z-[-2]',
     ]"
   >
-    <DarkModeSwitcher />
-    <MainColorSwitcher />
     <MobileMenu />
+
+    <div
+      class="h-[70px] z-[51] relative border-b border-white/[0.08] mt-12 md:mt-0 -mx-3 sm:-mx-8 md:mx-0 px-4 sm:px-8 md:px-6 mb-10 md:mb-8"
+    >
+      <div class="flex items-center h-full">
+      </div>
+    </div>
 
     <nav
       class="top-nav relative z-50 -mt-[3px] hidden translate-y-[50px] opacity-0 md:block"

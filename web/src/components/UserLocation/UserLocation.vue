@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed } from "vue";
+import { onMounted, computed, toRef } from "vue";
 import Breadcrumb from "@/components/Base/Breadcrumb";
 import Lucide from "@/components/Base/Lucide";
 import { Menu } from "@/components/Base/Headless";
@@ -7,6 +7,19 @@ import { useUserContextStore } from "@/stores/user-context";
 import { useSelectedUserLocationStore } from "@/stores/user-location";
 import { useI18n } from "vue-i18n";
 import _ from "lodash";
+
+interface UserLocationProps {
+    visible: boolean,
+    theme: string,    
+}
+
+const props = withDefaults(defineProps<UserLocationProps>(), {
+    visible: true,
+    theme: 'default',
+});
+
+const visible = toRef(props, 'visible');
+const theme = toRef(props, 'theme');
 
 const { t } = useI18n();
 
@@ -62,7 +75,7 @@ const setNewUserLocation = (companyId: string, branchId: string) => {
 </script>
 
 <template>
-  <Breadcrumb light
+  <Breadcrumb 
     :class="['h-[45px] md:ml-10 md:border-l border-white/[0.08] dark:border-white/[0.08] mr-auto -intro-x md:pl-6']">
     <Breadcrumb.Text>
       <Menu>
