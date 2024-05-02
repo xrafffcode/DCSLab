@@ -95,7 +95,6 @@ onMounted(async () => {
         </RouterLink>
         <div class="my-6 side-nav__divider"></div>
         <ul>
-          <!-- BEGIN: First Child -->
           <template v-for="(menu, menuKey) in formattedMenu">
             <li
               v-if="menu == 'divider'"

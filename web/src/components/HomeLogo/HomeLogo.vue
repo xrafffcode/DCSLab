@@ -33,7 +33,7 @@ const toUrl = ref<string>('side-menu-dashboard-maindashboard')
                     props.layout == 'simple-menu' && 'hidden',
             ]"
         >
-    {{ appName }}
-    </span>
-</RouterLink>
+            {{ appName }}
+        </span>
+    </RouterLink>
 </template>

@@ -7,6 +7,7 @@ import { useUserContextStore } from "@/stores/user-context";
 import { useSelectedUserLocationStore } from "@/stores/user-location";
 import { useI18n } from "vue-i18n";
 import _ from "lodash";
+import { twMerge } from "tailwind-merge";
 
 interface UserLocationProps {
     visible: boolean,
@@ -22,6 +23,7 @@ const props = withDefaults(defineProps<UserLocationProps>(), {
 
 const visible = toRef(props, 'visible');
 const theme = toRef(props, 'theme');
+const layout = toRef(props, 'layout');
 
 const { t } = useI18n();
 
@@ -57,6 +59,54 @@ const userLocationLength = computed((): number => {
   return result;
 });
 
+const computedClass = computed(() =>
+  twMerge([
+    theme.value == 'rubick'  && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'rubick'  && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'rubick'  && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
+    theme.value == 'icewall' && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'icewall' && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'icewall' && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
+    theme.value == 'enigma'  && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'enigma'  && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'enigma'  && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x',
+    theme.value == 'tinker'  && layout.value == 'side-menu'   && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'tinker'  && layout.value == 'simple-menu' && 'hidden mr-auto -intro-x sm:flex',
+    theme.value == 'tinker'  && layout.value == 'top-menu'    && 'h-full md:ml-10 md:pl-10 md:border-l border-white/[0.08] mr-auto -intro-x'
+  ])
+);
+
+const computedLight = computed(() => {
+  switch (true) {
+    case theme.value == 'rubick' && layout.value == 'side-menu':
+      return false;
+    case theme.value == 'rubick' && layout.value == 'simple-menu':
+      return false;
+    case theme.value == 'rubick' && layout.value == 'top-menu':
+      return true;
+    case theme.value == 'icewall' && layout.value == 'side-menu':
+      return false;
+    case theme.value == 'icewall' && layout.value == 'simple-menu':
+      return false;
+    case theme.value == 'icewall' && layout.value == 'top-menu':
+      return true;
+    case theme.value == 'enigma' && layout.value == 'side-menu':
+      return false;
+    case theme.value == 'enigma' && layout.value == 'simple-menu':
+      return false;
+    case theme.value == 'enigma' && layout.value == 'top-menu':
+      return true;
+    case theme.value == 'tinker' && layout.value == 'side-menu':
+      return false;
+    case theme.value == 'tinker' && layout.value == 'simple-menu':
+      return false;
+    case theme.value == 'rubick' && layout.value == 'top-menu':
+      return true;
+    default:
+      return false;
+  }
+});
+
 onMounted(() => {
   selectedUserLocationStore.getSelectedUserLocation;
 });
@@ -77,8 +127,7 @@ const setNewUserLocation = (companyId: string, branchId: string) => {
 </script>
 
 <template>
-  <Breadcrumb 
-    :class="['h-[45px] md:ml-10 md:border-l border-white/[0.08] dark:border-white/[0.08] mr-auto -intro-x md:pl-6']">
+  <Breadcrumb :light="computedLight" :class="computedClass">
     <Breadcrumb.Text>
       <Menu>
         <Menu.Button variant="primary">

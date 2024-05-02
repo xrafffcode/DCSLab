@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Lucide from "@/components/Base/Lucide";
-import logoUrl from "@/assets/images/logo.svg";
-import Breadcrumb from "@/components/Base/Breadcrumb";
 import { FormInput } from "@/components/Base/Form";
-import { Menu, Popover } from "@/components/Base/Headless";
-import _ from "lodash";
 import { TransitionRoot } from "@headlessui/vue";
 
-const props = defineProps<{
-  layout?: "side-menu" | "simple-menu" | "top-menu";
-}>();
+const props = withDefaults(defineProps<{
+    layout?: "side-menu" | "simple-menu" | "top-menu";
+    visible?: boolean;
+}>(),{
+    layout: "side-menu",
+    visible: false,
+});
 
 const searchDropdown = ref(false);
 const showSearchDropdown = () => {
@@ -22,18 +22,18 @@ const hideSearchDropdown = () => {
 </script>
 
 <template>
-    <div class="relative mr-3 intro-x sm:mr-6">
+    <div v-if="props.visible" class="relative mr-3 intro-x sm:mr-6">
         <div class="relative hidden sm:block">
             <FormInput
-            type="text"
-            class="border-transparent w-56 shadow-none rounded-full bg-slate-200 pr-8 transition-[width] duration-300 ease-in-out focus:border-transparent focus:w-72 dark:bg-darkmode-400"
-            placeholder="Search..."
-            @focus="showSearchDropdown"
-            @blur="hideSearchDropdown"
+                type="text"
+                class="border-transparent w-56 shadow-none rounded-full bg-slate-200 pr-8 transition-[width] duration-300 ease-in-out focus:border-transparent focus:w-72 dark:bg-darkmode-400"
+                placeholder="Search..."
+                @focus="showSearchDropdown"
+                @blur="hideSearchDropdown"
             />
             <Lucide
-            icon="Search"
-            class="absolute inset-y-0 right-0 w-5 h-5 my-auto mr-3 text-slate-600 dark:text-slate-500"
+                icon="Search"
+                class="absolute inset-y-0 right-0 w-5 h-5 my-auto mr-3 text-slate-600 dark:text-slate-500"
             />
         </div>
         <a class="relative text-white/70 sm:hidden" href="">
@@ -56,9 +56,9 @@ const hideSearchDropdown = () => {
                 <div class="mb-5">
                 <a href="" class="flex items-center">
                     <div
-                    class="flex items-center justify-center w-8 h-8 rounded-full bg-success/20 dark:bg-success/10 text-success"
+                        class="flex items-center justify-center w-8 h-8 rounded-full bg-success/20 dark:bg-success/10 text-success"
                     >
-                    <Lucide icon="Inbox" class="w-4 h-4" />
+                        <Lucide icon="Inbox" class="w-4 h-4" />
                     </div>
                     <div class="ml-3">Mail Settings</div>
                 </a>

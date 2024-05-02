@@ -19,11 +19,14 @@ import ScrollToTop from "@/components/Base/ScrollToTop";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import NotificationWidget from "@/components/NotificationWidget";
 import { EmailVerificationAlert } from "@/components/AlertPlaceholder";
-import { useDashboardStore } from "@/stores/dashboard";
 import DashboardService from "@/services/DashboardService";
 import { useZiggyRouteStore } from "@/stores/ziggy-route";
 import { Config } from "ziggy-js";
 import { useI18n } from "vue-i18n";
+import HomeLogo from "@/components/HomeLogo/HomeLogo.vue";
+import UserLocation from "@/components/UserLocation/UserLocation.vue";
+import SearchBox from "@/components/SearchBox/SearchBox.vue";
+import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
 
 const { t } = useI18n();
 const dashboardServices = new DashboardService();
@@ -88,7 +91,9 @@ onMounted(async () => {
       class="border-b border-white/[0.08] mt-[2.2rem] md:-mt-5 -mx-3 sm:-mx-8 px-3 sm:px-8 pt-3 md:pt-0 mb-10"
     >
       <div class="flex items-center h-[70px] z-[51] relative">
-
+        <HomeLogo layout="top-menu"/>
+        <UserLocation theme="rubick" layout="top-menu" />
+        <ProfileMenu theme="rubick" layout="top-menu" />
       </div>
     </div>
 

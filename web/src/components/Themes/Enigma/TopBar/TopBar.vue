@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HomeLogo from "@/components/HomeLogo/HomeLogo.vue";
 import UserLocation from "@/components/UserLocation/UserLocation.vue";
+import SearchBox from "@/components/SearchBox/SearchBox.vue";
 import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
 
 const props = defineProps<{
@@ -19,7 +20,7 @@ const props = defineProps<{
   >
     <div class="flex items-center h-full">
       <HomeLogo />
-      <UserLocation />
+      <UserLocation theme="enigma" :layout="props.layout" />
       <ProfileMenu />
     </div>
   </div>

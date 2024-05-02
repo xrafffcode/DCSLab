@@ -16,15 +16,21 @@ const router = useRouter();
 
 interface ProfileMenuProps {
     visible: boolean,
+    theme: "rubick" | "icewall" | "enigma" | "tinker",
+    layout: "side-menu" | "simple-menu" | "top-menu",
 }
 
 const props = withDefaults(defineProps<ProfileMenuProps>(), {
-    visible: false
+    visible: false,
+    theme: "rubick",
+    layout: "side-menu",
 });
 
 const profileServices = new ProfileService();
 
 const visible = toRef(props, 'visible');
+const theme = toRef(props, 'theme');
+const layout = toRef(props, 'layout');
 
 const userContextStore = useUserContextStore();
 const dashboardStore = useDashboardStore();
