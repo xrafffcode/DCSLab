@@ -113,7 +113,7 @@ const appName = import.meta.env.VITE_APP_NAME;
             <li v-else :key="menuKey">
               <Tippy
                 as="a"
-                :content="menu.title"
+                :content="t(menu.title)"
                 :options="{
                   placement: 'right',
                 }"
@@ -167,7 +167,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                   >
                     <Tippy
                       as="a"
-                      :content="subMenu.title"
+                      :content="t(subMenu.title)"
                       :options="{
                         placement: 'right',
                       }"
@@ -231,7 +231,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                         >
                           <Tippy
                             as="a"
-                            :content="lastSubMenu.title"
+                            :content="t(lastSubMenu.title)"
                             :options="{
                               placement: 'right',
                             }"

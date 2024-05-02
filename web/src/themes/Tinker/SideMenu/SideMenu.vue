@@ -6,7 +6,7 @@ import Tippy from "@/components/Base/Tippy";
 import Lucide from "@/components/Base/Lucide";
 import TopBar from "@/components/Themes/Tinker/TopBar";
 import MobileMenu from "@/components/MobileMenu";
-import { useMenuStore } from "@/stores/menu";
+import { useMenuStore, Menu as sMenu } from "@/stores/menu";
 import {
   type ProvideForceActiveMenu,
   forceActiveMenu,
@@ -43,6 +43,8 @@ const menuStore = useMenuStore();
 const menu = computed(() => nestedMenu(menuStore.menu("side-menu"), route));
 const windowWidth = ref(window.innerWidth);
 
+const ziggyRouteStore = useZiggyRouteStore();
+
 provide<ProvideForceActiveMenu>("forceActiveMenu", (pageName: string) => {
   forceActiveMenu(route, pageName);
   setFormattedMenu(menu.value);
@@ -59,7 +61,13 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  let menuResult = await dashboardServices.readUserMenu();
+  menuStore.setMenu(menuResult.data as Array<sMenu>);
+
+  let apiResult = await dashboardServices.readUserApi();
+  ziggyRouteStore.setZiggy(apiResult.data as Config);
+
   setFormattedMenu(menu.value);
 
   window.addEventListener("resize", () => {
@@ -105,7 +113,7 @@ const appName = import.meta.env.VITE_APP_NAME;
             <li v-else :key="menuKey">
               <Tippy
                 as="a"
-                :content="menu.title"
+                :content="t(menu.title)"
                 :options="{
                   placement: 'right',
                 }"
@@ -159,7 +167,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                   >
                     <Tippy
                       as="a"
-                      :content="subMenu.title"
+                      :content="t(subMenu.title)"
                       :options="{
                         placement: 'right',
                       }"
@@ -223,7 +231,7 @@ const appName = import.meta.env.VITE_APP_NAME;
                         >
                           <Tippy
                             as="a"
-                            :content="lastSubMenu.title"
+                            :content="t(lastSubMenu.title)"
                             :options="{
                               placement: 'right',
                             }"
