@@ -14,7 +14,7 @@ import {
   nestedMenu,
   linkTo,
 } from "./top-menu";
-import { watch, reactive, computed, onMounted, provide } from "vue";
+import { watch, reactive, ref, computed, onMounted, provide } from "vue";
 import ScrollToTop from "@/components/Base/ScrollToTop";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import NotificationWidget from "@/components/NotificationWidget";
@@ -40,6 +40,18 @@ const menuStore = useMenuStore();
 const menu = computed(() => nestedMenu(menuStore.menu("top-menu"), route));
 
 const ziggyRouteStore = useZiggyRouteStore();
+
+const showBackToTop = ref<boolean>(false);
+
+const handlescroll = () => {
+  if (window.scrollY > 100) {
+    showBackToTop.value = true;
+  } else {
+    showBackToTop.value = false;
+  }
+}
+
+window.addEventListener('scroll', handlescroll);
 
 provide<ProvideForceActiveMenu>("forceActiveMenu", (pageName: string) => {
   forceActiveMenu(route, pageName);
@@ -208,6 +220,8 @@ onMounted(async () => {
       ]"
     >
       <RouterView />
+      <br v-for="i in 3" :key="i" />
+      <ScrollToTop :visible="showBackToTop" />
     </div>
   </div>
 </template>
