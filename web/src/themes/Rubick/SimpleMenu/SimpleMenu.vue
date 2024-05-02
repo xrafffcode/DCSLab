@@ -42,6 +42,9 @@ const setFormattedMenu = (
 const menuStore = useMenuStore();
 const menu = computed(() => nestedMenu(menuStore.menu("simple-menu"), route));
 
+const dashboardStore = useDashboardStore();
+const screenMask = computed(() => dashboardStore.screenMaskValue);
+
 const ziggyRouteStore = useZiggyRouteStore();
 
 const showBackToTop = ref<boolean>(false);
@@ -84,208 +87,212 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div
-    :class="[
-      'rubick px-5 sm:px-8 py-5',
-      'before:content-[\'\'] before:bg-gradient-to-b before:from-theme-1 before:to-theme-2 dark:before:from-darkmode-800 dark:before:to-darkmode-800 before:fixed before:inset-0 before:z-[-1]',
-    ]"
-  >
-    <MobileMenu />
-    <div class="flex mt-[4.7rem] md:mt-0">
-      <nav
-        class="side-nav side-nav--simple pr-5 pb-16 overflow-x-hidden hidden md:block w-[80px]"
+  <div>
+    <LoadingOverlay :visible="screenMask" :transparent="false">
+      <div
+        :class="[
+          'rubick px-5 sm:px-8 py-5',
+          'before:content-[\'\'] before:bg-gradient-to-b before:from-theme-1 before:to-theme-2 dark:before:from-darkmode-800 dark:before:to-darkmode-800 before:fixed before:inset-0 before:z-[-1]',
+        ]"
       >
-        <RouterLink
-          :to="{ name: 'side-menu-dashboard-maindashboard' }"
-          class="flex items-center pt-4 pl-5 intro-x"
-        >
-          <img
-            alt="DCSLab"
-            class="w-6"
-            :src="logoUrl"
-          />
-        </RouterLink>
-        <div class="my-6 side-nav__divider"></div>
-        <ul>
-          <template v-for="(menu, menuKey) in formattedMenu">
-            <li
-              v-if="menu == 'divider'"
-              type="li"
-              class="my-6 side-nav__divider"
-              :key="'divider-' + menuKey"
-            ></li>
-            <li v-else :key="menuKey">
-              <Tippy
-                as="a"
-                :content="t(menu.title)"
-                :options="{
-                  placement: 'right',
-                }"
-                :href="
-                  menu.subMenu
-                    ? '#'
-                    : ((pageName: string | undefined) => {
-                        try {
-                          return router.resolve({
-                            name: pageName,
-                          }).fullPath;
-                        } catch (err) {
-                          return '';
-                        }
-                      })(menu.pageName)
-                "
-                @click="(event: MouseEvent) => {
-                  event.preventDefault();
-                  linkTo(menu, router);
-                  setFormattedMenu([...formattedMenu]);
-                }"
-                :class="[
-                  menu.active ? 'side-menu side-menu--active' : 'side-menu',
-                ]"
-              >
-                <div class="side-menu__icon">
-                  <Lucide :icon="menu.icon" />
-                </div>
-                <div class="side-menu__title">
-                  {{ t(menu.title) }}
-                  <div
-                    v-if="menu.subMenu"
+        <MobileMenu />
+        <div class="flex mt-[4.7rem] md:mt-0">
+          <nav
+            class="side-nav side-nav--simple pr-5 pb-16 overflow-x-hidden hidden md:block w-[80px]"
+          >
+            <RouterLink
+              :to="{ name: 'side-menu-dashboard-maindashboard' }"
+              class="flex items-center pt-4 pl-5 intro-x"
+            >
+              <img
+                alt="DCSLab"
+                class="w-6"
+                :src="logoUrl"
+              />
+            </RouterLink>
+            <div class="my-6 side-nav__divider"></div>
+            <ul>
+              <template v-for="(menu, menuKey) in formattedMenu">
+                <li
+                  v-if="menu == 'divider'"
+                  type="li"
+                  class="my-6 side-nav__divider"
+                  :key="'divider-' + menuKey"
+                ></li>
+                <li v-else :key="menuKey">
+                  <Tippy
+                    as="a"
+                    :content="t(menu.title)"
+                    :options="{
+                      placement: 'right',
+                    }"
+                    :href="
+                      menu.subMenu
+                        ? '#'
+                        : ((pageName: string | undefined) => {
+                            try {
+                              return router.resolve({
+                                name: pageName,
+                              }).fullPath;
+                            } catch (err) {
+                              return '';
+                            }
+                          })(menu.pageName)
+                    "
+                    @click="(event: MouseEvent) => {
+                      event.preventDefault();
+                      linkTo(menu, router);
+                      setFormattedMenu([...formattedMenu]);
+                    }"
                     :class="[
-                      'side-menu__sub-icon',
-                      { 'transform rotate-180': menu.activeDropdown },
+                      menu.active ? 'side-menu side-menu--active' : 'side-menu',
                     ]"
                   >
-                    <Lucide icon="ChevronDown" />
-                  </div>
-                </div>
-              </Tippy>
-              <Transition @enter="enter" @leave="leave">
-                <ul
-                  v-if="menu.subMenu && menu.activeDropdown"
-                  :class="{ 'side-menu__sub-open': menu.activeDropdown }"
-                >
-                  <li
-                    v-for="(subMenu, subMenuKey) in menu.subMenu"
-                    :key="subMenuKey"
-                  >
-                    <Tippy
-                      as="a"
-                      :content="t(subMenu.title)"
-                      :options="{
-                        placement: 'right',
-                      }"
-                      :href="
-                        subMenu.subMenu
-                          ? '#'
-                          : ((pageName: string | undefined) => {
-                              try {
-                                return router.resolve({
-                                  name: pageName,
-                                }).fullPath;
-                              } catch (err) {
-                                return '';
-                              }
-                            })(subMenu.pageName)
-                      "
-                      :class="[
-                        subMenu.active
-                          ? 'side-menu side-menu--active'
-                          : 'side-menu',
-                      ]"
-                      @click="(event: MouseEvent) => {
-                        event.preventDefault();
-                        linkTo(subMenu, router);
-                        setFormattedMenu([...formattedMenu]);
-                      }"
-                    >
-                      <div class="side-menu__icon">
-                        <Lucide :icon="subMenu.icon" />
-                      </div>
-                      <div class="side-menu__title">
-                        {{ t(subMenu.title) }}
-                        <div
-                          v-if="subMenu.subMenu"
-                          :class="[
-                            'side-menu__sub-icon',
-                            { 'transform rotate-180': subMenu.activeDropdown },
-                          ]"
-                        >
-                          <Lucide icon="ChevronDown" />
-                        </div>
-                      </div>
-                    </Tippy>
-                    <Transition
-                      @enter="enter"
-                      @leave="leave"
-                      v-if="subMenu.subMenu"
-                    >
-                      <ul
-                        v-if="subMenu.subMenu && subMenu.activeDropdown"
-                        :class="{
-                          'side-menu__sub-open': subMenu.activeDropdown,
-                        }"
+                    <div class="side-menu__icon">
+                      <Lucide :icon="menu.icon" />
+                    </div>
+                    <div class="side-menu__title">
+                      {{ t(menu.title) }}
+                      <div
+                        v-if="menu.subMenu"
+                        :class="[
+                          'side-menu__sub-icon',
+                          { 'transform rotate-180': menu.activeDropdown },
+                        ]"
                       >
-                        <li
-                          v-for="(
-                            lastSubMenu, lastSubMenuKey
-                          ) in subMenu.subMenu"
-                          :key="lastSubMenuKey"
+                        <Lucide icon="ChevronDown" />
+                      </div>
+                    </div>
+                  </Tippy>
+                  <Transition @enter="enter" @leave="leave">
+                    <ul
+                      v-if="menu.subMenu && menu.activeDropdown"
+                      :class="{ 'side-menu__sub-open': menu.activeDropdown }"
+                    >
+                      <li
+                        v-for="(subMenu, subMenuKey) in menu.subMenu"
+                        :key="subMenuKey"
+                      >
+                        <Tippy
+                          as="a"
+                          :content="t(subMenu.title)"
+                          :options="{
+                            placement: 'right',
+                          }"
+                          :href="
+                            subMenu.subMenu
+                              ? '#'
+                              : ((pageName: string | undefined) => {
+                                  try {
+                                    return router.resolve({
+                                      name: pageName,
+                                    }).fullPath;
+                                  } catch (err) {
+                                    return '';
+                                  }
+                                })(subMenu.pageName)
+                          "
+                          :class="[
+                            subMenu.active
+                              ? 'side-menu side-menu--active'
+                              : 'side-menu',
+                          ]"
+                          @click="(event: MouseEvent) => {
+                            event.preventDefault();
+                            linkTo(subMenu, router);
+                            setFormattedMenu([...formattedMenu]);
+                          }"
                         >
-                          <Tippy
-                            as="a"
-                            :content="t(lastSubMenu.title)"
-                            :options="{
-                              placement: 'right',
-                            }"
-                            :href="
-                              lastSubMenu.subMenu
-                                ? '#'
-                                : ((pageName: string | undefined) => {
-                                    try {
-                                      return router.resolve({
-                                        name: pageName,
-                                      }).fullPath;
-                                    } catch (err) {
-                                      return '';
-                                    }
-                                  })(lastSubMenu.pageName)
-                            "
-                            :class="[
-                              lastSubMenu.active
-                                ? 'side-menu side-menu--active'
-                                : 'side-menu',
-                            ]"
-                            @click="(event: MouseEvent) => {
-                              event.preventDefault();
-                              linkTo(lastSubMenu, router);
-                              setFormattedMenu([...formattedMenu]);
+                          <div class="side-menu__icon">
+                            <Lucide :icon="subMenu.icon" />
+                          </div>
+                          <div class="side-menu__title">
+                            {{ t(subMenu.title) }}
+                            <div
+                              v-if="subMenu.subMenu"
+                              :class="[
+                                'side-menu__sub-icon',
+                                { 'transform rotate-180': subMenu.activeDropdown },
+                              ]"
+                            >
+                              <Lucide icon="ChevronDown" />
+                            </div>
+                          </div>
+                        </Tippy>
+                        <Transition
+                          @enter="enter"
+                          @leave="leave"
+                          v-if="subMenu.subMenu"
+                        >
+                          <ul
+                            v-if="subMenu.subMenu && subMenu.activeDropdown"
+                            :class="{
+                              'side-menu__sub-open': subMenu.activeDropdown,
                             }"
                           >
-                            <div class="side-menu__icon">
-                              <Lucide :icon="lastSubMenu.icon" />
-                            </div>
-                            <div class="side-menu__title">
-                              {{ t(lastSubMenu.title) }}
-                            </div>
-                          </Tippy>
-                        </li>
-                      </ul>
-                    </Transition>
-                  </li>
-                </ul>
-              </Transition>
-            </li>
-          </template>
-        </ul>
-      </nav>
-      <div
-        class="rounded-[30px] min-w-0 min-h-screen flex-1 pb-10 bg-slate-100 dark:bg-darkmode-700 px-4 md:px-[22px] max-w-full md:max-w-auto before:content-[''] before:w-full before:h-px before:block"
-      >
-        <TopBar />
-        <RouterView />
-        <br v-for="i in 3" :key="i" />
-        <ScrollToTop :visible="showBackToTop" />
+                            <li
+                              v-for="(
+                                lastSubMenu, lastSubMenuKey
+                              ) in subMenu.subMenu"
+                              :key="lastSubMenuKey"
+                            >
+                              <Tippy
+                                as="a"
+                                :content="t(lastSubMenu.title)"
+                                :options="{
+                                  placement: 'right',
+                                }"
+                                :href="
+                                  lastSubMenu.subMenu
+                                    ? '#'
+                                    : ((pageName: string | undefined) => {
+                                        try {
+                                          return router.resolve({
+                                            name: pageName,
+                                          }).fullPath;
+                                        } catch (err) {
+                                          return '';
+                                        }
+                                      })(lastSubMenu.pageName)
+                                "
+                                :class="[
+                                  lastSubMenu.active
+                                    ? 'side-menu side-menu--active'
+                                    : 'side-menu',
+                                ]"
+                                @click="(event: MouseEvent) => {
+                                  event.preventDefault();
+                                  linkTo(lastSubMenu, router);
+                                  setFormattedMenu([...formattedMenu]);
+                                }"
+                              >
+                                <div class="side-menu__icon">
+                                  <Lucide :icon="lastSubMenu.icon" />
+                                </div>
+                                <div class="side-menu__title">
+                                  {{ t(lastSubMenu.title) }}
+                                </div>
+                              </Tippy>
+                            </li>
+                          </ul>
+                        </Transition>
+                      </li>
+                    </ul>
+                  </Transition>
+                </li>
+              </template>
+            </ul>
+          </nav>
+          <div
+            class="rounded-[30px] min-w-0 min-h-screen flex-1 pb-10 bg-slate-100 dark:bg-darkmode-700 px-4 md:px-[22px] max-w-full md:max-w-auto before:content-[''] before:w-full before:h-px before:block"
+          >
+            <TopBar />
+            <RouterView />
+            <br v-for="i in 3" :key="i" />
+            <ScrollToTop :visible="showBackToTop" />
+          </div>
+        </div>
       </div>
-    </div>
+    </LoadingOverlay>
   </div>
 </template>
