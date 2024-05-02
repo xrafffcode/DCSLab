@@ -10,12 +10,14 @@ import _ from "lodash";
 
 interface UserLocationProps {
     visible: boolean,
-    theme: string,    
+    theme: 'rubick' | 'icewall' | 'enigma' | 'tinker',
+    layout: "side-menu" | "simple-menu" | "top-menu",
 }
 
 const props = withDefaults(defineProps<UserLocationProps>(), {
     visible: true,
-    theme: 'default',
+    theme: 'rubick',
+    layout: 'side-menu',
 });
 
 const visible = toRef(props, 'visible');

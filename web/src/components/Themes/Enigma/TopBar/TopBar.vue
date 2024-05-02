@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import HomeLogo from "@/components/HomeLogo/HomeLogo.vue";
 import UserLocation from "@/components/UserLocation/UserLocation.vue";
 import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
 
@@ -17,6 +18,9 @@ const props = defineProps<{
     ]"
   >
     <div class="flex items-center h-full">
+      <HomeLogo />
+      <UserLocation />
+      <ProfileMenu />
     </div>
   </div>
 </template>
