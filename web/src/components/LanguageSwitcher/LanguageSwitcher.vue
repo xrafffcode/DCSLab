@@ -14,7 +14,7 @@ const switchLanguage = (lang: "en" | "id"): void => {
 <template>
     <Menu class="mr-4 intro-x sm:mr-6">
         <Menu.Button variant="primary">
-            <Lucide icon="Globe" />
+            <Lucide icon="Globe" class="hover:animate-spin" />
         </Menu.Button>
         <Menu.Items class="w-48 h-24 overflow-y-auto" placement="bottom-end">
             <Menu.Item @click="switchLanguage('en')">

@@ -7,6 +7,8 @@ import FormLabel from "./FormLabel.vue";
 import FormSelect from "./FormSelect.vue";
 import FormSwitch from "./FormSwitch";
 import InputGroup from "./InputGroup";
+import FormFileUpload from "./FormFileUpload.vue";
+import FormInputCode from "./FormInputCode.vue";
 import FormErrorMessages from "./FormErrorMessages.vue";
 
 export {
@@ -19,5 +21,7 @@ export {
   FormSelect,
   FormSwitch,
   InputGroup,
+  FormInputCode,
+  FormFileUpload,
   FormErrorMessages,
 };

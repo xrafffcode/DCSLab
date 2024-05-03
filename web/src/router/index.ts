@@ -8,6 +8,23 @@ import ResetPasswordPage from "../pages/auth/ResetPasswordPage.vue";
 
 import MainDashboard from "../pages/dashboard/MainDashboard.vue";
 import ProfileView from "../pages/dashboard/ProfileView.vue";
+import DevTool from "../pages/dev/DevTool.vue";
+import PlayOne from "../pages/dev/PlayOne.vue";
+import PlayTwo from "../pages/dev/PlayTwo.vue";
+import ErrorView from "../pages/error/ErrorView.vue";
+import ErrorPage from "../pages/error/ErrorPage.vue";
+import UserIndex from "../pages/administrator/UserIndex.vue";
+import UserList from "../pages/administrator/UserList.vue";
+import UserCreate from "../pages/administrator/UserCreate.vue";
+import UserEdit from "../pages/administrator/UserEdit.vue";
+import CompanyIndex from "../pages/company/CompanyIndex.vue";
+import CompanyList from "../pages/company/CompanyList.vue";
+import CompanyCreate from "../pages/company/CompanyCreate.vue";
+import CompanyEdit from "../pages/company/CompanyEdit.vue";
+import BranchIndex from "../pages/branch/BranchIndex.vue";
+import BranchList from "../pages/branch/BranchList.vue";
+import BranchCreate from "../pages/branch/BranchCreate.vue";
+import BranchEdit from "../pages/branch/BranchEdit.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -68,7 +85,6 @@ const router = createRouter({
                   remember: true,
               },
           },
-          /*
           {
               path: "/dashboard/company",
               children: [
@@ -220,10 +236,8 @@ const router = createRouter({
                   remember: false,
               },
           }
-          */
       ],
   },
-  /*
   {
       path: "/:pathMatch(.*)*",
       component: ErrorPage,
@@ -239,7 +253,6 @@ const router = createRouter({
           remember: false,
       },
   }
-  */
   ],
 });
 
