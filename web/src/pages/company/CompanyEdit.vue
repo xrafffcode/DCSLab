@@ -3,10 +3,10 @@
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import CompanyService from "../../services/CompanyService";
-import DashboardService from "../../services/DashboardService";
-import CacheService from "../../services/CacheService";
-import { TwoColumnsLayout } from "../../base-components/Form/FormLayout";
+import CompanyService from "@/services/CompanyService";
+import DashboardService from "@/services/DashboardService";
+import CacheService from "@/services/CacheService";
+import { TwoColumnsLayout } from "@/components/Base/Form/FormLayout";
 import {
     FormInput,
     FormLabel,
@@ -15,16 +15,16 @@ import {
     FormSwitch,
     FormInputCode,
     FormErrorMessages,
-} from "../../base-components/Form";
-import { TwoColumnsLayoutCards } from "../../base-components/Form/FormLayout/TwoColumnsLayout.vue";
-import { CardState } from "../../types/enums/CardState";
-import { DropDownOption } from "../../types/models/DropDownOption";
-import { ServiceResponse } from "../../types/services/ServiceResponse";
-import { ViewMode } from "../../types/enums/ViewMode";
-import Button from "../../base-components/Button";
+} from "@/components/Base/Form";
+import { TwoColumnsLayoutCards } from "@/components/Base/Form/FormLayout/TwoColumnsLayout.vue";
+import { CardState } from "@/types/enums/CardState";
+import { DropDownOption } from "@/types/models/DropDownOption";
+import { ServiceResponse } from "@/types/services/ServiceResponse";
+import { ViewMode } from "@/types/enums/ViewMode";
+import Button from "@/components/Base/Button";
 import { debounce } from "lodash";
-import Lucide from "../../base-components/Lucide";
-import { Company } from "../../types/models/Company";
+import Lucide from "@/components/Base/Lucide";
+import { Company } from "@/types/models/Company";
 import { useRouter } from "vue-router";
 // #endregion
 

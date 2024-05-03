@@ -1,23 +1,23 @@
 <script setup lang="ts">
 // #region Imports
 import { onMounted, ref } from "vue";
-import AlertPlaceholder from "../../base-components/AlertPlaceholder";
-import DataList from "../../base-components/DataList";
+import AlertPlaceholder from "@/components/AlertPlaceholder";
+import DataList from "@/components/DataList";
 import { useI18n } from "vue-i18n";
-import Button from "../../base-components/Button";
-import Lucide from "../../base-components/Lucide";
-import Table from "../../base-components/Table";
-import CompanyService from "../../services/CompanyService";
-import { Company } from "../../types/models/Company";
-import { Collection } from "../../types/resources/Collection";
-import { Role } from "../../types/models/Role";
-import { DataListEmittedData } from "../../base-components/DataList/DataList.vue";
-import { ServiceResponse } from "../../types/services/ServiceResponse";
-import { Resource } from "../../types/resources/Resource";
-import { ReadAnyRequest } from "../../types/services/ServiceRequest";
+import Button from "@/components/Base/Button";
+import Lucide from "@/components/Base/Lucide";
+import Table from "@/components/Base/Table";
+import CompanyService from "@/services/CompanyService";
+import { Company } from "@/types/models/Company";
+import { Collection } from "@/types/resources/Collection";
+import { Role } from "@/types/models/Role";
+import { DataListEmittedData } from "@/components/DataList/DataList.vue";
+import { ServiceResponse } from "@/types/services/ServiceResponse";
+import { Resource } from "@/types/resources/Resource";
+import { ReadAnyRequest } from "@/types/services/ServiceRequest";
 import { useRouter } from "vue-router";
-import { Dialog } from "../../base-components/Headless";
-import { ViewMode } from "../../types/enums/ViewMode";
+import { Dialog } from "@/components/Base/Headless";
+import { ViewMode } from "@/types/enums/ViewMode";
 // #endregion
 
 // #region Interfaces

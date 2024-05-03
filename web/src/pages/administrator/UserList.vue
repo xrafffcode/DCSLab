@@ -1,17 +1,17 @@
 <script setup lang="ts">
 // #region Imports
 import { onMounted, ref } from "vue";
-import AlertPlaceholder from "../../base-components/AlertPlaceholder";
-import DataList from "../../base-components/DataList";
+import AlertPlaceholder from "@/components/AlertPlaceholder";
+import DataList from "@/components/DataList";
 import { useI18n } from "vue-i18n";
-import Button from "../../base-components/Button";
-import Lucide from "../../base-components/Lucide";
-import Table from "../../base-components/Table";
-import UserService from "../../services/UserService";
-import { User } from "../../types/models/User";
-import { Collection } from "../../types/resources/Collection";
-import { Role } from "../../types/models/Role";
-import { DataListEmittedData } from "../../base-components/DataList/DataList.vue";
+import Button from "@/components/Base/Button";
+import Lucide from "@/components/Base/Lucide";
+import Table from "@/components/Base/Table";
+import UserService from "@/services/UserService";
+import { User } from "@/types/models/User";
+import { Collection } from "@/types/resources/Collection";
+import { Role } from "@/types/models/Role";
+import { DataListEmittedData } from "@/components/DataList/DataList.vue";
 import { ServiceResponse } from "../../types/services/ServiceResponse";
 import { Resource } from "../../types/resources/Resource";
 import { ReadAnyRequest } from "../../types/services/ServiceRequest";

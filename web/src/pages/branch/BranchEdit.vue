@@ -3,9 +3,9 @@
 import { onMounted, ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import BranchService from "../../services/BranchService";
-import DashboardService from "../../services/DashboardService";
-import CacheService from "../../services/CacheService";
+import BranchService from "@/services/BranchService";
+import DashboardService from "@/services/DashboardService";
+import CacheService from "@/services/CacheService";
 import { TwoColumnsLayout } from "@/components/Base/Form/FormLayout";
 import {
     FormInput,
@@ -17,16 +17,16 @@ import {
     FormErrorMessages,
 } from "@/components/Base/Form";
 import { TwoColumnsLayoutCards } from "@/components/Base/Form/FormLayout/TwoColumnsLayout.vue";
-import { CardState } from "../../types/enums/CardState";
-import { DropDownOption } from "../../types/models/DropDownOption";
-import { ServiceResponse } from "../../types/services/ServiceResponse";
-import { ViewMode } from "../../types/enums/ViewMode";
-import { Branch } from "../../types/models/Branch";
+import { CardState } from "@/types/enums/CardState";
+import { DropDownOption } from "@/types/models/DropDownOption";
+import { ServiceResponse } from "@/types/services/ServiceResponse";
+import { ViewMode } from "@/types/enums/ViewMode";
+import { Branch } from "@/types/models/Branch";
 import Button from "@/components/Base/Button";
 import { debounce } from "lodash";
 import Lucide from "@/components/Base/Lucide";
-import { useSelectedUserLocationStore } from "../../stores/user-location";
-import { ErrorCode } from "../../types/enums/ErrorCode";
+import { useSelectedUserLocationStore } from "@/stores/user-location";
+import { ErrorCode } from "@/types/enums/ErrorCode";
 // #endregion
 
 // #region Interfaces

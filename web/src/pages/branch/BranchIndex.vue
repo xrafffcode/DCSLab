@@ -1,14 +1,14 @@
 <script setup lang="ts">
 // #region Imports
 import { ref } from "vue";
-import LoadingOverlay from "../../base-components/LoadingOverlay";
-import { TitleLayout } from "../../base-components/Form/FormLayout";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import { TitleLayout } from "@/components/Base/Form/FormLayout";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import Button from "../../base-components/Button";
-import Lucide from "../../base-components/Lucide";
-import { ViewMode } from "../../types/enums/ViewMode";
-import CacheService from "../../services/CacheService";
+import Button from "@/components/Base/Button";
+import Lucide from "@/components/Base/Lucide";
+import { ViewMode } from "@/types/enums/ViewMode";
+import CacheService from "@/services/CacheService";
 // #endregion
 
 // #region Interfaces
