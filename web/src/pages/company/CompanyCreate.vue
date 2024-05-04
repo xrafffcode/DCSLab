@@ -113,6 +113,15 @@ const resetForm = () => {
     companyForm.reset();
     companyForm.setErrors({});
 }
+
+const setCode = () => {
+    companyForm.forgetError('code');
+    if (companyForm.code == '_AUTO_') {
+        companyForm.setData({ code: '' });
+    } else {
+        companyForm.setData({ code: '_AUTO_' });
+    }
+}
 // #endregion
 
 // #region Watchers
@@ -132,46 +141,47 @@ watch(
             <template #card-items-0>
                 <div class="p-5">
                     <div class="pb-4">
-                        <FormLabel html-for="code" :class="{ 'text-danger': companyForm.invalid('code') }">
+                        <FormLabel :class="{ 'text-danger': companyForm.invalid('code') }">
                             {{ t('views.company.fields.code') }}
                         </FormLabel>
-                        <FormInputCode id="code" v-model="companyForm.code" name="code"
+                        <FormInputCode v-model="companyForm.code"
                             :class="{ 'border-danger': companyForm.invalid('code') }"
-                            :placeholder="t('views.company.fields.code')" @change="companyForm.validate('code')" />
+                            :placeholder="t('views.company.fields.code')"
+                            @set-auto="setCode" @change="companyForm.validate('code')" />
                         <FormErrorMessages :messages="companyForm.errors.code" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="name" :class="{ 'text-danger': companyForm.invalid('name') }">
+                        <FormLabel :class="{ 'text-danger': companyForm.invalid('name') }">
                             {{ t('views.company.fields.name') }}
                         </FormLabel>
-                        <FormInput id="name" v-model="companyForm.name" name="name" type="text"
+                        <FormInput v-model="companyForm.name" type="text"
                             :class="{ 'border-danger': companyForm.invalid('name') }"
                             :placeholder="t('views.company.fields.name')" @change="companyForm.validate('name')" />
                         <FormErrorMessages :messages="companyForm.errors.name" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="address">
+                        <FormLabel>
                             {{ t('views.company.fields.address') }}
                         </FormLabel>
-                        <FormTextarea id="address" v-model="companyForm.address" name="address" type="text"
+                        <FormTextarea v-model="companyForm.address" type="text"
                             :placeholder="t('views.company.fields.address')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="default" :class="{ 'text-danger': companyForm.invalid('default') }">
+                        <FormLabel :class="{ 'text-danger': companyForm.invalid('default') }">
                             {{ t('views.company.fields.default') }}
                         </FormLabel>
                         <FormSwitch class="mt-2">
-                            <FormSwitch.Input id="default" v-model="companyForm.default" name="default" type="checkbox"
+                            <FormSwitch.Input v-model="companyForm.default" type="checkbox"
                                 :class="{ 'border-danger': companyForm.invalid('default') }"
                                 :placeholder="t('views.company.fields.default')" />
                         </FormSwitch>
                         <FormErrorMessages :messages="companyForm.errors.default" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="status" :class="{ 'text-danger': companyForm.invalid('status') }">
+                        <FormLabel :class="{ 'text-danger': companyForm.invalid('status') }">
                             {{ t('views.company.fields.status') }}
                         </FormLabel>
-                        <FormSelect id="status" v-model="companyForm.status" name="status"
+                        <FormSelect v-model="companyForm.status"
                             :class="{ 'border-danger': companyForm.invalid('status') }"
                             @change="companyForm.validate('status')">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>

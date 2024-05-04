@@ -400,21 +400,21 @@ watchEffect(async () => {
                     <div class="p-5">
                         <form id="updateUserProfileForm" @submit.prevent="onSubmitUpdateUserProfile">
                             <div class="pb-4">
-                                <FormLabel html-for="name"
+                                <FormLabel
                                     :class="{ 'text-danger': updateUserProfileForm.invalid('name') }">
                                     {{ t("views.profile.fields.name") }}
                                 </FormLabel>
-                                <FormInput id="name" v-model="updateUserProfileForm.name" name="name" type="text"
+                                <FormInput v-model="updateUserProfileForm.name" type="text"
                                     :class="{ 'border-danger': updateUserProfileForm.invalid('name') }"
                                     :placeholder="t('views.profile.fields.name')"
                                     @change="updateUserProfileForm.validate('name')" />
                                 <FormErrorMessages :messages="updateUserProfileForm.errors.name" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="email">
+                                <FormLabel>
                                     {{ t("views.profile.fields.email") }}
                                 </FormLabel>
-                                <FormInput id="email" v-model="userContext.email" name="email" type="text"
+                                <FormInput v-model="userContext.email" type="text"
                                     :placeholder="t('views.profile.fields.email')" disabled />
                             </div>
                             <div>
@@ -446,48 +446,48 @@ watchEffect(async () => {
                     <div class="p-5">
                         <form id="updatePersonalInfoForm" @submit.prevent="onSubmitUpdatePersonalInfo">
                             <div class="pb-4">
-                                <FormLabel html-for="first_name">
+                                <FormLabel>
                                     {{ t("views.profile.fields.first_name") }}
                                 </FormLabel>
-                                <FormInput id="first_name" v-model="updatePersonalInfoForm.first_name" name="first_name"
+                                <FormInput v-model="updatePersonalInfoForm.first_name"
                                     type="text" :placeholder="t('views.profile.fields.first_name')" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="last_name">
+                                <FormLabel>
                                     {{ t("views.profile.fields.last_name") }}
                                 </FormLabel>
-                                <FormInput id="last_name" v-model="updatePersonalInfoForm.last_name" name="last_name"
+                                <FormInput v-model="updatePersonalInfoForm.last_name"
                                     type="text" :placeholder="t('views.profile.fields.last_name')" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="address">
+                                <FormLabel>
                                     {{ t("views.profile.fields.address") }}
                                 </FormLabel>
-                                <FormTextarea id="address" v-model="updatePersonalInfoForm.address" name="address" rows="5"
+                                <FormTextarea v-model="updatePersonalInfoForm.address" rows="5"
                                     :placeholder="t('views.profile.fields.address')" />
                             </div>
                             <div class="flex gap-2">
                                 <div class="pb-4 w-full">
-                                    <FormLabel html-for="city">
+                                    <FormLabel>
                                         {{ t("views.profile.fields.city") }}
                                     </FormLabel>
-                                    <FormInput id="address" v-model="updatePersonalInfoForm.city" name="city" type="text"
+                                    <FormInput v-model="updatePersonalInfoForm.city" type="text"
                                         class="w-full" :placeholder="t('views.profile.fields.city')" />
                                 </div>
                                 <div class="pb-4">
-                                    <FormLabel html-for="postal_code">
+                                    <FormLabel>
                                         {{ t("views.profile.fields.postal_code") }}
                                     </FormLabel>
-                                    <FormInput id="postal_code" v-model="updatePersonalInfoForm.postal_code"
-                                        name="postal_code" type="number"
+                                    <FormInput v-model="updatePersonalInfoForm.postal_code"
+                                        type="number"
                                         :placeholder="t('views.profile.fields.postal_code')" />
                                 </div>
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="country">
+                                <FormLabel>
                                     {{ t("views.profile.fields.country") }}
                                 </FormLabel>
-                                <FormSelect id="country" v-model="updatePersonalInfoForm.country" name="country"
+                                <FormSelect v-model="updatePersonalInfoForm.country"
                                     :class="{ 'border-danger': updatePersonalInfoForm.invalid('country') }"
                                     :placeholder="t('views.profile.fields.country')"
                                     @change="updatePersonalInfoForm.validate('country'); updatePersonalInfoForm.submit()">
@@ -497,31 +497,31 @@ watchEffect(async () => {
                                 <FormErrorMessages :messages="updatePersonalInfoForm.errors.country" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="tax_id"
+                                <FormLabel
                                     :class="{ 'text-danger': updatePersonalInfoForm.invalid('tax_id') }">
                                     {{ t("views.profile.fields.tax_id") }}
                                 </FormLabel>
-                                <FormInput id="tax_id" v-model="updatePersonalInfoForm.tax_id" name="tax_id" type="text"
+                                <FormInput v-model="updatePersonalInfoForm.tax_id" type="text"
                                     :class="{ 'border-danger': updatePersonalInfoForm.invalid('tax_id') }"
                                     :placeholder="t('views.profile.fields.tax_id')"
                                     @change="updatePersonalInfoForm.validate('tax_id'); updatePersonalInfoForm.submit();" />
                                 <FormErrorMessages :messages="updatePersonalInfoForm.errors.tax_id" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="ic_num"
+                                <FormLabel
                                     :class="{ 'text-danger': updatePersonalInfoForm.invalid('ic_num') }">
                                     {{ t("views.profile.fields.ic_num") }}
                                 </FormLabel>
-                                <FormInput id="ic_num" v-model="updatePersonalInfoForm.ic_num" name="ic_num" type="text"
+                                <FormInput v-model="updatePersonalInfoForm.ic_num" type="text"
                                     :class="{ 'border-danger': updatePersonalInfoForm.invalid('ic_num') }"
                                     :placeholder="t('views.profile.fields.ic_num')"
                                     @change="updatePersonalInfoForm.validate('ic_num')" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="remarks">
+                                <FormLabel>
                                     {{ t("views.profile.fields.remarks") }}
                                 </FormLabel>
-                                <FormTextarea id="remarks" v-model="updatePersonalInfoForm.remarks" name="remarks" rows="5"
+                                <FormTextarea v-model="updatePersonalInfoForm.remarks" rows="5"
                                     :placeholder="t('views.profile.fields.remarks')" />
                             </div>
                             <div>
@@ -540,10 +540,10 @@ watchEffect(async () => {
                     <div class="p-5">
                         <form id="updateAccountSettingsForm" @submit.prevent="onSubmitUpdateAccountSettings">
                             <div class="pb-4">
-                                <FormLabel html-for="themes">
+                                <FormLabel>
                                     {{ t("views.profile.fields.settings.theme") }}
                                 </FormLabel>
-                                <FormSelect id="themes" v-model="updateAccountSettingsForm.theme" name="themes">
+                                <FormSelect v-model="updateAccountSettingsForm.theme">
                                     <option value="side-menu-light-full">Menu Light</option>
                                     <option value="side-menu-light-mini">Mini Menu Light</option>
                                     <option value="side-menu-dark-full">Menu Dark</option>
@@ -551,11 +551,10 @@ watchEffect(async () => {
                                 </FormSelect>
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="date_format">
+                                <FormLabel>
                                     {{ t("views.profile.fields.settings.date_format") }}
                                 </FormLabel>
-                                <FormSelect id="date_format" v-model="updateAccountSettingsForm.date_format"
-                                    name="date_format">
+                                <FormSelect v-model="updateAccountSettingsForm.date_format">
                                     <option value="yyyy_MM_dd">
                                         {{ formatDate(new Date().toString(), "YYYY-MM-DD") }}
                                     </option>
@@ -565,11 +564,10 @@ watchEffect(async () => {
                                 </FormSelect>
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="time_format">
+                                <FormLabel>
                                     {{ t("views.profile.fields.settings.time_format") }}
                                 </FormLabel>
-                                <FormSelect id="time_format" v-model="updateAccountSettingsForm.time_format"
-                                    name="time_format">
+                                <FormSelect v-model="updateAccountSettingsForm.time_format">
                                     <option value="hh_mm_ss">
                                         {{ formatDate(new Date().toString(), "HH:mm:ss") }}
                                     </option>
@@ -619,33 +617,32 @@ watchEffect(async () => {
                     <div class="p-5">
                         <form id="updatePasswordForm" @submit.prevent="onSubmitUpdatePassword">
                             <div class="pb-4">
-                                <FormLabel html-for="current_password"
+                                <FormLabel
                                     :class="{ 'text-danger': updatePasswordForm.invalid('current_password') }">
                                     {{ t("views.profile.fields.change_password.current_password") }}
                                 </FormLabel>
-                                <FormInput id="current_password" v-model="updatePasswordForm.current_password"
-                                    name="current_password" type="password"
+                                <FormInput v-model="updatePasswordForm.current_password" type="password"
                                     :class="{ 'border-danger': updatePasswordForm.invalid('current_password') }"
                                     :placeholder="t('views.profile.fields.change_password.current_password')"
                                     @change="updatePasswordForm.validate('current_password')" />
                                 <FormErrorMessages :messages="updatePasswordForm.errors.current_password" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="password"
+                                <FormLabel
                                     :class="{ 'text-danger': updatePasswordForm.invalid('password') }">
                                     {{ t("views.profile.fields.change_password.password") }}
                                 </FormLabel>
-                                <FormInput id="password" v-model="updatePasswordForm.password" name="password"
+                                <FormInput v-model="updatePasswordForm.password" 
                                     type="password" :class="{ 'border-danger': updatePasswordForm.invalid('password') }"
                                     :placeholder="t('views.profile.fields.change_password.password')" />
                                 <FormErrorMessages :messages="updatePasswordForm.errors.password" />
                             </div>
                             <div class="pb-4">
-                                <FormLabel html-for="password_confirmation">
+                                <FormLabel>
                                     {{ t("views.profile.fields.change_password.password_confirmation") }}
                                 </FormLabel>
-                                <FormInput id="password_confirmation" v-model="updatePasswordForm.password_confirmation"
-                                    name="password_confirmation" type="password"
+                                <FormInput v-model="updatePasswordForm.password_confirmation"
+                                    type="password"
                                     :placeholder="t('views.profile.fields.change_password.password_confirmation')" />
                             </div>
                             <div>
@@ -679,11 +676,11 @@ watchEffect(async () => {
                 <template #card-items-7>
                     <div class="p-5">
                         <div class="pb-4">
-                            <FormLabel html-for="twoFactorAuthStatus">
+                            <FormLabel>
                                 {{ t('views.profile.fields.2fa.status') }}
                             </FormLabel>
                             <FormSwitch>
-                                <FormSwitch.Input id="twoFactorAuthStatus" type="checkbox" @change="setTwoFactor"
+                                <FormSwitch.Input type="checkbox" @change="setTwoFactor"
                                     v-model="twoFactorAuthStatus" />
                             </FormSwitch>
                         </div>
@@ -701,10 +698,10 @@ watchEffect(async () => {
                             {{ t('views.profile.fields.2fa.confirm_2fa_auth_description_2') }}
                             <br />
                             <br />
-                            <FormLabel html-for="code_2fa">
+                            <FormLabel>
                                 {{ t('views.profile.fields.2fa.confirm_2fa_auth') }}
                             </FormLabel>
-                            <FormInput id="twoFactorCode" v-model="twoFactorCode" name="twoFactorCode" />
+                            <FormInput v-model="twoFactorCode" />
                             <FormErrorMessages v-if="twoFactorCodeErrorText != ''" :messages="twoFactorCodeErrorText" />
                             <br />
                             <Button type="button" variant="primary" @click="() => { doConfirmTwoFactorAuthentication(); }"
@@ -718,7 +715,7 @@ watchEffect(async () => {
                             {{ t('views.profile.fields.2fa.recovery-codes_description_2') }}
                             <br />
                             <br />
-                            <FormLabel html-for="recoverycodes_2fa">
+                            <FormLabel>
                                 {{ t('views.profile.fields.2fa.recovery-codes') }}
                             </FormLabel>
                             <div>
@@ -734,7 +731,7 @@ watchEffect(async () => {
                             {{ t('views.profile.fields.2fa.secret-key_description_2') }}
                             <br />
                             <br />
-                            <FormLabel html-for="secretkey_2fa">
+                            <FormLabel>
                                 {{ t('views.profile.fields.2fa.secret-key') }}
                             </FormLabel>
                             <div class="italic">
@@ -746,11 +743,11 @@ watchEffect(async () => {
                             <Dialog.Panel class="px-5 py-10">
                                 <div class="text-center">
                                     <div class="mb-5">
-                                        <FormLabel html-for="confirmPasswordText">
+                                        <FormLabel>
                                             {{ t('views.profile.fields.2fa.confirm_password') }}
                                         </FormLabel>
-                                        <FormInput id="confirmPasswordText" v-model="confirmPasswordText"
-                                            name="confirmPasswordText" type="password"
+                                        <FormInput v-model="confirmPasswordText"
+                                            type="password"
                                             :placeholder="t('views.profile.fields.2fa.confirm_password')" />
                                         <FormErrorMessages v-if="confirmPasswordErrorText != ''"
                                             :messages="confirmPasswordErrorText" />

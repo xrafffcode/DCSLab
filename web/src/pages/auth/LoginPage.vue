@@ -132,7 +132,6 @@ const onTwoFactorLoginSubmit = async () => {
                   <div class="flex items-center mr-auto">
                     <FormCheck.Input
                       v-model="loginForm.remember"
-                      id="remember-me"
                       type="checkbox"
                       class="mr-2 border"
                     />
@@ -162,10 +161,10 @@ const onTwoFactorLoginSubmit = async () => {
               </form>
               <form v-else id="twoFactorLoginForm" @submit.prevent="onTwoFactorLoginSubmit">
                 <div v-if="twoFactorRecoveryCodesMode" class="mt-8 intro-x">
-                  <FormLabel html-for="two_factor_challenge">
+                  <FormLabel>
                     {{ t('views.login.fields.2fa.recovery_code') }}
                   </FormLabel>
-                  <FormInput v-model="twoFactorLoginForm.recovery_code" type="text" name="recovery_code"
+                  <FormInput v-model="twoFactorLoginForm.recovery_code" type="text"
                             class="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
                             :class="{ 'border-danger': twoFactorLoginForm.invalid('recovery_code') }"
                             :placeholder="t('views.login.fields.2fa.recovery_code')"
@@ -173,10 +172,10 @@ const onTwoFactorLoginSubmit = async () => {
                   <FormErrorMessages :messages="twoFactorLoginForm.errors.recovery_code" />
                 </div>
                 <div v-else class="mt-8 intro-x">
-                  <FormLabel html-for="two_factor_challenge">
+                  <FormLabel>
                     {{ t('views.login.fields.2fa.label') }}
                   </FormLabel>
-                  <FormInput v-model="twoFactorLoginForm.code" type="text" name="code"
+                  <FormInput v-model="twoFactorLoginForm.code" type="text"
                     class="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
                     :class="{ 'border-danger': twoFactorLoginForm.invalid('code') }"
                     :placeholder="t('views.login.fields.2fa.code')" @focus="twoFactorLoginForm.forgetError('code')" />
@@ -185,9 +184,8 @@ const onTwoFactorLoginSubmit = async () => {
                 <div class="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
                   <div class="flex items-center mr-auto">
                     <FormCheck>
-                      <FormCheck.Input v-model="twoFactorRecoveryCodesMode" id="twoFactorRecoveryCodesMode"
-                        type="checkbox" />
-                      <FormCheck.Label html-for="twoFactorRecoveryCodesMode">
+                      <FormCheck.Input v-model="twoFactorRecoveryCodesMode" type="checkbox" />
+                      <FormCheck.Label>
                         {{ t('views.login.fields.2fa.use_recovery_codes') }}
                       </FormCheck.Label>
                     </FormCheck>

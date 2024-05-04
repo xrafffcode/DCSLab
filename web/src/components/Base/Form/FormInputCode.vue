@@ -7,28 +7,33 @@ export default {
 <script setup lang="ts">
 import _ from "lodash";
 import { twMerge } from "tailwind-merge";
-import { computed, InputHTMLAttributes, useAttrs, inject, ref, onMounted } from "vue";
-import { ProvideFormInline } from "./FormInline.vue";
-import { ProvideInputGroup } from "./InputGroup/InputGroup.vue";
+import { computed, type InputHTMLAttributes, useAttrs, inject } from "vue";
+import { type ProvideFormInline } from "./FormInline.vue";
+import { type ProvideInputGroup } from "./InputGroup/InputGroup.vue";
 
-interface FormInputProps extends /* @vue-ignore */ InputHTMLAttributes {
+interface FormInputCodeProps extends /* @vue-ignore */ InputHTMLAttributes {
   value?: InputHTMLAttributes["value"];
   modelValue?: InputHTMLAttributes["value"];
   formInputSize?: "sm" | "lg";
   rounded?: boolean;
 }
 
-interface FormInputEmit {
-  (e: "change", value: string): void;
+interface FormInputCodeEmit {
+  (e: "setAuto"): void;
   (e: "update:modelValue", value: string): void;
 }
 
-const props = defineProps<FormInputProps>();
+const props = defineProps<FormInputCodeProps>();
 const attrs = useAttrs();
 const formInline = inject<ProvideFormInline>("formInline", false);
 const inputGroup = inject<ProvideInputGroup>("inputGroup", false);
 
-const isAuto = ref<boolean>(true);
+const emit = defineEmits<FormInputCodeEmit>();
+
+const disabledInput = computed(() => {
+  if (props.modelValue == '_AUTO_') return true;
+  else return false;
+});
 
 const computedClass = computed(() =>
   twMerge([
@@ -40,53 +45,38 @@ const computedClass = computed(() =>
     props.rounded && "rounded-full",
     formInline && "flex-1",
     inputGroup &&
-    "rounded-none [&:not(:first-child)]:border-l-transparent first:rounded-l last:rounded-r z-10",
+      "rounded-none [&:not(:first-child)]:border-l-transparent first:rounded-l last:rounded-r z-10",
     typeof attrs.class === "string" && attrs.class,
   ])
 );
 
-const emit = defineEmits<FormInputEmit>();
-
-function handleClickAutoButton() {
-  isAuto.value = !isAuto.value;
-  if (isAuto.value) {
-    localValue.value = '_AUTO_'
-  } else {
-    localValue.value = ''
-  }
-}
-
 const localValue = computed({
   get() {
-    if (isAuto.value) {
-      return '_AUTO_'
-    } else {
-      return props.modelValue === undefined ? props.value : props.modelValue;
-    }
+    return props.modelValue === undefined ? props.value : props.modelValue;
   },
   set(newValue) {
-    if (newValue == "_AUTO_" && isAuto.value == false) {
-      isAuto.value = true;
-    }
-
     emit("update:modelValue", newValue);
-    emit("change", newValue);
   },
 });
 
-onMounted(() => {
-  if (props.value && props.value !== "_AUTO_") {
-    isAuto.value = false
-  }
-})
+const handleClickAutoButton = () => {
+  emit('setAuto');
+};
 </script>
 
 <template>
   <div class="block flex gap-2">
-    <input v-model="localValue" :disabled="isAuto" :class="computedClass" :type="props.type ? props.type : 'text'"
-      v-bind="_.omit(attrs, 'class')" />
-    <div class="border-slate-200 border w-[8%] rounded bg-slate-100 cursor-pointer flex justify-center items-center"
-      @click="handleClickAutoButton">
+    <input
+      :disabled="disabledInput"
+      :class="computedClass"
+      :type="props.type"
+      v-bind="_.omit(attrs, 'class')"
+      v-model="localValue"
+    />
+    <div 
+      class="border-slate-200 border w-[8%] rounded bg-slate-100 cursor-pointer flex justify-center items-center"
+      @click="handleClickAutoButton"
+    >
       Auto
     </div>
   </div>

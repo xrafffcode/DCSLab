@@ -159,68 +159,68 @@ watch(
             <template #card-items-1>
                 <div class="p-5">
                     <div class="pb-4">
-                        <FormLabel html-for="code" :class="{ 'text-danger': branchForm.invalid('code') }">
+                        <FormLabel :class="{ 'text-danger': branchForm.invalid('code') }">
                             {{ t('views.branch.fields.code') }}
                         </FormLabel>
-                        <FormInputCode id="code" v-model="branchForm.code" name="code" type="text"
+                        <FormInputCode v-model="branchForm.code" type="text"
                             :class="{ 'border-danger': branchForm.invalid('code') }"
                             :placeholder="t('views.branch.fields.code')" @change="branchForm.validate('code')" />
                         <FormErrorMessages :messages="branchForm.errors.code" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="name" :class="{ 'text-danger': branchForm.invalid('name') }">
+                        <FormLabel :class="{ 'text-danger': branchForm.invalid('name') }">
                             {{ t('views.branch.fields.name') }}
                         </FormLabel>
-                        <FormInput id="name" v-model="branchForm.name" name="name" type="text"
+                        <FormInput v-model="branchForm.name" type="text"
                             :class="{ 'border-danger': branchForm.invalid('name') }"
                             :placeholder="t('views.branch.fields.name')" @change="branchForm.validate('name')" />
                         <FormErrorMessages :messages="branchForm.errors.name" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="address">
+                        <FormLabel>
                             {{ t('views.branch.fields.address') }}
                         </FormLabel>
-                        <FormTextarea id="address" v-model="branchForm.address" name="address" type="text"
+                        <FormTextarea v-model="branchForm.address" type="text"
                             :placeholder="t('views.branch.fields.address')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="city">
+                        <FormLabel>
                             {{ t('views.branch.fields.city') }}
                         </FormLabel>
-                        <FormInput id="city" v-model="branchForm.city" name="city" type="text"
+                        <FormInput v-model="branchForm.city" type="text"
                             :placeholder="t('views.branch.fields.city')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="contact">
+                        <FormLabel>
                             {{ t('views.branch.fields.contact') }}
                         </FormLabel>
-                        <FormInput id="contact" v-model="branchForm.contact" name="contact" type="text"
+                        <FormInput v-model="branchForm.contact" type="text"
                             :placeholder="t('views.branch.fields.contact')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="is_main" :class="{ 'text-danger': branchForm.invalid('is_main') }"
+                        <FormLabel :class="{ 'text-danger': branchForm.invalid('is_main') }"
                             class="pr-5">
                             {{ t('views.branch.fields.is_main') }}
                         </FormLabel>
                         <FormSwitch>
-                            <FormSwitch.Input id="is_main" v-model="branchForm.is_main" name="is_main" type="checkbox"
+                            <FormSwitch.Input v-model="branchForm.is_main" type="checkbox"
                                 :class="{ 'border-danger': branchForm.invalid('is_main') }"
                                 :placeholder="t('views.branch.fields.is_main')" @change="branchForm.validate('is_main')" />
                         </FormSwitch>
                         <FormErrorMessages :messages="branchForm.errors.is_main" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="remarks">
+                        <FormLabel>
                             {{ t('views.branch.fields.remarks') }}
                         </FormLabel>
-                        <FormTextarea id="remarks" v-model="branchForm.remarks" name="remarks" type="text"
+                        <FormTextarea v-model="branchForm.remarks" type="text"
                             :placeholder="t('views.branch.fields.remarks')" rows="3" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="status" :class="{ 'text-danger': branchForm.invalid('status') }">
+                        <FormLabel :class="{ 'text-danger': branchForm.invalid('status') }">
                             {{ t('views.branch.fields.status') }}
                         </FormLabel>
-                        <FormSelect id="status" v-model="branchForm.status" name="status"
+                        <FormSelect v-model="branchForm.status"
                             :class="{ 'border-danger': branchForm.invalid('status') }"
                             @change="branchForm.validate('status')">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>

@@ -151,19 +151,19 @@ watch(
             <template #card-items-0>
                 <div class="p-5">
                     <div class="pb-4">
-                        <FormLabel html-for="name" :class="{ 'text-danger': userForm.invalid('name') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('name') }">
                             {{ t('views.user.fields.name') }}
                         </FormLabel>
-                        <FormInput v-model="userForm.name" id="name" name="name" type="text"
+                        <FormInput v-model="userForm.name" type="text"
                             :class="{ 'border-danger': userForm.invalid('name') }"
                             :placeholder="t('views.user.fields.name')" @change="userForm.validate('name')" />
                         <FormErrorMessages :messages="userForm.errors.name" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="email" :class="{ 'text-danger': userForm.invalid('email') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('email') }">
                             {{ t('views.user.fields.email') }}
                         </FormLabel>
-                        <FormInput v-model="userForm.email" id="email" name="email" type="text"
+                        <FormInput v-model="userForm.email" type="text"
                             :class="{ 'border-danger': userForm.invalid('email') }"
                             :placeholder="t('views.user.fields.email')" @change="userForm.validate('email')" />
                         <FormErrorMessages :messages="userForm.errors.email" />
@@ -173,37 +173,35 @@ watch(
             <template #card-items-1>
                 <div class="p-5">
                     <div class="pb-4">
-                        <FormLabel html-for="first_name">{{ t('views.user.fields.first_name') }}</FormLabel>
-                        <FormInput v-model="userForm.first_name" id="first_name" name="first_name" type="text"
+                        <FormLabel>{{ t('views.user.fields.first_name') }}</FormLabel>
+                        <FormInput v-model="userForm.first_name" type="text"
                             :placeholder="t('views.user.fields.name')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="last_name">{{ t('views.user.fields.last_name') }}</FormLabel>
-                        <FormInput v-model="userForm.last_name" id="last_name" name="last_name" type="text"
+                        <FormLabel>{{ t('views.user.fields.last_name') }}</FormLabel>
+                        <FormInput v-model="userForm.last_name" type="text"
                             :placeholder="t('views.user.fields.last_name')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="address" class="form-label">{{ t('views.user.fields.address') }}
-                        </FormLabel>
-                        <FormInput v-model="userForm.address" id="address" name="address" type="text"
+                        <FormLabel class="form-label">{{ t('views.user.fields.address') }}</FormLabel>
+                        <FormInput v-model="userForm.address" type="text"
                             :placeholder="t('views.user.fields.address')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="city">{{ t('views.user.fields.city') }}</FormLabel>
-                        <FormInput v-model="userForm.city" id="city" name="city" type="text" class="form-control"
+                        <FormLabel>{{ t('views.user.fields.city') }}</FormLabel>
+                        <FormInput v-model="userForm.city" type="text" class="form-control"
                             :placeholder="t('views.user.fields.city')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="postal_code">{{ t('views.user.fields.postal_code') }}
-                        </FormLabel>
-                        <FormInput v-model="userForm.postal_code" id="postal_code" name="postal_code" type="text"
+                        <FormLabel>{{ t('views.user.fields.postal_code') }}</FormLabel>
+                        <FormInput v-model="userForm.postal_code" type="text"
                             :placeholder="t('views.user.fields.postal_code')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="country" :class="{ 'text-danger': userForm.invalid('country') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('country') }">
                             {{ t('views.user.fields.country') }}
                         </FormLabel>
-                        <FormSelect v-model="userForm.country" id="country" name="country"
+                        <FormSelect v-model="userForm.country" 
                             :class="{ 'border-danger': userForm.invalid('country') }"
                             :placeholder="t('views.user.fields.country')" @change="userForm.validate('country')">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
@@ -212,34 +210,34 @@ watch(
                         <FormErrorMessages :messages="userForm.errors.country" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="img_path" :class="{ 'text-danger': false }">
+                        <FormLabel :class="{ 'text-danger': false }">
                             {{ t('views.user.fields.picture') }}
                         </FormLabel>
-                        <FormFileUpload id="img_path" v-model="userForm.img_path" name="img_path" type="text"
+                        <FormFileUpload v-model="userForm.img_path"
                             :class="{ 'border-danger': false }" :placeholder="t('views.user.fields.picture')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="tax_id" :class="{ 'text-danger': userForm.invalid('tax_id') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('tax_id') }">
                             {{ t('views.user.fields.tax_id') }}
                         </FormLabel>
-                        <FormInput v-model="userForm.tax_id" id="tax_id" name="tax_id" type="text"
+                        <FormInput v-model="userForm.tax_id" type="text"
                             :class="{ 'border-danger': userForm.invalid('tax_id') }"
                             @change="userForm.validate('tax_id')" />
                         <FormErrorMessages :messages="userForm.errors.tax_id" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="ic_num" :class="{ 'text-danger': userForm.invalid('ic_num') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('ic_num') }">
                             {{ t('views.user.fields.ic_num') }}
                         </FormLabel>
-                        <FormInput id="ic_num" v-model="userForm.ic_num" name="ic_num" type="text"
+                        <FormInput v-model="userForm.ic_num" type="text"
                             :class="{ 'border-danger': false }" @change="userForm.validate('ic_num')" />
                         <FormErrorMessages :messages="userForm.errors.ic_num" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="status" :class="{ 'text-danger': userForm.invalid('status') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('status') }">
                             {{ t('views.user.fields.status') }}
                         </FormLabel>
-                        <FormSelect id="status" v-model="userForm.status" name="status" :class="{ 'border-danger': false }"
+                        <FormSelect v-model="userForm.status" :class="{ 'border-danger': false }"
                             @change="userForm.validate('status')">
                             <option value="">{{ t('components.dropdown.placeholder') }}</option>
                             <option v-for="c in statusDDL" :key="c.code" :value="c.code">{{ t(c.name) }}</option>
@@ -247,10 +245,10 @@ watch(
                         <FormErrorMessages :messages="userForm.errors.status" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="remarks" :class="{ 'text-danger': false }">
+                        <FormLabel :class="{ 'text-danger': false }">
                             {{ t('views.user.fields.remarks') }}
                         </FormLabel>
-                        <FormTextarea id="remarks" v-model="userForm.remarks" name="remarks" type="text"
+                        <FormTextarea v-model="userForm.remarks" type="text"
                             :placeholder="t('views.user.fields.remarks')" rows="3" />
                     </div>
                 </div>
@@ -258,10 +256,10 @@ watch(
             <template #card-items-2>
                 <div class="p-5">
                     <div class="pb-4">
-                        <FormLabel html-for="roles" :class="{ 'text-danger': userForm.invalid('roles') }">
+                        <FormLabel :class="{ 'text-danger': userForm.invalid('roles') }">
                             {{ t('views.user.fields.roles') }}
                         </FormLabel>
-                        <FormSelect id="roles" v-model="userForm.roles" multiple size="6"
+                        <FormSelect v-model="userForm.roles" multiple size="6"
                             :class="{ 'border-danger': userForm.invalid('roles') }" @change="userForm.validate('roles')">
                             <option v-for="r in rolesDDL" :key="r.id" :value="r">
                                 {{ r.display_name }}
@@ -274,10 +272,10 @@ watch(
             <template #card-items-3>
                 <div class="p-5">
                     <div class="pb-4">
-                        <FormLabel html-for="theme">
+                        <FormLabel>
                             {{ t('views.user.fields.settings.theme') }}
                         </FormLabel>
-                        <FormSelect v-model="userForm.theme" id="theme" name="theme">
+                        <FormSelect v-model="userForm.theme">
                             <option value="side-menu-light-full">Menu Light</option>
                             <option value="side-menu-light-mini">Mini Menu Light</option>
                             <option value="side-menu-dark-full">Menu Dark</option>
@@ -285,19 +283,19 @@ watch(
                         </FormSelect>
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="date_format">
+                        <FormLabel>
                             {{ t('views.user.fields.settings.date_format') }}
                         </FormLabel>
-                        <FormSelect v-model="userForm.date_format" id="date_format" name="date_format">
+                        <FormSelect v-model="userForm.date_format">
                             <option value="yyyy_MM_dd">{{ 'YYYY-MM-DD' }}</option>
                             <option value="dd_MMM_yyyy">{{ 'DD-MMM-YYYY' }}</option>
                         </FormSelect>
                     </div>
                     <div class="pb-4">
-                        <FormLabel html-for="time_format">
+                        <FormLabel>
                             {{ t('views.user.fields.settings.time_format') }}
                         </FormLabel>
-                        <FormSelect v-model="userForm.time_format" id="time_format" name="time_format">
+                        <FormSelect v-model="userForm.time_format">
                             <option value="hh_mm_ss">{{ 'HH:mm:ss' }}</option>
                             <option value="h_m_A">{{ 'H:m A' }}</option>
                         </FormSelect>

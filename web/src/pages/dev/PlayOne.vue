@@ -42,7 +42,7 @@ const triggerNotification = () => {
         <br />
         <div>
             <p>FormInput Test</p>
-            <FormInput id="ic_num" v-model="inputTestVal" name="ic_num" type="text" @change="changeInputTriggered" />
+            <FormInput v-model="inputTestVal" type="text" @change="changeInputTriggered" />
 
             <Button variant="primary" @click="inputTestVal = 2">Change Input Value To 2</Button>
         </div>
