@@ -27,6 +27,7 @@ export default class CompanyService {
         const url = route('api.post.db.company.company.save', undefined, true, this.ziggyRoute);
 
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', url, {
             code: '_AUTO_',
             name: '',
@@ -107,6 +108,7 @@ export default class CompanyService {
         const url = route('api.post.db.company.company.edit', ulid, true, this.ziggyRoute);
 
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', url, {
             code: '_AUTO_',
             name: '',

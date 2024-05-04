@@ -27,6 +27,7 @@ export default class UserService {
         const url = route('api.post.db.admin.user.save', undefined, true, this.ziggyRoute);
 
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', url, {
             name: '',
             email: '',
@@ -137,6 +138,7 @@ export default class UserService {
         const url = route('api.post.db.admin.user.edit', ulid, true, this.ziggyRoute);
 
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', url, {
             name: '',
             email: '',

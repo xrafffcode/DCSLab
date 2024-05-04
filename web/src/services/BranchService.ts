@@ -27,6 +27,7 @@ export default class BranchService {
         const url = route('api.post.db.company.branch.save', undefined, true, this.ziggyRoute);
 
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', url, {
             company_id: '',
             code: '_AUTO_',
@@ -114,6 +115,7 @@ export default class BranchService {
         const url = route('api.post.db.company.branch.edit', ulid, true, this.ziggyRoute);
 
         client.axios().defaults.withCredentials = true;
+        client.axios().defaults.withXSRFToken = true;
         const form = useForm('post', url, {
             company_id: '',
             code: '_AUTO_',

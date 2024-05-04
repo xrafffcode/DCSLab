@@ -51,6 +51,7 @@ export default class ProfileService {
     const url = route('api.post.db.module.profile.update.user_profile', undefined, true, this.ziggyRoute);
 
     client.axios().defaults.withCredentials = true;
+    client.axios().defaults.withXSRFToken = true;
     const form = useForm('post', url, {
       name: '',
     });
@@ -62,6 +63,7 @@ export default class ProfileService {
     const url = route('api.post.db.module.profile.update.personal_info', undefined, true, this.ziggyRoute);
 
     client.axios().defaults.withCredentials = true;
+    client.axios().defaults.withXSRFToken = true;
     const form = useForm('post', url, {
       first_name: '',
       last_name: '',
@@ -83,6 +85,7 @@ export default class ProfileService {
     const url = route('api.post.db.module.profile.update.account_settings', undefined, true, this.ziggyRoute);
 
     client.axios().defaults.withCredentials = true;
+    client.axios().defaults.withXSRFToken = true;
     const form = useForm('post', url, {
       theme: 'side-menu-light-full',
       date_format: 'dd_MMM_yyyy',
@@ -96,6 +99,7 @@ export default class ProfileService {
     const url = route('api.post.db.module.profile.update.roles', undefined, true, this.ziggyRoute);
 
     client.axios().defaults.withCredentials = true;
+    client.axios().defaults.withXSRFToken = true;
     const form = useForm('post', url, {
       roles: '',
     });
@@ -107,6 +111,7 @@ export default class ProfileService {
     const url = route('api.post.db.module.profile.update.password', undefined, true, this.ziggyRoute);
 
     client.axios().defaults.withCredentials = true;
+    client.axios().defaults.withXSRFToken = true;
     const form = useForm('post', url, {
       current_password: '',
       password: '',
@@ -120,6 +125,7 @@ export default class ProfileService {
     const url = route('api.post.db.module.profile.update.tokens', undefined, true, this.ziggyRoute);
 
     client.axios().defaults.withCredentials = true;
+    client.axios().defaults.withXSRFToken = true;
     const form = useForm('post', url, {
       reset_tokens: true,
     });
