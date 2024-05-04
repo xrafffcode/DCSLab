@@ -22,7 +22,7 @@ import Button from "@/components/Base/Button";
 import { ViewMode } from "@/types/enums/ViewMode";
 import { debounce } from "lodash";
 import Lucide from "@/components/Base/Lucide";
-import { useSelectedUserLocationStore } from "@/stores/user-location";
+import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { useRouter } from "vue-router";
 import { ErrorCode } from "@/types/enums/ErrorCode";
 // #endregion

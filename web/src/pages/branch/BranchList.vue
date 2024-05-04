@@ -16,7 +16,7 @@ import { Resource } from "@/types/resources/Resource";
 import { ReadAnyRequest } from "@/types/services/ServiceRequest";
 import { useRouter } from "vue-router";
 import { Dialog } from "@/components/Base/Headless";
-import { useSelectedUserLocationStore } from "@/stores/user-location";
+import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { ErrorCode } from "@/types/enums/ErrorCode";
 import { ViewMode } from "@/types/enums/ViewMode";
 // #endregion

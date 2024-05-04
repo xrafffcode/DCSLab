@@ -4,7 +4,7 @@ import Breadcrumb from "@/components/Base/Breadcrumb";
 import Lucide from "@/components/Base/Lucide";
 import { Menu } from "@/components/Base/Headless";
 import { useUserContextStore } from "@/stores/user-context";
-import { useSelectedUserLocationStore } from "@/stores/user-location";
+import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { useI18n } from "vue-i18n";
 import _ from "lodash";
 import { twMerge } from "tailwind-merge";
@@ -108,11 +108,13 @@ const setNewUserLocation = (companyId: string, branchId: string) => {
   let branch = branchId == '' ? _.find(company.branches, { is_main: true }) : _.find(company.branches, { id: branchId });
 
   if (branch) {
+    selectedUserLocationStore.clearSelectedUserLocation();
     selectedUserLocationStore.setSelectedUserLocation(company.id, company.ulid, company.code, company.name, branch.id, branch.ulid, branch.code, branch.name);
   } else {
+    selectedUserLocationStore.clearSelectedUserLocation();
     selectedUserLocationStore.setSelectedUserLocation(company.id, company.ulid, company.code, company.name);
   }
-}
+};
 </script>
 
 <template>

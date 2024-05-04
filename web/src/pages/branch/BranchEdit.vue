@@ -25,7 +25,7 @@ import { Branch } from "@/types/models/Branch";
 import Button from "@/components/Base/Button";
 import { debounce } from "lodash";
 import Lucide from "@/components/Base/Lucide";
-import { useSelectedUserLocationStore } from "@/stores/user-location";
+import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { ErrorCode } from "@/types/enums/ErrorCode";
 // #endregion
 
