@@ -143,6 +143,15 @@ const resetForm = async () => {
     branchForm.setErrors({});
     await loadData(route.params.ulid as string);
 }
+
+const setCode = () => {
+    branchForm.forgetError('code');
+    if (branchForm.code == '_AUTO_') {
+        branchForm.setData({ code: '' });
+    } else {
+        branchForm.setData({ code: '_AUTO_' });
+    }
+}
 // #endregion
 
 // #region Watchers
@@ -177,7 +186,7 @@ watch(
                         </FormLabel>
                         <FormInputCode v-model="branchForm.code" type="text"
                             :class="{ 'border-danger': branchForm.invalid('code') }"
-                            :placeholder="t('views.branch.fields.code')" @change="branchForm.validate('code')" />
+                            :placeholder="t('views.branch.fields.code')" @set-auto="setCode" @change="branchForm.validate('code')" />
                         <FormErrorMessages :messages="branchForm.errors.code" />
                     </div>
                     <div class="pb-4">
