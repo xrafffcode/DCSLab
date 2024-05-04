@@ -78,7 +78,7 @@ const loadFromCache = () => {
     let data = cacheServices.getLastEntity('USER_CREATE') as Record<string, unknown>;
     if (!data) return;
     userForm.setData(data);
-}
+};
 
 const getDDL = (): void => {
     roleServices.readAny().then((result: ServiceResponse<Resource<Array<Role>> | null>) => {
@@ -94,7 +94,7 @@ const getDDL = (): void => {
     dashboardServices.getStatusDDL().then((result: Array<DropDownOption> | null) => {
         statusDDL.value = result;
     });
-}
+};
 
 const handleExpandCard = (index: number) => {
     if (cards.value[index].state === CardState.Collapsed) {
@@ -102,7 +102,7 @@ const handleExpandCard = (index: number) => {
     } else if (cards.value[index].state === CardState.Expanded) {
         cards.value[index].state = CardState.Collapsed
     }
-}
+};
 
 const scrollToError = (id: string): void => {
     let el = document.getElementById(id);
@@ -110,7 +110,7 @@ const scrollToError = (id: string): void => {
     if (!el) return;
 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
+};
 
 const onSubmit = async () => {
     if (userForm.hasErrors) {
@@ -131,7 +131,7 @@ const onSubmit = async () => {
 const resetForm = () => {
     userForm.reset();
     userForm.setErrors({});
-}
+};
 // #endregion
 
 // #region Watchers

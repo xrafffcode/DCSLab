@@ -101,7 +101,7 @@ const getBranches = async (search: string, refresh: boolean, paginate: boolean, 
   }
 
   emits('loading-state', false);
-}
+};
 
 const onDataListChanged = async (data: DataListEmittedData) => {
   await getBranches(data.search.text, false, true, data.pagination.page, data.pagination.per_page);
@@ -120,7 +120,7 @@ const editSelected = (itemIdx: number) => {
 
   let ulid = branchLists.value.data[itemIdx].ulid;
   router.push({ name: 'side-menu-company-branch-edit', params: { ulid: ulid } });
-}
+};
 
 const deleteSelected = (itemIdx: number) => {
   if (!branchLists.value) return;
@@ -129,7 +129,7 @@ const deleteSelected = (itemIdx: number) => {
 
   deleteUlid.value = itemUlid;
   deleteModalShow.value = true;
-}
+};
 
 const confirmDelete = async () => {
   deleteModalShow.value = false;
@@ -142,7 +142,7 @@ const confirmDelete = async () => {
   }
 
   emits('loading-state', false);
-}
+};
 // #endregion
 
 // #region Watchers

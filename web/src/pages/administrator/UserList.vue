@@ -86,7 +86,7 @@ const getUsers = async (search: string, refresh: boolean, paginate: boolean, pag
     }
 
     emits('loading-state', false);
-}
+};
 
 const onDataListChanged = async (data: DataListEmittedData) => {
     await getUsers(data.search.text, false, true, data.pagination.page, data.pagination.per_page);
@@ -105,12 +105,12 @@ const editSelected = (itemIdx: number) => {
 
     let ulid = userLists.value.data[itemIdx].ulid;
     router.push({ name: 'side-menu-administrator-user-edit', params: { ulid: ulid } });
-}
+};
 
 const flattenedRoles = (roles: Array<Role>): string => {
     if (roles.length == 0) return '';
     return roles.map((x: Role) => x.display_name).join(', ');
-}
+};
 // #endregion
 
 // #region Watchers

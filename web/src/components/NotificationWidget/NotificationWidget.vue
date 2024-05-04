@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, provide, computed, watch } from "vue";
-import Lucide from "../Base/Lucide";
-import Notification, { NotificationElement } from "../Base/Notification";
-import Button from "../Base/Button";
+import Lucide from "@/components/Base/Lucide";
+import Notification, { NotificationElement } from "@/components/Base/Notification";
+import Button from "@/components/Base/Button";
 import { useNotificationWidgetStore } from "@/stores/notification-widget";
 
 const notificationWidgetStore = useNotificationWidgetStore();

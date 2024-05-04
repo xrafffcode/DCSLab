@@ -98,13 +98,13 @@ const loadData = async (ulid: string) => {
         });
     }
     emits('loading-state', false);
-}
+};
 
 const getDDL = (): void => {
     dashboardServices.getStatusDDL().then((result: Array<DropDownOption> | null) => {
         statusDDL.value = result;
     });
-}
+};
 
 const handleExpandCard = (index: number) => {
     if (cards.value[index].state === CardState.Collapsed) {
@@ -112,7 +112,7 @@ const handleExpandCard = (index: number) => {
     } else if (cards.value[index].state === CardState.Expanded) {
         cards.value[index].state = CardState.Collapsed
     }
-}
+};
 
 const scrollToError = (id: string): void => {
     let el = document.getElementById(id);
@@ -120,7 +120,7 @@ const scrollToError = (id: string): void => {
     if (!el) return;
 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
+};
 
 const onSubmit = async () => {
     if (branchForm.hasErrors) {
@@ -142,7 +142,7 @@ const resetForm = async () => {
     branchForm.reset();
     branchForm.setErrors({});
     await loadData(route.params.ulid as string);
-}
+};
 
 const setCode = () => {
     branchForm.forgetError('code');
@@ -151,7 +151,7 @@ const setCode = () => {
     } else {
         branchForm.setData({ code: '_AUTO_' });
     }
-}
+};
 // #endregion
 
 // #region Watchers

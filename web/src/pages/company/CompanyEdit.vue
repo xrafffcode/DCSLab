@@ -127,7 +127,7 @@ const resetForm = async () => {
     companyForm.reset();
     companyForm.setErrors({});
     await loadData(route.params.ulid as string);
-}
+};
 
 const setCode = () => {
     companyForm.forgetError('code');
@@ -136,7 +136,7 @@ const setCode = () => {
     } else {
         companyForm.setData({ code: '_AUTO_' });
     }
-}
+};
 // #endregion
 
 // #region Watchers
@@ -144,6 +144,9 @@ watch(
     companyForm,
     debounce((newValue): void => {
         cacheServices.setLastEntity('COMPANY_EDIT', newValue.data())
+        if (companyForm.hasErrors) {
+            
+        }
     }, 500),
     { deep: true }
 );

@@ -40,17 +40,17 @@ const titleView = ref<string>('views.company.page_title');
 const createNew = () => {
     mode.value = ViewMode.FORM_CREATE;
     router.push({ name: 'side-menu-company-company-create' });
-}
+};
 
 const backToList = async () => {
     mode.value = ViewMode.LIST;
 
     router.push({ name: 'side-menu-company-company-list' });
-}
+};
 
 const onLoadingStateChanged = (state: boolean) => {
     loading.value = state;
-}
+};
 
 const onModeStateChanged = (state: ViewMode) => {
     mode.value = state;
@@ -68,7 +68,7 @@ const onModeStateChanged = (state: ViewMode) => {
             titleView.value = 'views.company.page_title';
             break;
     }
-}
+};
 
 const clearCache = (mode: ViewMode) => {
     switch (mode) {
@@ -81,7 +81,7 @@ const clearCache = (mode: ViewMode) => {
         default:
             break;
     }
-}
+};
 // #endregion
 
 // #region Watchers

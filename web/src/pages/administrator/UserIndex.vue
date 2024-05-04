@@ -37,17 +37,17 @@ const titleView = ref<string>('views.user.page_title');
 const createNew = () => {
     mode.value = ViewMode.FORM_CREATE;
     router.push({ name: 'side-menu-administrator-user-create' });
-}
+};
 
 const backToList = async () => {
     mode.value = ViewMode.LIST;
 
     router.push({ name: 'side-menu-administrator-user-list' });
-}
+};
 
 const onLoadingStateChanged = (state: boolean) => {
     loading.value = state;
-}
+};
 
 const onModeStateChanged = (state: ViewMode) => {
     mode.value = state;
@@ -65,7 +65,7 @@ const onModeStateChanged = (state: ViewMode) => {
             titleView.value = 'views.user.page_title';
             break;
     }
-}
+};
 // #endregion
 
 // #region Watchers

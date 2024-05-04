@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import Alert from "../Base/Alert";
-import Lucide from "../Base/Lucide";
+import Alert from "@/components/Base/Alert";
+import Lucide from "@/components/Base/Lucide";
 import { useI18n } from "vue-i18n";
 import { useUserContextStore } from "@/stores/user-context";
 

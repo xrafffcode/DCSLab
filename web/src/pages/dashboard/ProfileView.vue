@@ -157,7 +157,7 @@ const setFormData = () => {
     if (!hasRolePOSOwner()) { roleSelection.value[0].state = 'selectable' }
     if (!hasRoleWHOwner()) { roleSelection.value[1].state = 'selectable' }
     if (!hasRoleACCOwner()) { roleSelection.value[2].state = 'selectable' }
-}
+};
 
 const handleExpandCard = (index: number) => {
     if (cards.value[index].state === CardState.Collapsed) {
@@ -173,7 +173,7 @@ const handleChangeRole = (index: number) => {
     updateUserRolesForm.setData({
         roles: activeRole
     });
-}
+};
 
 const hasRolePOSOwner = () => {
     let result = false;
@@ -207,7 +207,7 @@ const hasRoleACCOwner = () => {
 
 const setTwoFactorAuthStatus = async () => {
     twoFactorAuthStatus.value = userContext.value.two_factor;
-}
+};
 
 const setTwoFactor = async (event: Event) => {
     let checked: boolean = (event.target as HTMLInputElement).checked;
@@ -227,7 +227,7 @@ const setTwoFactorWithConfirmPassword = async () => {
     confirmPasswordText.value = '';
     confirmPasswordErrorText.value = '';
     showConfirmPasswordDialog.value = true;
-}
+};
 
 const setTwoFactorWithoutOrAfterConfirmPassword = async () => {
     if (twoFactorAuthStatus.value) {
@@ -237,7 +237,7 @@ const setTwoFactorWithoutOrAfterConfirmPassword = async () => {
         await profileServices.disableTwoFactor();
         await reloadUserContext();
     }
-}
+};
 
 const doConfirmTwoFactorAuthentication = async () => {
     let code = twoFactorCode.value;
@@ -252,7 +252,7 @@ const doConfirmTwoFactorAuthentication = async () => {
     } else {
         twoFactorCodeErrorText.value = t('views.profile.fields.2fa.confirm_2fa_auth_error');
     }
-}
+};
 
 const showQR = async () => {
     await checkConfirmPasswordStatus();
@@ -263,7 +263,7 @@ const showQR = async () => {
         confirmPasswordPurpose.value = 'QRCODE';
         await showQRWithConfirmPassword();
     }
-}
+};
 
 const showQRWithoutOrAfterConfirmPassword = async () => {
     let response: ServiceResponse<QRCode | null> = await profileServices.twoFactorQR();
@@ -272,13 +272,13 @@ const showQRWithoutOrAfterConfirmPassword = async () => {
         qrCode.value = response.data;
         showQRCodeField.value = true;
     }
-}
+};
 
 const showQRWithConfirmPassword = async () => {
     confirmPasswordText.value = '';
     confirmPasswordErrorText.value = '';
     showConfirmPasswordDialog.value = true;
-}
+};
 
 const showRecoveryCodes = async () => {
     let response: ServiceResponse<Array<string> | null> = await profileServices.twoFactorRecoveryCodes();
@@ -287,7 +287,7 @@ const showRecoveryCodes = async () => {
         twoFactorRecoveryCodes.value = response.data;
         showRecoveryCodesField.value = true;
     }
-}
+};
 
 const showSecretKey = async () => {
     let response: ServiceResponse<SecretKeyResponse | null> = await profileServices.twoFactorSecretKey();
@@ -298,7 +298,7 @@ const showSecretKey = async () => {
             showSecretKeyField.value = true;
         }
     }
-}
+};
 
 const checkConfirmPasswordStatus = async () => {
     let response: ServiceResponse<ConfirmPasswordStatusResponse | null> = await profileServices.confirmPasswordStatus();
@@ -306,7 +306,7 @@ const checkConfirmPasswordStatus = async () => {
     if (response.success && response.data) {
         confirmPasswordStatus.value = response.data;
     }
-}
+};
 
 const submitConfirmPassword = async () => {
     let response: ServiceResponse<TwoFactorResponse | null> = await profileServices.confirmPassword(confirmPasswordText.value);
@@ -328,7 +328,7 @@ const submitConfirmPassword = async () => {
     } else {
         confirmPasswordErrorText.value = t('views.profile.fields.2fa.confirm_password_error');
     }
-}
+};
 
 const closeConfirmPasswordDialog = async () => {
     showConfirmPasswordDialog.value = false;
@@ -339,16 +339,16 @@ const closeConfirmPasswordDialog = async () => {
     confirmPasswordPurpose.value = '';
 
     await reloadUserContext();
-}
+};
 
 const reloadUserContext = async () => {
     let userprofile = await profileServices.readProfile();
     userContextStore.setUserContext(userprofile.data as UserProfile);
-}
+};
 
 const sendEmailVerification = () => {
 
-}
+};
 
 const onSubmitUpdateUserProfile = async () => {
 

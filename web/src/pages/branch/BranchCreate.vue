@@ -81,18 +81,19 @@ const setCompanyIdData = () => {
     branchForm.setData({
         company_id: selectedUserLocation.value.company.id,
     });
-}
+};
+
 const loadFromCache = () => {
     let data = cacheServices.getLastEntity('BRANCH_CREATE') as Record<string, unknown>;
     if (!data) return;
     branchForm.setData(data);
-}
+};
 
 const getDDL = (): void => {
     dashboardServices.getStatusDDL().then((result: Array<DropDownOption> | null) => {
         statusDDL.value = result;
     });
-}
+};
 
 const handleExpandCard = (index: number) => {
     if (cards.value[index].state === CardState.Collapsed) {
@@ -100,7 +101,7 @@ const handleExpandCard = (index: number) => {
     } else if (cards.value[index].state === CardState.Expanded) {
         cards.value[index].state = CardState.Collapsed
     }
-}
+};
 
 const scrollToError = (id: string): void => {
     let el = document.getElementById(id);
@@ -108,7 +109,7 @@ const scrollToError = (id: string): void => {
     if (!el) return;
 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
+};
 
 const onSubmit = async () => {
     if (branchForm.hasErrors) {
@@ -129,7 +130,7 @@ const onSubmit = async () => {
 const resetForm = () => {
     branchForm.reset();
     branchForm.setErrors({});
-}
+};
 
 const setCode = () => {
     branchForm.forgetError('code');
@@ -138,7 +139,7 @@ const setCode = () => {
     } else {
         branchForm.setData({ code: '_AUTO_' });
     }
-}
+};
 // #endregion
 
 // #region Watchers

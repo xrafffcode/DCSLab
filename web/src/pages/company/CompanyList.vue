@@ -89,11 +89,11 @@ const getCompanies = async (search: string, refresh: boolean, paginate: boolean,
   }
 
   emits('loading-state', false);
-}
+};
 
 const onDataListChanged = async (data: DataListEmittedData) => {
   await getCompanies(data.search.text, false, true, data.pagination.page, data.pagination.per_page);
-}
+};
 
 const viewSelected = (idx: number) => {
   if (expandDetail.value === idx) {
@@ -108,7 +108,7 @@ const editSelected = (itemIdx: number) => {
 
   let ulid = companyLists.value.data[itemIdx].ulid;
   router.push({ name: 'side-menu-company-company-edit', params: { ulid: ulid } });
-}
+};
 
 const deleteSelected = (itemIdx: number) => {
   if (!companyLists.value) return;
@@ -117,7 +117,7 @@ const deleteSelected = (itemIdx: number) => {
 
   deleteUlid.value = itemUlid;
   deleteModalShow.value = true;
-}
+};
 
 const confirmDelete = async () => {
   deleteModalShow.value = false;
@@ -130,7 +130,7 @@ const confirmDelete = async () => {
   }
 
   emits('loading-state', false);
-}
+};
 // #endregion
 
 // #region Watchers

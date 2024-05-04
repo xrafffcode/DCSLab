@@ -23,6 +23,7 @@ import { ViewMode } from "@/types/enums/ViewMode";
 import { debounce } from "lodash";
 import Lucide from "@/components/Base/Lucide";
 import { useRouter } from "vue-router";
+import AlertPlaceholder from "@/components/AlertPlaceholder";
 // #endregion
 
 // #region Interfaces
@@ -69,13 +70,13 @@ const loadFromCache = () => {
     let data = cacheServices.getLastEntity('USER_CREATE') as Record<string, unknown>;
     if (!data) return;
     companyForm.setData(data);
-}
+};
 
 const getDDL = (): void => {
     dashboardServices.getStatusDDL().then((result: Array<DropDownOption> | null) => {
         statusDDL.value = result;
     });
-}
+};
 
 const handleExpandCard = (index: number) => {
     if (cards.value[index].state === CardState.Collapsed) {
@@ -83,7 +84,7 @@ const handleExpandCard = (index: number) => {
     } else if (cards.value[index].state === CardState.Expanded) {
         cards.value[index].state = CardState.Collapsed
     }
-}
+};
 
 const scrollToError = (id: string): void => {
     let el = document.getElementById(id);
@@ -91,7 +92,7 @@ const scrollToError = (id: string): void => {
     if (!el) return;
 
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
+};
 
 const onSubmit = async () => {
     if (companyForm.hasErrors) {
@@ -112,7 +113,7 @@ const onSubmit = async () => {
 const resetForm = () => {
     companyForm.reset();
     companyForm.setErrors({});
-}
+};
 
 const setCode = () => {
     companyForm.forgetError('code');
@@ -121,7 +122,11 @@ const setCode = () => {
     } else {
         companyForm.setData({ code: '_AUTO_' });
     }
-}
+};
+
+const convertPrecogErrors = () => {
+
+};
 // #endregion
 
 // #region Watchers
@@ -129,6 +134,9 @@ watch(
     companyForm,
     debounce((newValue): void => {
         cacheServices.setLastEntity('COMPANY_CREATE', newValue.data())
+        if (companyForm.hasErrors) {
+            
+        }
     }, 500),
     { deep: true }
 );
