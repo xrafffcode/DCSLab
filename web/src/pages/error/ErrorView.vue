@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { TitleLayout } from '@/components/Base/Form/FormLayout';
 import { useI18n } from 'vue-i18n';
+import Button from "@/components/Base/Button";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -10,7 +11,11 @@ const errorCode = ref<number>(0);
 
 onMounted(() => {
     errorCode.value = parseInt(route.params.code as string);
-})
+});
+
+const back = () => {
+    window.history.go(-1);
+};
 </script>
 
 <template>
@@ -39,5 +44,9 @@ onMounted(() => {
         <div v-else>
 
         </div>
+
+        <br />
+        <br />
+        <Button variant="soft-primary" size="sm" @click="back">{{ t('components.buttons.back') }}</Button>
     </div>
 </template>

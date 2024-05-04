@@ -14,5 +14,7 @@
     "new_order": "New Order",
     "login": "Login",
     "register": "Register",
-    "create_new": "Create New"
+    "create_new": "Create New",
+    "retry": "Retry",
+    "reload": "Reload"
 }

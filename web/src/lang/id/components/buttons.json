@@ -14,5 +14,7 @@
     "new_order": "Order Baru",
     "login": "Login",
     "register": "Register",
-    "create_new": "Tambah Baru"
+    "create_new": "Tambah Baru",
+    "retry": "Coba Kembali",
+    "reload": "Memuat Ulang"
 }
