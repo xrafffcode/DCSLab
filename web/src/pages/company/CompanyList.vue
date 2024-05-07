@@ -86,6 +86,7 @@ const getCompanies = async (search: string, refresh: boolean, paginate: boolean,
     companyLists.value = result.data as Collection<Array<Company>>;
   } else {
     datalistErrors.value = result.errors as Record<string, Array<string>>;
+    emits('show-alertplaceholder', datalistErrors.value);
   }
 
   emits('loading-state', false);

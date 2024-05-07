@@ -36,7 +36,7 @@ const mode = ref<ViewMode>(ViewMode.INDEX);
 const loading = ref<boolean>(false);
 const titleView = ref<string>('views.company.page_title');
 
-const errorMessages = ref<Array<string> | null>(null);
+const errorMessages = ref<Record<string, Array<string>> | null>(null);
 // #endregion
 
 // #region Computed
@@ -87,7 +87,7 @@ const onUpdateProfileTriggered = async () => {
 };
 
 const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
-    console.log(errors);
+    errorMessages.value = errors;
 };
 
 const clearCache = (mode: ViewMode) => {

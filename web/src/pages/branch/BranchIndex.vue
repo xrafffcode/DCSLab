@@ -101,7 +101,7 @@ const onUpdateProfileTriggered = async () => {
 };
 
 const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
-    
+    errorMessages.value = errors;
 };
 // #endregion
 

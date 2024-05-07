@@ -70,7 +70,7 @@ const onModeStateChanged = (state: ViewMode) => {
 };
 
 const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
-    
+    errorMessages.value = errors;
 };
 // #endregion
 
