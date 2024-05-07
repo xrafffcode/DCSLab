@@ -93,7 +93,8 @@ class ProfileController extends BaseController
         $request = $profileRequest->validated();
         $user = Auth::user();
 
-        $addedRole = $request->roles;
+        $currentRole = $user->roles->pluck('id')->toArray();
+        $addedRole = $request['roles'];
 
         $roleId = '';
         if ($addedRole == 'pos') {
@@ -104,7 +105,7 @@ class ProfileController extends BaseController
             return response()->error();
         }
 
-        $rolesArr = [$roleId];
+        $rolesArr = array_merge($currentRole, [$roleId]);
 
         $result = $this->userActions->updateRoles($user, $rolesArr, true);
 

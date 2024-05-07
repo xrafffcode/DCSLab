@@ -11,6 +11,8 @@ import {
     FormErrorMessages,
 } from "@/components/Base/Form";
 import { useUserContextStore } from "@/stores/user-context";
+import { useZiggyRouteStore } from "@/stores/ziggy-route";
+import { useMenuStore, Menu as sMenu } from "@/stores/menu";
 import {
     TitleLayout,
     TwoColumnsLayout,
@@ -22,15 +24,17 @@ import posSystemImage from "@/assets/images/pos_system.png";
 import wareHouseImage from "@/assets/images/warehouse_system.png";
 import accountingImage from "@/assets/images/accounting_system.jpg";
 import googlePlayBadge from "@/assets/images/google-play-badge.png";
+import Lucide from "@/components/Base/Lucide";
 import Button from "@/components/Base/Button";
 import { formatDate } from "@/utils/helper";
 import ProfileService from "@/services/ProfileService";
+import DashboardService from "@/services/DashboardService";
 import { TwoFactorResponse, QRCode, SecretKeyResponse } from "@/types/models/TwoFactorAuthentication";
 import { ConfirmPasswordStatusResponse } from "@/types/models/ConfirmPassword";
 import { UserProfile } from "@/types/models/UserProfile";
 import { ServiceResponse } from "@/types/services/ServiceResponse";
 import { Dialog } from "@/components/Base/Headless";
-import Lucide from "@/components/Base/Lucide";
+import { Config } from "ziggy-js";
 // #endregion
 
 // #region Interfaces
@@ -44,12 +48,14 @@ interface RoleSelection {
 // #region Declarations
 const { t } = useI18n();
 
+const dashboardServices = new DashboardService();
 const profileServices = new ProfileService();
 const userContextStore = useUserContextStore();
+const menuStore = useMenuStore();
+const ziggyRouteStore = useZiggyRouteStore();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
 // #endregion
 
 // #region Refs
@@ -154,9 +160,20 @@ const setFormData = () => {
         time_format: userContext.value.settings.time_format,
     });
 
-    if (!hasRolePOSOwner()) { roleSelection.value[0].state = 'selectable' }
-    if (!hasRoleWHOwner()) { roleSelection.value[1].state = 'selectable' }
-    if (!hasRoleACCOwner()) { roleSelection.value[2].state = 'selectable' }
+    roleSelection.value.forEach((r) => {
+        if (r.rolekey == 'pos' && hasRolePOSOwner()) {
+            r.state = 'checked';
+        }
+        else if (r.rolekey == 'wh' && hasRoleWHOwner()) {
+            r.state = 'checked';
+        }
+        else if (r.rolekey == 'acc' && hasRoleACCOwner()) {
+            r.state = 'checked';
+        }
+        else {
+            r.state = 'selectable'
+        }
+    });
 };
 
 const handleExpandCard = (index: number) => {
@@ -221,7 +238,7 @@ const setTwoFactor = async (event: Event) => {
         confirmPasswordPurpose.value = '2FA';
         await setTwoFactorWithConfirmPassword();
     }
-}
+};
 
 const setTwoFactorWithConfirmPassword = async () => {
     confirmPasswordText.value = '';
@@ -350,21 +367,83 @@ const sendEmailVerification = () => {
 
 };
 
+const updateUserProfile = async () => {
+    let userprofile = await profileServices.readProfile();
+    if (userprofile.success) {
+        userContextStore.setUserContext(userprofile.data as UserProfile);
+    }
+};
+
+const updateUserMenu = async () => {
+    let menuResult = await dashboardServices.readUserMenu();
+    menuStore.setMenu(menuResult.data as Array<sMenu>);
+
+    let apiResult = await dashboardServices.readUserApi();
+    ziggyRouteStore.setZiggy(apiResult.data as Config);
+};
+
 const onSubmitUpdateUserProfile = async () => {
+    loading.value = true;
 
+    await updateUserProfileForm.submit().then(async () => {
+        await updateUserProfile();
+    }).catch(error => {
+        console.error(error);
+    }).finally(() => {
+        loading.value = false;
+    });
 };
+
 const onSubmitUpdatePersonalInfo = async () => {
+    loading.value = true;
 
+    await updatePersonalInfoForm.submit().then(async () => {
+        await updateUserProfile();
+    }).catch(error => {
+        console.error(error);
+    }).finally(() => {
+        loading.value = false;
+    });
 };
+
 const onSubmitUpdateAccountSettings = async () => {
+    loading.value = true;
 
+    await updateAccountSettingsForm.submit().then(async () => {
+        await updateUserProfile();
+    }).catch(error => {
+        console.error(error);
+    }).finally(() => {
+        loading.value = false;
+    });
 };
+
 const onSubmitUpdateUserRoles = async () => {
+    loading.value = true;
 
+    await updateUserRolesForm.submit().then(async () => {
+        await updateUserProfile();
+        await updateUserMenu();
+    }).catch(error => {
+        console.error(error);
+    }).finally(() => {
+        loading.value = false;
+    });
 };
+
 const onSubmitUpdatePassword = async () => {
+    loading.value = true;
 
+    await updatePasswordForm.submit().then(async () => {
+        await updateUserProfile();
+        updatePasswordForm.reset();
+    }).catch(error => {
+        console.error(error);
+    }).finally(() => {
+        loading.value = false;
+    });
 };
+
 const onSubmitUpdateToken = async () => {
 
 };
@@ -599,7 +678,7 @@ watchEffect(async () => {
                                             @click="handleChangeRole(index)">
                                             <img alt="" :src="item.images" width="100" height="100" />
                                             <div v-if="item.state == 'checked'" class="grid grid-cols-1 place-items-center">
-                                                <Check class="text-success" />
+                                                <Check icon="Check" class="text-success" />
                                             </div>
                                             <Button v-else-if="item.state == 'selectable'" type="submit" variant="primary"
                                                 size="sm" class="w-28 shadow-md">
