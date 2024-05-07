@@ -29,7 +29,7 @@ const userServices = new UserService();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
+const emits = defineEmits(['mode-state', 'loading-state', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs
@@ -83,6 +83,7 @@ const getUsers = async (search: string, refresh: boolean, paginate: boolean, pag
         userLists.value = result.data as Collection<Array<User>>;
     } else {
         datalistErrors.value = result.errors as Record<string, Array<string>>;
+        emits('show-alertplaceholder', datalistErrors.value);
     }
 
     emits('loading-state', false);
@@ -118,7 +119,6 @@ const flattenedRoles = (roles: Array<Role>): string => {
 </script>
 
 <template>
-    <AlertPlaceholder :errors="datalistErrors" />
     <DataList :title="t('views.user.table.title')" :enable-search="true" :can-print="true" :can-export="true"
         :pagination="userLists ? userLists.meta : null" @dataListChanged="onDataListChanged">
         <template #content>

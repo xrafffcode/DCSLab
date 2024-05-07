@@ -25,6 +25,8 @@ const router = useRouter();
 const mode = ref<ViewMode>(ViewMode.INDEX);
 const loading = ref<boolean>(false);
 const titleView = ref<string>('views.user.page_title');
+
+const errorMessages = ref<Record<string, Array<string>> | null>(null);
 // #endregion
 
 // #region Computed
@@ -66,6 +68,10 @@ const onModeStateChanged = (state: ViewMode) => {
             break;
     }
 };
+
+const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
+    
+};
 // #endregion
 
 // #region Watchers
@@ -92,7 +98,8 @@ const onModeStateChanged = (state: ViewMode) => {
                 </template>
             </TitleLayout>
 
-            <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" />
+            <AlertPlaceholder :errors="errorMessages" />
+            <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" @show-alertplaceholder="onAlertPlaceholderTriggered" />
         </LoadingOverlay>
     </div>
 </template>

@@ -42,7 +42,7 @@ const cacheServices = new CacheService();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
+const emits = defineEmits(['mode-state', 'loading-state', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs

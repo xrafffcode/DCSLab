@@ -86,8 +86,8 @@ const onUpdateProfileTriggered = async () => {
     }
 };
 
-const onAlertPlaceholderTriggered = () => {
-
+const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
+    console.log(errors);
 };
 
 const clearCache = (mode: ViewMode) => {
@@ -128,7 +128,7 @@ const clearCache = (mode: ViewMode) => {
                 </template>
             </TitleLayout>
 
-            <AlertPlaceholder />
+            <AlertPlaceholder :errors="errorMessages" />
             <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" @update-profile="onUpdateProfileTriggered" @show-alertplaceholder="onAlertPlaceholderTriggered" />
         </LoadingOverlay>
     </div>
