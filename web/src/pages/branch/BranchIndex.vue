@@ -47,14 +47,15 @@ const errorMessages = ref<Record<string, Array<string>> | null>(null);
 
 // #region Methods
 const createNew = () => {
+    errorMessages.value = null;
     mode.value = ViewMode.FORM_CREATE;
     router.push({ name: 'side-menu-company-branch-create' });
 };
 
 const backToList = async () => {
+    errorMessages.value = null;
     clearCache(mode.value);
     mode.value = ViewMode.LIST;
-
     router.push({ name: 'side-menu-company-branch-list' });
 };
 

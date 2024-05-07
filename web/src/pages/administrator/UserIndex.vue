@@ -8,6 +8,7 @@ import { useI18n } from "vue-i18n";
 import Button from "@/components/Base/Button";
 import Lucide from "@/components/Base/Lucide";
 import { ViewMode } from "@/types/enums/ViewMode";
+import CacheService from "@/services/CacheService";
 // #endregion
 
 // #region Interfaces
@@ -16,6 +17,8 @@ import { ViewMode } from "@/types/enums/ViewMode";
 // #region Declarations
 const { t } = useI18n();
 const router = useRouter();
+
+const cacheService = new CacheService();
 // #endregion
 
 // #region Props, Emits
@@ -37,13 +40,15 @@ const errorMessages = ref<Record<string, Array<string>> | null>(null);
 
 // #region Methods
 const createNew = () => {
+    errorMessages.value = null;
     mode.value = ViewMode.FORM_CREATE;
     router.push({ name: 'side-menu-administrator-user-create' });
 };
 
 const backToList = async () => {
+    errorMessages.value = null;
+    clearCache(mode.value);
     mode.value = ViewMode.LIST;
-
     router.push({ name: 'side-menu-administrator-user-list' });
 };
 
@@ -65,6 +70,19 @@ const onModeStateChanged = (state: ViewMode) => {
         case ViewMode.LIST:
         default:
             titleView.value = 'views.user.page_title';
+            break;
+    }
+};
+
+const clearCache = (mode: ViewMode) => {
+    switch (mode) {
+        case ViewMode.FORM_CREATE:
+            cacheService.removeLastEntity('USER_CREATE');
+            break;
+        case ViewMode.FORM_EDIT:
+            cacheService.removeLastEntity('USER_EDIT');
+            break;
+        default:
             break;
     }
 };
