@@ -140,6 +140,9 @@ const confirmDelete = async () => {
   if (result.success) {
     emits('update-profile');
     await getBranches('', true, true, 1, 10);
+  } else {
+    datalistErrors.value = result.errors as Record<string, Array<string>>;
+    emits('show-alertplaceholder', datalistErrors.value);
   }
 
   emits('loading-state', false);

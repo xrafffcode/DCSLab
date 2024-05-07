@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // #region Imports
 import { onMounted, ref } from "vue";
-import AlertPlaceholder from "@/components/AlertPlaceholder";
 import DataList from "@/components/DataList";
 import { useI18n } from "vue-i18n";
 import Button from "@/components/Base/Button";
@@ -10,7 +9,6 @@ import Table from "@/components/Base/Table";
 import CompanyService from "@/services/CompanyService";
 import { Company } from "@/types/models/Company";
 import { Collection } from "@/types/resources/Collection";
-import { Role } from "@/types/models/Role";
 import { DataListEmittedData } from "@/components/DataList/DataList.vue";
 import { ServiceResponse } from "@/types/services/ServiceResponse";
 import { Resource } from "@/types/resources/Resource";
@@ -129,6 +127,9 @@ const confirmDelete = async () => {
   if (result.success) {
     emits('update-profile');
     await getCompanies('', true, true, 1, 10);
+  } else {
+    datalistErrors.value = result.errors as Record<string, Array<string>>;
+    emits('show-alertplaceholder', datalistErrors.value);
   }
 
   emits('loading-state', false);
@@ -140,7 +141,6 @@ const confirmDelete = async () => {
 </script>
 
 <template>
-  <AlertPlaceholder :errors="datalistErrors" />
   <DataList :title="t('views.company.table.title')" :enable-search="true" :can-print="true" :can-export="true"
     :pagination="companyLists ? companyLists.meta : null" @dataListChanged="onDataListChanged">
     <template #content>
