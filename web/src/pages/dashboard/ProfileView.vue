@@ -678,7 +678,7 @@ watchEffect(async () => {
                                             @click="handleChangeRole(index)">
                                             <img alt="" :src="item.images" width="100" height="100" />
                                             <div v-if="item.state == 'checked'" class="grid grid-cols-1 place-items-center">
-                                                <Check icon="Check" class="text-success" />
+                                                <Lucide icon="Check" class="text-success" />
                                             </div>
                                             <Button v-else-if="item.state == 'selectable'" type="submit" variant="primary"
                                                 size="sm" class="w-28 shadow-md">
