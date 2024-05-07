@@ -115,7 +115,7 @@ const layoutImages = import.meta.glob<{
                             '/src/assets/images/themes/' + theme + '.png'
                           ].default
                         "
-                        alt="Midone - Admin Dashboard Template"
+                        alt="DCSLab"
                       />
                     </div>
                   </a>
@@ -151,7 +151,7 @@ const layoutImages = import.meta.glob<{
                             '/src/assets/images/layouts/' + layout + '.png'
                           ].default
                         "
-                        alt="Midone - Admin Dashboard Template"
+                        alt="DCSLab"
                       />
                     </div>
                   </a>

@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import logoUrl from "@/assets/images/logo.svg";
 
-const props = defineProps<{
-  layout?: "side-menu" | "simple-menu" | "top-menu";
-}>();
+interface LanguageSwitcherProps {
+    visible: boolean,
+    theme?: 'rubick' | 'icewall' | 'enigma' | 'tinker',
+    layout?: "side-menu" | "simple-menu" | "top-menu",
+}
+
+const props = withDefaults(defineProps<LanguageSwitcherProps>(), {
+    visible: true,
+    theme: 'rubick',
+    layout: 'side-menu',
+});
 
 const appName = import.meta.env.VITE_APP_NAME;
 
-const toUrl = ref<string>('side-menu-dashboard-maindashboard')
+const toUrl = ref<string>('side-menu-dashboard-maindashboard');
 </script>
 
 <template>

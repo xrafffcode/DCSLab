@@ -1,21 +1,40 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import Lucide from "@/components/Base/Lucide";
 import { Menu, Slideover } from "@/components/Base/Headless";
 import { useI18n } from "vue-i18n";
+import { twMerge } from "tailwind-merge";
 
 const { t } = useI18n();
+
+interface SidebarPopProps {
+    visible: boolean,
+    theme?: 'rubick' | 'icewall' | 'enigma' | 'tinker',
+    layout?: "side-menu" | "simple-menu" | "top-menu",
+}
+
+const props = withDefaults(defineProps<SidebarPopProps>(), {
+    visible: true,
+    theme: 'rubick',
+    layout: 'side-menu',
+});
 
 const showSlideover = ref(false);
 const toggleSlideover = (value: boolean) => {
   showSlideover.value = value;
 };
+
+const computedClass = computed(() => 
+    twMerge([
+        props.theme == 'rubick' && props.layout == 'side-menu' && '',
+    ])
+);
 </script>
 
 <template>
     <Menu class="mr-4 intro-x sm:mr-6">
         <Menu.Button variant="primary" @click="(event: MouseEvent) => { event.preventDefault(); toggleSlideover(true); }">
-            <Lucide icon="Archive" />
+            <Lucide icon="Archive" :class="computedClass" />
         </Menu.Button>
     </Menu>
 
