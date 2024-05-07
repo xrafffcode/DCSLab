@@ -30,7 +30,7 @@ const companyServices = new CompanyService();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
+const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs
@@ -126,6 +126,7 @@ const confirmDelete = async () => {
   let result: ServiceResponse<boolean | null> = await companyServices.delete(deleteUlid.value);
 
   if (result.success) {
+    emits('update-profile');
     await getCompanies('', true, true, 1, 10);
   }
 

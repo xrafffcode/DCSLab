@@ -38,7 +38,7 @@ const cacheServices = new CacheService();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
+const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs
@@ -101,6 +101,7 @@ const onSubmit = async () => {
     emits('loading-state', true);
     await companyForm.submit().then(() => {
         resetForm();
+        emits('update-profile');
         router.push({ name: 'side-menu-company-company-list' });
     }).catch(error => {
         console.error(error);

@@ -9,6 +9,10 @@ import Button from "@/components/Base/Button";
 import Lucide from "@/components/Base/Lucide";
 import { ViewMode } from "@/types/enums/ViewMode";
 import CacheService from "@/services/CacheService";
+import AlertPlaceholder from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
+import { useUserContextStore } from "@/stores/user-context";
+import ProfileService from "@/services/ProfileService";
+import { UserProfile } from "@/types/models/UserProfile";
 // #endregion
 
 // #region Interfaces
@@ -18,7 +22,10 @@ import CacheService from "@/services/CacheService";
 const { t } = useI18n();
 const router = useRouter();
 
+const userContextStore = useUserContextStore();
+
 const cacheService = new CacheService();
+const profileService = new ProfileService();
 // #endregion
 
 // #region Props, Emits
@@ -28,6 +35,8 @@ const cacheService = new CacheService();
 const mode = ref<ViewMode>(ViewMode.INDEX);
 const loading = ref<boolean>(false);
 const titleView = ref<string>('views.branch.page_title');
+
+const errorMessages = ref<Record<string, Array<string>> | null>(null);
 // #endregion
 
 // #region Computed
@@ -83,6 +92,17 @@ const clearCache = (mode: ViewMode) => {
             break;
     }
 };
+
+const onUpdateProfileTriggered = async () => {
+    let userprofile = await profileService.readProfile();
+    if (userprofile.success) {
+        userContextStore.setUserContext(userprofile.data as UserProfile);
+    }
+};
+
+const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
+    
+};
 // #endregion
 
 // #region Watchers
@@ -109,7 +129,8 @@ const clearCache = (mode: ViewMode) => {
                 </template>
             </TitleLayout>
 
-            <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" />
+            <AlertPlaceholder :errors="errorMessages" />
+            <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" @update-profile="onUpdateProfileTriggered" @show-alertplaceholder="onAlertPlaceholderTriggered" />
         </LoadingOverlay>
     </div>
 </template>

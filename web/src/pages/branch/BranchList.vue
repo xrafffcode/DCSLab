@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // #region Imports
-import { onMounted, ref, computed, ErrorCodes } from "vue";
-import AlertPlaceholder from "@/components/AlertPlaceholder";
+import { onMounted, ref, computed } from "vue";
 import DataList from "@/components/DataList";
 import { useI18n } from "vue-i18n";
 import Button from "@/components/Base/Button";
@@ -32,7 +31,7 @@ const selectedUserLocationStore = useSelectedUserLocationStore();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
+const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs
@@ -98,6 +97,7 @@ const getBranches = async (search: string, refresh: boolean, paginate: boolean, 
     branchLists.value = result.data as Collection<Array<Branch>>;
   } else {
     datalistErrors.value = result.errors as Record<string, Array<string>>;
+    emits('show-alertplaceholder', datalistErrors.value);
   }
 
   emits('loading-state', false);
@@ -138,6 +138,7 @@ const confirmDelete = async () => {
   let result: ServiceResponse<boolean | null> = await branchServices.delete(deleteUlid.value);
 
   if (result.success) {
+    emits('update-profile');
     await getBranches('', true, true, 1, 10);
   }
 
@@ -150,7 +151,6 @@ const confirmDelete = async () => {
 </script>
 
 <template>
-  <AlertPlaceholder :errors="datalistErrors" />
   <DataList :title="t('views.company.table.title')" :enable-search="true" :can-print="true" :can-export="true"
     :pagination="branchLists ? branchLists.meta : null" @dataListChanged="onDataListChanged">
     <template #content>

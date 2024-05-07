@@ -45,7 +45,7 @@ const selectedUserLocationStore = useSelectedUserLocationStore();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state']);
+const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs
@@ -130,6 +130,7 @@ const onSubmit = async () => {
     emits('loading-state', true);
     await branchForm.submit().then(() => {
         resetForm();
+        emits('update-profile');
         router.push({ name: 'side-menu-company-branch-list' });
     }).catch(error => {
         console.error(error);
