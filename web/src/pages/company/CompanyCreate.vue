@@ -23,7 +23,6 @@ import { ViewMode } from "@/types/enums/ViewMode";
 import { debounce } from "lodash";
 import Lucide from "@/components/Base/Lucide";
 import { useRouter } from "vue-router";
-import AlertPlaceholder from "@/components/AlertPlaceholder";
 // #endregion
 
 // #region Interfaces
@@ -122,10 +121,6 @@ const setCode = () => {
     } else {
         companyForm.setData({ code: '_AUTO_' });
     }
-};
-
-const convertPrecogErrors = () => {
-
 };
 // #endregion
 
