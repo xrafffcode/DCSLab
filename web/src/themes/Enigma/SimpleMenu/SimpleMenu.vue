@@ -300,9 +300,11 @@ onMounted(async () => {
               'before:content-[\'\'] before:w-full before:h-px before:block',
             ]"
           >
+            <EmailVerificationAlert />
             <RouterView />
             <br v-for="i in 3" :key="i" />
             <ScrollToTop :visible="showBackToTop" />
+            <NotificationWidget />
           </div>
         </div>
       </div>
