@@ -21,11 +21,11 @@ const props = defineProps<{
     ]"
   >
     <div class="flex items-center h-full">
-      <HomeLogo />
+      <HomeLogo theme="enigma" :layout="props.layout" />
       <UserLocation theme="enigma" :layout="props.layout" />
-      <SidebarPop />
-      <LanguageSwitcher />
-      <ProfileMenu />
+      <SidebarPop theme="enigma" :layout="props.layout" />
+      <LanguageSwitcher theme="enigma" :layout="props.layout" />
+      <ProfileMenu theme="enigma" :layout="props.layout" />
     </div>
   </div>
 </template>

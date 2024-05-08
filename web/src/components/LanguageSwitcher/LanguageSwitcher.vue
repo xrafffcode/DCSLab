@@ -27,6 +27,8 @@ const switchLanguage = (lang: "en" | "id"): void => {
 const computedClass = computed(() => 
     twMerge([
         props.theme == 'rubick' && props.layout == 'side-menu' && '',
+        props.theme == 'enigma' && 'text-white',
+        props.theme == 'tinker' && 'text-white',
         'hover:animate-spin'
     ])
 );

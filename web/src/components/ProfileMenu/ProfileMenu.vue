@@ -16,10 +16,14 @@ const router = useRouter();
 
 interface ProfileMenuProps {
     visible: boolean,
+    theme?: 'rubick' | 'icewall' | 'enigma' | 'tinker',
+    layout?: "side-menu" | "simple-menu" | "top-menu",
 }
 
 const props = withDefaults(defineProps<ProfileMenuProps>(), {
-    visible: false,
+    visible: true,
+    theme: 'rubick',
+    layout: 'side-menu',
 });
 
 const profileServices = new ProfileService();
@@ -61,7 +65,7 @@ const logout = () => {
 </script>
 
 <template>
-    <Menu>
+    <Menu v-if="visible">
         <Menu.Button
         class="block w-8 h-8 overflow-hidden rounded-full shadow-lg image-fit zoom-in intro-x"
         >

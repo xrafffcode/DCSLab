@@ -10,10 +10,10 @@ import ProfileMenu from "@/components/ProfileMenu/ProfileMenu.vue";
   <div
     class="relative z-[51] flex h-[67px] items-center border-b border-slate-200"
   >
-    <UserLocation />
-    <SearchBox />
-    <SidebarPop />
-    <LanguageSwitcher />
-    <ProfileMenu />
+    <UserLocation theme="rubick" />
+    <SearchBox theme="rubick" />
+    <SidebarPop theme="rubick" />
+    <LanguageSwitcher theme="rubick" />
+    <ProfileMenu theme="rubick" />
   </div>
 </template>

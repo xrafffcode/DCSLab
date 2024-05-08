@@ -5,9 +5,11 @@ import { FormInput } from "@/components/Base/Form";
 import { TransitionRoot } from "@headlessui/vue";
 
 const props = withDefaults(defineProps<{
+    theme?: 'rubick' | 'icewall' | 'tinker' | 'enigma';
     layout?: "side-menu" | "simple-menu" | "top-menu";
     visible?: boolean;
 }>(),{
+    theme: 'rubick',
     layout: "side-menu",
     visible: false,
 });

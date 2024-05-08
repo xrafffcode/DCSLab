@@ -111,11 +111,11 @@ onMounted(async () => {
           class="h-[70px] z-[51] relative border-b border-white/[0.08] mt-12 md:mt-0 -mx-3 sm:-mx-8 md:mx-0 px-4 sm:px-8 md:px-6 mb-10 md:mb-8"
         >
           <div class="flex items-center h-full">
-            <HomeLogo />
+            <HomeLogo theme="tinker" layout="top-menu" />
             <UserLocation theme="tinker" layout="top-menu" />
-            <SidebarPop />
-            <LanguageSwitcher />
-            <ProfileMenu />
+            <SidebarPop theme="tinker" layout="top-menu" />
+            <LanguageSwitcher theme="tinker" layout="top-menu" />
+            <ProfileMenu theme="tinker" layout="top-menu" />
           </div>
         </div>
 
