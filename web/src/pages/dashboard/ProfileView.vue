@@ -445,7 +445,16 @@ const onSubmitUpdatePassword = async () => {
 };
 
 const onSubmitUpdateToken = async () => {
+    loading.value = true;
 
+    await updateTokensForm.submit().then(async () => {
+        await updateUserProfile();
+        updateTokensForm.reset();
+    }).catch(error => {
+        console.error(error);
+    }).finally(() => {
+        loading.value = false;
+    });
 };
 // #region Methods
 
@@ -739,6 +748,11 @@ watchEffect(async () => {
                 <template #card-items-6>
                     <div class="p-5">
                         <form id="updateTokenForm" @submit.prevent="onSubmitUpdateToken">
+                            <div class="pb-4">
+                                <FormLabel>
+                                    {{ t("views.profile.fields.api_token.total_token_generated") }}&nbsp;:&nbsp;{{ userContext.personal_access_tokens }}
+                                </FormLabel>
+                            </div>
                             <input id="resetToken" type="hidden" v-model="updateTokensForm.reset_tokens" />
                             <div>
                                 <Button type="submit" size="sm" href="#" variant="primary" class="w-28 shadow-md"

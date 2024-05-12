@@ -33,6 +33,7 @@
             "password_confirmation": "Konfirmasi Password Baru"
         },
         "api_token": {
+            "total_token_generated": "Jumlah Token Yang Dimiliki",
             "reset": "Reset Token"
         },
         "2fa": {

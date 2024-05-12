@@ -33,6 +33,7 @@
             "password_confirmation": "Confirm Password"
         },
         "api_token": {
+            "total_token_generated": "Total Token Generated",
             "reset": "Reset Token"
         },
         "2fa": {

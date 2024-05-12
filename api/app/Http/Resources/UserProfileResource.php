@@ -36,6 +36,7 @@ class UserProfileResource extends JsonResource
                 'settings' => (new SettingResource($this->whenLoaded('settings'))),
             ]),
             'two_factor' => $this->getTwoFactorStatus(),
+            'personal_access_tokens' => $this->getPersonalAccessTokens(),
         ];
     }
 
@@ -58,5 +59,16 @@ class UserProfileResource extends JsonResource
 
         return (auth()->user()->two_factor_secret !== null) &&
                 (auth()->user()->two_factor_confirmed_at !== null);
+    }
+
+    private function getPersonalAccessTokens()
+    {
+        $result = 0;
+
+        if (auth()->user()) {
+            $result = auth()->user()->tokens->count();
+        }
+
+        return $result;
     }
 }

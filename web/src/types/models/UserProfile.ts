@@ -13,5 +13,6 @@ export interface UserProfile {
     roles: Array<Role>,
     companies: Array<Company>,
     settings: Setting,
-    two_factor: boolean
+    two_factor: boolean,
+    personal_access_tokens: number,
 }
