@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide, computed, watch } from "vue";
+import { ref, provide, computed, watch, readonly } from "vue";
 import Lucide from "@/components/Base/Lucide";
 import Notification, { NotificationElement } from "@/components/Base/Notification";
 import Button from "@/components/Base/Button";
@@ -22,6 +22,7 @@ provide("bind[mainNotification]", (el: NotificationElement) => {
 });
 
 const countDown = ref<number>(0);
+let durationVal = 30;
 
 const mainNotification = ref<NotificationElement>();
 
@@ -44,6 +45,7 @@ const startCountDown = () => {
 watch(notificationWidgetHasWork, () => {
     if (notificationWidgetHasWork.value) {
         countDown.value = notificationWidgetValue.value.timeout;
+        durationVal = readonly(notificationWidgetValue).value.timeout;
         startCountDown();
         mainNotificationToggle();
     }
@@ -56,7 +58,7 @@ watch(notificationWidgetHasWork, () => {
             @click="mainNotificationToggle">
             Trigger Notification
         </Button>
-        <Notification ref-key="mainNotification" :options="{ duration: notificationWidgetValue.timeout * 1000, }"
+        <Notification ref-key="mainNotification" :options="{ duration: durationVal * 1000, }"
             class="flex">
             <Lucide icon="CheckCircle" class="text-success" />
             <div class="ml-4 mr-4">
