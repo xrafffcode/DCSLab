@@ -38,6 +38,7 @@ export const useUserContextStore = defineStore("userContext", {
         time_format: '',
       },
       two_factor: false,
+      personal_access_tokens: 0
     },
   }),
   getters: {
