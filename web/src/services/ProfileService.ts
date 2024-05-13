@@ -81,6 +81,32 @@ export default class ProfileService {
     return form;
   }
 
+  public async sendEmailVerification() {
+    const result: ServiceResponse<null> = {
+      success: false,
+    };
+
+    try {
+      const url = route('api.post.db.module.profile.send.email_verification', undefined, false, this.ziggyRoute);
+
+      const response: AxiosResponse<null> = await axios.post(url);
+
+      if (response.status == StatusCode.OK) {
+        result.success = true;
+      }
+
+      return result;
+    } catch (e: unknown) {
+      if (e instanceof Error && e.message.includes('Ziggy error')) {
+        return this.errorHandlerService.generateZiggyUrlErrorServiceResponse(e.message);
+      } else if (isAxiosError(e)) {
+        return this.errorHandlerService.generateAxiosErrorServiceResponse(e as AxiosError);
+      } else {
+        return result;
+      }
+    }
+  }
+
   public useUpdateAccountSettingsForm() {
     const url = route('api.post.db.module.profile.update.account_settings', undefined, true, this.ziggyRoute);
 
@@ -351,3 +377,4 @@ export default class ProfileService {
     }
   }
 }
+

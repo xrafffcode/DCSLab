@@ -35,6 +35,8 @@ import { UserProfile } from "@/types/models/UserProfile";
 import { ServiceResponse } from "@/types/services/ServiceResponse";
 import { Dialog } from "@/components/Base/Headless";
 import { Config } from "ziggy-js";
+import { useNotificationWidgetStore } from "@/stores/notification-widget";
+import { NotificationWidget } from "@/types/models/NotificationWidget";
 // #endregion
 
 // #region Interfaces
@@ -50,9 +52,11 @@ const { t } = useI18n();
 
 const dashboardServices = new DashboardService();
 const profileServices = new ProfileService();
+
 const userContextStore = useUserContextStore();
 const menuStore = useMenuStore();
 const ziggyRouteStore = useZiggyRouteStore();
+const notificationWidget = useNotificationWidgetStore();
 // #endregion
 
 // #region Props, Emits
@@ -363,8 +367,20 @@ const reloadUserContext = async () => {
     userContextStore.setUserContext(userprofile.data as UserProfile);
 };
 
-const sendEmailVerification = () => {
+const sendEmailVerification = async () => {
+    loading.value = true;
 
+    let result = await profileServices.sendEmailVerification();
+
+    let nWidget: NotificationWidget = {
+        title: 'Email Verification',
+        message: 'Email Verification Has Been Sent',
+        timeout: 10,
+    };
+
+    notificationWidget.setNotificationValue(nWidget);
+
+    loading.value = false;
 };
 
 const updateUserProfile = async () => {
