@@ -17,7 +17,6 @@ import {
 import { watch, reactive, ref, computed, onMounted, provide } from "vue";
 import ScrollToTop from "@/components/Base/ScrollToTop";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import NotificationWidget from "@/components/NotificationWidget";
 import { EmailVerificationAlert } from "@/components/AlertPlaceholder";
 import { useDashboardStore } from "@/stores/dashboard";
 import DashboardService from "@/services/DashboardService";
@@ -228,7 +227,6 @@ onMounted(async () => {
           <RouterView />
           <br v-for="i in 3" :key="i" />
           <ScrollToTop :visible="showBackToTop" />
-          <NotificationWidget />
         </div>
       </div>
     </LoadingOverlay>
