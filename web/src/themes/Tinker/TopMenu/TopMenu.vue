@@ -246,6 +246,7 @@ onMounted(async () => {
             'after:content-[\'\'] after:z-[-1] after:rounded-[40px_40px_0px_0px] after:w-[97%] after:inset-y-0 after:absolute after:left-0 after:right-0 after:bg-white/10 after:-mt-4 after:mx-auto after:dark:bg-darkmode-400/50',
           ]"
         >
+          <EmailVerificationAlert />
           <RouterView />
           <br v-for="i in 3" :key="i" />
           <ScrollToTop :visible="showBackToTop" />

@@ -290,6 +290,7 @@ onMounted(async () => {
             ]"
           >
             <TopBar />
+            <EmailVerificationAlert />
             <RouterView />
             <br v-for="i in 3" :key="i" />
             <ScrollToTop :visible="showBackToTop" />
