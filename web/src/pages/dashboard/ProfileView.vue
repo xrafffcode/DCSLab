@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // #region Imports
-import { onMounted, computed, ref, watchEffect } from "vue";
+import { onMounted, computed, ref, watchEffect, provide } from "vue";
 import { useI18n } from "vue-i18n";
 import {
     FormInput,
@@ -35,8 +35,7 @@ import { UserProfile } from "@/types/models/UserProfile";
 import { ServiceResponse } from "@/types/services/ServiceResponse";
 import { Dialog } from "@/components/Base/Headless";
 import { Config } from "ziggy-js";
-import { useNotificationWidgetStore } from "@/stores/notification-widget";
-import { NotificationWidget } from "@/types/models/NotificationWidget";
+import Notification, { type NotificationElement } from "@/components/Base/Notification";
 // #endregion
 
 // #region Interfaces
@@ -56,7 +55,6 @@ const profileServices = new ProfileService();
 const userContextStore = useUserContextStore();
 const menuStore = useMenuStore();
 const ziggyRouteStore = useZiggyRouteStore();
-const notificationWidget = useNotificationWidgetStore();
 // #endregion
 
 // #region Props, Emits
@@ -74,6 +72,12 @@ const cards = ref<Array<TwoColumnsLayoutCards>>([
     { title: 'views.profile.field_groups.api_token', state: CardState.Expanded },
     { title: 'views.profile.field_groups.two_factor_authentication', state: CardState.Expanded },
 ]);
+
+const sendVerificationEmailNotification = ref<NotificationElement>();
+
+provide("bind[sendVerificationEmailNotification]", (el: NotificationElement) => {
+    sendVerificationEmailNotification.value = el;
+});
 
 const roleSelection = ref<Array<RoleSelection>>([
     {
@@ -372,14 +376,10 @@ const sendEmailVerification = async () => {
 
     let result = await profileServices.sendEmailVerification();
 
-    let nWidget: NotificationWidget = {
-        title: 'Email Verification',
-        message: 'Email Verification Has Been Sent',
-        timeout: 10,
-    };
-
-    notificationWidget.setNotificationValue(nWidget);
-
+    if (sendVerificationEmailNotification.value) {
+        sendVerificationEmailNotification.value.showToast();
+    }
+        
     loading.value = false;
 };
 
@@ -544,6 +544,15 @@ watchEffect(async () => {
                                 {{ t("components.buttons.send_verification_email") }}
                             </Button>
                         </div>
+                        <Notification ref-key="sendVerificationEmailNotification" :options="{ duration: 3000, }" class="flex">
+                            <Lucide icon="CheckCircle" class="text-success" />
+                            <div class="ml-4 mr-4">
+                                <div class="font-medium">{{ t('views.profile.alert.verification_email_sent.title') }}</div>
+                                <div class="mt-1 text-slate-500">
+                                    {{ t('views.profile.alert.verification_email_sent.content') }}
+                                </div>
+                            </div>
+                        </Notification>
                     </div>
                 </template>
                 <template #card-items-2>

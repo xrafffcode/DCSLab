@@ -59,5 +59,11 @@
     },
     "tooltip": {
         "email_verified": "Email terverifikasi"
+    },
+    "alert": {
+        "verification_email_sent": {
+            "title": "Email Verifikasi",
+            "content": "Email verifikasi terkirim"
+        }
     }
 }
