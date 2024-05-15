@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // #region Imports
-import { ref } from "vue";
+import { ref, provide } from "vue";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { TitleLayout } from "@/components/Base/Form/FormLayout";
 import { useRouter } from "vue-router";
@@ -10,6 +10,10 @@ import Lucide from "@/components/Base/Lucide";
 import { ViewMode } from "@/types/enums/ViewMode";
 import CacheService from "@/services/CacheService";
 import AlertPlaceholder from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
+import Notification from "@/components/Base/Notification/Notification.vue";
+import { NotificationData } from "@/types/models/NotificationData";
+import { type NotificationElement } from "@/components/Base/Notification/Notification.vue";
+import { type AlertPlaceholderProps } from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
 // #endregion
 
 // #region Interfaces
@@ -30,7 +34,20 @@ const mode = ref<ViewMode>(ViewMode.INDEX);
 const loading = ref<boolean>(false);
 const titleView = ref<string>('views.user.page_title');
 
-const errorMessages = ref<Record<string, Array<string>> | null>(null);
+const alertType = ref<'danger'|'success'|'warning'|'pending'|'dark'|'hidden'>('hidden');
+const title = ref<string>('');
+const alertList = ref<Record<string, Array<string>> | null>(null);
+
+const userNotification = ref<NotificationElement>();
+
+const notificationTitle = ref<string>('');
+const notificationContent = ref<string>('')
+// #endregion
+
+// #region Provide/Inject
+provide("bind[userNotification]", (el: NotificationElement) => {
+    userNotification.value = el;
+});
 // #endregion
 
 // #region Computed
@@ -41,13 +58,13 @@ const errorMessages = ref<Record<string, Array<string>> | null>(null);
 
 // #region Methods
 const createNew = () => {
-    errorMessages.value = null;
+    resetAlertPlaceholder();
     mode.value = ViewMode.FORM_CREATE;
     router.push({ name: 'side-menu-administrator-user-create' });
 };
 
 const backToList = async () => {
-    errorMessages.value = null;
+    resetAlertPlaceholder();
     clearCache(mode.value);
     mode.value = ViewMode.LIST;
     router.push({ name: 'side-menu-administrator-user-list' });
@@ -88,8 +105,24 @@ const clearCache = (mode: ViewMode) => {
     }
 };
 
-const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
-    errorMessages.value = errors;
+const onAlertPlaceholderTriggered = (apProps: AlertPlaceholderProps) => {
+    alertType.value = apProps.alertType;
+    title.value = apProps.title;
+    alertList.value = apProps.alertList;
+};
+
+const onShowNotificationTriggered = (notification: NotificationData) => {
+    notificationTitle.value = notification.title;
+    notificationContent.value = notification.content;
+
+    if (userNotification.value)
+        userNotification.value.showToast();
+};
+
+const resetAlertPlaceholder = () => {
+    title.value = '';
+    alertList.value = null;
+    alertType.value = 'hidden';
 };
 // #endregion
 
@@ -117,8 +150,17 @@ const onAlertPlaceholderTriggered = (errors: Record<string, Array<string>>) => {
                 </template>
             </TitleLayout>
 
-            <AlertPlaceholder :errors="errorMessages" />
-            <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" @show-alertplaceholder="onAlertPlaceholderTriggered" />
+            <AlertPlaceholder :alert-type="alertType" :title="title" :alert-list="alertList" />
+            <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" @show-alertplaceholder="onAlertPlaceholderTriggered" @show-notification="onShowNotificationTriggered" />
         </LoadingOverlay>
+        <Notification ref-key="userNotification" :options="{ duration: 3000, }" class="flex">
+            <Lucide icon="CheckCircle" class="text-success" />
+            <div class="ml-4 mr-4">
+                <div class="font-medium">{{ notificationTitle }}</div>
+                <div class="mt-1 text-slate-500">
+                    {{ notificationContent }}
+                </div>
+            </div>
+        </Notification>
     </div>
 </template>

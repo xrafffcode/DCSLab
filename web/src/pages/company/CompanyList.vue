@@ -16,6 +16,8 @@ import { ReadAnyRequest } from "@/types/services/ServiceRequest";
 import { useRouter } from "vue-router";
 import { Dialog } from "@/components/Base/Headless";
 import { ViewMode } from "@/types/enums/ViewMode";
+import { NotificationData } from "@/types/models/NotificationData";
+import { type AlertPlaceholderProps } from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
 // #endregion
 
 // #region Interfaces
@@ -28,7 +30,7 @@ const companyServices = new CompanyService();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
+const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder', 'show-notification']);
 // #endregion
 
 // #region Refs
@@ -129,10 +131,29 @@ const confirmDelete = async () => {
     await getCompanies('', true, true, 1, 10);
   } else {
     datalistErrors.value = result.errors as Record<string, Array<string>>;
-    emits('show-alertplaceholder', datalistErrors.value);
+    
   }
 
   emits('loading-state', false);
+};
+
+const showNotification = (pTitle: string, pContent: string) => {
+  let n: NotificationData = {
+    title: pTitle,
+    content: pContent
+  };
+
+  emits('show-notification', n);
+};
+
+const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
+  let ap: AlertPlaceholderProps = {
+    alertType: pAlertType,
+    title: pTitle,
+    alertList: pAlertList,
+  };
+
+  emits('show-alertplaceholder', ap);
 };
 // #endregion
 
