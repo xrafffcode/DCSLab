@@ -3,6 +3,10 @@ import { ref } from "vue";
 import Lucide from "@/components/Base/Lucide";
 import { FormInput } from "@/components/Base/Form";
 import { TransitionRoot } from "@headlessui/vue";
+import { useI18n } from "vue-i18n";
+import LoadingIcon from "@/components/Base/LoadingIcon";
+
+const { t } = useI18n();
 
 const props = withDefaults(defineProps<{
     theme?: 'rubick' | 'icewall' | 'tinker' | 'enigma';
@@ -56,32 +60,29 @@ const hideSearchDropdown = () => {
         >
             <div class="absolute right-0 z-10 mt-[3px]">
                 <div class="w-[450px] p-5 box">
-                    <div class="mb-2 font-medium">Pages</div>
+                    <div class="mb-2 font-medium">{{ t('components.search-box.search_group.user') }}</div>
                     <div class="mb-5">
-                        <a href="" class="flex items-center">
-                            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-success/20 dark:bg-success/10 text-success">
-                                <Lucide icon="Inbox" class="w-4 h-4" />
+                        <div class="flex items-center mt-2">
+                            <div class="ml-3">
+                                <LoadingIcon icon="puff" />
                             </div>
-                            <div class="ml-3">Mail Settings</div>
-                        </a>
-                        <a href="" class="flex items-center mt-2">
-                            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-pending/10 text-pending">
-                                <Lucide icon="Users" class="w-4 h-4" />
-                            </div>
-                            <div class="ml-3">Users & Permissions</div>
-                        </a>
-                        <a href="" class="flex items-center mt-2">
-                            <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary/80" >
-                                <Lucide icon="CreditCard" class="w-4 h-4" />
-                            </div>
-                            <div class="ml-3">Transactions Report</div>
-                        </a>
+                        </div>
                     </div>
-                    <div class="mb-2 font-medium">Users</div>
+                    <div class="mb-2 font-medium">{{ t('components.search-box.search_group.company') }}</div>
                     <div class="mb-5">
+                        <div class="flex items-center mt-2">
+                            <div class="ml-3">
+                                <LoadingIcon icon="puff" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-2 font-medium">Products</div>
+                    <div class="mb-2 font-medium">{{ t('components.search-box.search_group.branch') }}</div>
                     <div class="mb-5">
+                        <div class="flex items-center mt-2">
+                            <div class="ml-3">
+                                <LoadingIcon icon="puff" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
