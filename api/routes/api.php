@@ -7,6 +7,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,8 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
         Route::group(['prefix' => 'core', 'as' => '.core'], function () {
             Route::get('user/menu', [DashboardController::class, 'userMenu'])->name('.user.menu');
             Route::get('user/api', [DashboardController::class, 'userApi'])->name('.user.api');
+
+            Route::get('search', [SearchController::class, 'search'])->name('.search');
         });
 
         Route::group(['prefix' => 'common', 'as' => '.common'], function () {

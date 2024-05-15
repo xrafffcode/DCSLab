@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class SearchRequest extends FormRequest
 {
@@ -11,7 +12,14 @@ class SearchRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        //Authorization Error
+        //return false;
+
+        if (! Auth::check()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -22,7 +30,7 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'q' => ['present', 'string'],
         ];
     }
 }
