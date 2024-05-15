@@ -33,13 +33,6 @@ import SidebarPop from "@/components/SidebarPop/SidebarPop.vue";
 const { t } = useI18n();
 const dashboardServices = new DashboardService();
 
-const searchDropdown = ref(false);
-const showSearchDropdown = () => {
-  searchDropdown.value = true;
-};
-const hideSearchDropdown = () => {
-  searchDropdown.value = false;
-};
 const route: Route = useRoute();
 const router = useRouter();
 let formattedMenu = reactive<Array<FormattedMenu | "divider">>([]);
@@ -112,6 +105,7 @@ onMounted(async () => {
           <div class="flex items-center h-full">
             <HomeLogo theme="tinker" layout="top-menu" />
             <UserLocation theme="tinker" layout="top-menu" />
+            <SearchBox />
             <SidebarPop theme="tinker" layout="top-menu" />
             <LanguageSwitcher theme="tinker" layout="top-menu" />
             <ProfileMenu theme="tinker" layout="top-menu" />

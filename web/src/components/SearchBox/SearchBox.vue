@@ -11,13 +11,15 @@ const props = withDefaults(defineProps<{
 }>(),{
     theme: 'rubick',
     layout: "side-menu",
-    visible: false,
+    visible: true,
 });
 
 const searchDropdown = ref(false);
+
 const showSearchDropdown = () => {
   searchDropdown.value = true;
 };
+
 const hideSearchDropdown = () => {
   searchDropdown.value = false;
 };

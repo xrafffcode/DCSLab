@@ -41,10 +41,10 @@ const computedClass = computed(() =>
         </Menu.Button>
         <Menu.Items class="w-48 h-24 overflow-y-auto" placement="bottom-end">
             <Menu.Item @click="switchLanguage('en')">
-                <span class="text-primary">{{ t('components.top-bar.language.english') }}</span>
+                <span class="text-primary">{{ t('components.language-switcher.language.english') }}</span>
             </Menu.Item>
             <Menu.Item @click="switchLanguage('id')">
-                <span class="text-primary">{{ t('components.top-bar.language.indonesia') }}</span>
+                <span class="text-primary">{{ t('components.language-switcher.language.indonesia') }}</span>
             </Menu.Item>
         </Menu.Items>
     </Menu>

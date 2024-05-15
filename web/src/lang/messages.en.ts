@@ -2,7 +2,10 @@ import menu from "./en/components/menu.json";
 import buttons from "./en/components/buttons.json";
 import alert_placeholder from "./en/components/alert-placeholder.json";
 import dropdown from "./en/components/dropdown.json";
-import top_bar from "./en/components/top-bar.json";
+import profile_menu from "./en/components/profile-menu.json";
+import language_switcher from "./en/components/language-switcher.json";
+import search_box from "./en/components/search-box.json";
+import sidebar_pop from "./en/components/sidebar-pop.json";
 import data_list from "./en/components/data-list.json"
 import user_location from "./en/components/user-location.json";
 import delete_modal from "./en/components/delete-modal.json";
@@ -24,11 +27,14 @@ export default {
         "alert-placeholder": alert_placeholder,
         "buttons": buttons,
         "dropdown": dropdown,
-        "top-bar": top_bar,
         "data-list": data_list,
         "user-location": user_location,
         "delete-modal": delete_modal,
         "file-upload": file_upload,
+        "profile-menu": profile_menu,
+        "language-switcher": language_switcher,
+        "search-box": search_box,
+        "sidebar-pop": sidebar_pop
     },
     "views": {
         "login": login,

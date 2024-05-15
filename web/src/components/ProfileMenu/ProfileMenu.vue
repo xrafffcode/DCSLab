@@ -85,17 +85,17 @@ const logout = () => {
             </Menu.Header>
             <Menu.Divider class="bg-white/[0.08]" />
             <Menu.Item class="hover:bg-white/5" @click="router.push({ name: 'side-menu-dashboard-profile' })">
-                <Lucide icon="User" class="w-4 h-4 mr-2" /> {{ t('components.top-bar.profile_ddl.profile') }}
+                <Lucide icon="User" class="w-4 h-4 mr-2" /> {{ t('components.profile-menu.profile_ddl.profile') }}
             </Menu.Item>
             <Menu.Item class="hover:bg-white/5">
-                <Lucide icon="Mail" class="w-4 h-4 mr-2" /> {{ t('components.top-bar.profile_ddl.inbox') }}
+                <Lucide icon="Mail" class="w-4 h-4 mr-2" /> {{ t('components.profile-menu.profile_ddl.inbox') }}
             </Menu.Item>
             <Menu.Item class="hover:bg-white/5">
-                <Lucide icon="Activity" class="w-4 h-4 mr-2" /> {{ t('components.top-bar.profile_ddl.activity') }}
+                <Lucide icon="Activity" class="w-4 h-4 mr-2" /> {{ t('components.profile-menu.profile_ddl.activity') }}
             </Menu.Item>
             <Menu.Divider class="bg-white/[0.08]" />
             <Menu.Item class="hover:bg-white/5" @click="logout">
-                <Lucide icon="ToggleRight" class="w-4 h-4 mr-2" /> {{ t('components.top-bar.profile_ddl.logout') }}
+                <Lucide icon="ToggleRight" class="w-4 h-4 mr-2" /> {{ t('components.profile-menu.profile_ddl.logout') }}
             </Menu.Item>
         </Menu.Items>
     </Menu>

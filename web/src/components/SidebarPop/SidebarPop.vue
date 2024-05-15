@@ -51,12 +51,12 @@ const computedClass = computed(() =>
                 &nbsp;
             </Slideover.Description>
             <Slideover.Footer>
-                <strong>{{ t('components.top-bar.slide_over.footer.copyright') }} &copy; {{ (new Date()).getFullYear() }}
-                    <a href="https://www.github.com/GitzJoey">{{ t('components.top-bar.slide_over.footer.copyright_name') }}</a>
+                <strong>{{ t('components.sidebar-pop.slide_over.footer.copyright') }} &copy; {{ (new Date()).getFullYear() }}
+                    <a href="https://www.github.com/GitzJoey">{{ t('components.sidebar-pop.slide_over.footer.copyright_name') }}</a>
                     &nbsp;&amp;&nbsp;
-                    <a href="https://github.com/GitzJoey/DCSLab/graphs/contributors">{{ t('components.top-bar.slide_over.footer.contributors') }}</a>.
+                    <a href="https://github.com/GitzJoey/DCSLab/graphs/contributors">{{ t('components.sidebar-pop.slide_over.footer.contributors') }}</a>.
                 </strong>
-                {{ t('components.top-bar.slide_over.footer.rights') }} <br /> {{ t('components.top-bar.slide_over.footer.powered_by') }}
+                {{ t('components.sidebar-pop.slide_over.footer.rights') }} <br /> {{ t('components.sidebar-pop.slide_over.footer.powered_by') }}
             </Slideover.Footer>
         </Slideover.Panel>
     </Slideover>

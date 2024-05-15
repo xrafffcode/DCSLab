@@ -5,10 +5,6 @@ import Button from "@/components/Base/Button";
 import {
     FormInput
 } from "@/components/Base/Form";
-import { useNotificationWidgetStore } from "@/stores/notification-widget";
-import { NotificationWidget } from "@/types/models/NotificationWidget";
-
-const notificationWidgetStore = useNotificationWidgetStore();
 
 const is_active_1 = ref<boolean>(false);
 const is_active_2 = ref<boolean>(true);
@@ -19,13 +15,7 @@ const changeInputTriggered = () => {
     console.log('changeInputTriggered' + Date());
 }
 
-const triggerNotification = () => {
-    notificationWidgetStore.setNotificationValue({
-        title: 'Test',
-        message: 'Test ' + Date(),
-        timeout: 30
-    });
-}
+
 </script>
 
 <template>
@@ -47,9 +37,5 @@ const triggerNotification = () => {
             <Button variant="primary" @click="inputTestVal = 2">Change Input Value To 2</Button>
         </div>
         <br />
-        <div>
-            <p>Test Notificaiton</p>
-            <Button variant="primary" @click="triggerNotification">Trigger here</Button>
-        </div>
     </div>
 </template>
