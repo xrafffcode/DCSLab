@@ -208,7 +208,7 @@ class CompanyController extends BaseController
         //return response()->error('Custom Validation Error 1 Message', 422);
 
         //Custom Validation With Multiple Error (HttpStatus 422)
-        //return response()->error(['name' => ['Custom Validation With Multiple Error'], 'email' => ['Custom Validation With Multiple Error']], 422);
+        //return response()->error(['name' => ['Custom Validation With Multiple Error'], 'address' => ['Custom Validation With Multiple Error']], 422);
 
         $result = false;
         $errorMsg = '';

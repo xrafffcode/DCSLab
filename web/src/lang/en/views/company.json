@@ -25,5 +25,11 @@
         "address": "Address",
         "default": "Default",
         "status": "Status"
+    },
+    "alert": {
+        "delete_company": {
+            "title": "Delete Company",
+            "content": "Company Deleted Successfully"
+        }
     }
 }

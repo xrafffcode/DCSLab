@@ -34,7 +34,6 @@ const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'sho
 // #endregion
 
 // #region Refs
-const datalistErrors = ref<Record<string, Array<string>> | null>(null);
 const deleteUlid = ref<string>('');
 const deleteModalShow = ref<boolean>(false);
 const expandDetail = ref<number | null>(null);
@@ -85,8 +84,7 @@ const getCompanies = async (search: string, refresh: boolean, paginate: boolean,
   if (result.success && result.data) {
     companyLists.value = result.data as Collection<Array<Company>>;
   } else {
-    datalistErrors.value = result.errors as Record<string, Array<string>>;
-    emits('show-alertplaceholder', datalistErrors.value);
+    showAlertPlaceholder('danger', '', result.errors as Record<string, Array<string>>);
   }
 
   emits('loading-state', false);
@@ -129,9 +127,9 @@ const confirmDelete = async () => {
   if (result.success) {
     emits('update-profile');
     await getCompanies('', true, true, 1, 10);
+    showNotification(t('views.company.alert.delete_company.title'), t('views.company.alert.delete_company.content'));
   } else {
-    datalistErrors.value = result.errors as Record<string, Array<string>>;
-    
+    showAlertPlaceholder('danger', '', result.errors as Record<string, Array<string>>);
   }
 
   emits('loading-state', false);

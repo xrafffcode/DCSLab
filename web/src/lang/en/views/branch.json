@@ -33,5 +33,11 @@
         "is_main": "Main Branch",
         "remarks": "Remarks",
         "status": "Status"
+    },
+    "alert": {
+        "delete_branch": {
+            "title": "Delete Branch",
+            "content": "Branch Deleted Successfully"
+        }
     }
 }

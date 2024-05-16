@@ -18,6 +18,8 @@ const props = withDefaults(defineProps<AlertPlaceholderProps>(), {
     title: '',
 });
 
+const emits = defineEmits(['dismiss']);
+
 const alertType = toRef(props, 'alertType');
 const alertList = toRef(props, 'alertList');
 const title = toRef(props, 'title');
@@ -31,6 +33,10 @@ const computedVariant = computed(() => {
     
     return 'soft-danger';
 });
+
+const emitDismiss = () => {
+    emits('dismiss');
+}
 </script>
 
 <template>
@@ -40,7 +46,7 @@ const computedVariant = computed(() => {
                 <div class="flex items-center">
                     <Lucide icon="AlertCircle" class="w-6 h-6 mr-2" />
                     {{ title != '' ? title : t('components.alert-placeholder.default_title') }}
-                    <Alert.DismissButton type="button" class="text-white" aria-label="Close" @click="dismiss">
+                    <Alert.DismissButton type="button" class="text-white" aria-label="Close" @click="emitDismiss(); dismiss();">
                         <Lucide icon="X" class="w-4 h-4" />
                     </Alert.DismissButton>
                 </div>

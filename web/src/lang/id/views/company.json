@@ -25,5 +25,11 @@
         "address": "Alamat",
         "default": "Default",
         "status": "Status"
+    },
+    "alert": {
+        "delete_company": {
+            "title": "Hapus Perusahaan",
+            "content": "Perusahaan Berhasil Dihapus"
+        }
     }
 }

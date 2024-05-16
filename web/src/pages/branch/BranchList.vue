@@ -18,6 +18,8 @@ import { Dialog } from "@/components/Base/Headless";
 import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { ErrorCode } from "@/types/enums/ErrorCode";
 import { ViewMode } from "@/types/enums/ViewMode";
+import { NotificationData } from "@/types/models/NotificationData";
+import { type AlertPlaceholderProps } from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
 // #endregion
 
 // #region Interfaces
@@ -31,7 +33,7 @@ const selectedUserLocationStore = useSelectedUserLocationStore();
 // #endregion
 
 // #region Props, Emits
-const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
+const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder', 'show-notification']);
 // #endregion
 
 // #region Refs
@@ -96,8 +98,7 @@ const getBranches = async (search: string, refresh: boolean, paginate: boolean, 
   if (result.success && result.data) {
     branchLists.value = result.data as Collection<Array<Branch>>;
   } else {
-    datalistErrors.value = result.errors as Record<string, Array<string>>;
-    emits('show-alertplaceholder', datalistErrors.value);
+    showAlertPlaceholder('danger', '', result.errors as Record<string, Array<string>>);
   }
 
   emits('loading-state', false);
@@ -140,12 +141,31 @@ const confirmDelete = async () => {
   if (result.success) {
     emits('update-profile');
     await getBranches('', true, true, 1, 10);
+    showNotification(t('views.branch.alert.delete_branch.title'), t('views.branch.alert.delete_branch.content'));
   } else {
-    datalistErrors.value = result.errors as Record<string, Array<string>>;
-    emits('show-alertplaceholder', datalistErrors.value);
+    showAlertPlaceholder('danger', '', result.errors as Record<string, Array<string>>);
   }
 
   emits('loading-state', false);
+};
+
+const showNotification = (pTitle: string, pContent: string) => {
+  let n: NotificationData = {
+    title: pTitle,
+    content: pContent
+  };
+
+  emits('show-notification', n);
+};
+
+const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
+  let ap: AlertPlaceholderProps = {
+    alertType: pAlertType,
+    title: pTitle,
+    alertList: pAlertList,
+  };
+
+  emits('show-alertplaceholder', ap);
 };
 // #endregion
 

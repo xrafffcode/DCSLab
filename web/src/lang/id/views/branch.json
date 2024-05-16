@@ -33,5 +33,11 @@
         "is_main": "Cabang Utama",
         "remarks": "Keterangan",
         "status": "Status"
+    },
+    "alert": {
+        "delete_branch": {
+            "title": "Hapus Cabang",
+            "content": "Cabang Berhasil Dihapus"
+        }
     }
 }
