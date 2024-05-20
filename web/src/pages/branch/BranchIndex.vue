@@ -165,7 +165,7 @@ const resetAlertPlaceholder = () => {
                 </template>
             </TitleLayout>
 
-            <AlertPlaceholder :alert-type="alertType" :title="title" :alert-list="alertList" />
+            <AlertPlaceholder :alert-type="alertType" :title="title" :alert-list="alertList" @dismiss="resetAlertPlaceholder" />
             <RouterView @loading-state="onLoadingStateChanged" @mode-state="onModeStateChanged" @update-profile="onUpdateProfileTriggered" @show-alertplaceholder="onAlertPlaceholderTriggered" @show-notification="onShowNotificationTriggered" />
         </LoadingOverlay>
         <Notification ref-key="branchNotification" :options="{ duration: 3000, }" class="flex">

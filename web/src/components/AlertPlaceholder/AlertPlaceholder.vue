@@ -34,19 +34,19 @@ const computedVariant = computed(() => {
     return 'soft-danger';
 });
 
-const emitDismiss = () => {
+const dismiss = () => {
     emits('dismiss');
 }
 </script>
 
 <template>
     <div v-if="alertType != 'hidden'" class="mt-4">
-        <Alert v-slot="{ dismiss }" :variant="computedVariant" class="flex items-center mb-2">
+        <Alert :variant="computedVariant" class="flex items-center mb-2">
             <div class="flex flex-col">
                 <div class="flex items-center">
                     <Lucide icon="AlertCircle" class="w-6 h-6 mr-2" />
                     {{ title != '' ? title : t('components.alert-placeholder.default_title') }}
-                    <Alert.DismissButton type="button" class="text-white" aria-label="Close" @click="emitDismiss(); dismiss();">
+                    <Alert.DismissButton type="button" class="text-white" aria-label="Close" @click="dismiss">
                         <Lucide icon="X" class="w-4 h-4" />
                     </Alert.DismissButton>
                 </div>
