@@ -24,6 +24,7 @@ defaultAxiosInstance.interceptors.response.use(response => {
     if (error.response == undefined || error.response.status == undefined) return Promise.reject(error);
     switch (error.response.status) {
         case 401:
+            window.location.replace('/auth/login');
             break;
         case 403:
             break;
