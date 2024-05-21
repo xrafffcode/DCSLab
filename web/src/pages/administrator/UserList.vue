@@ -17,6 +17,8 @@ import { Resource } from "../../types/resources/Resource";
 import { ReadAnyRequest } from "../../types/services/ServiceRequest";
 import { useRouter } from "vue-router";
 import { ViewMode } from "../../types/enums/ViewMode";
+import { NotificationData } from "@/types/models/NotificationData";
+import { type AlertPlaceholderProps } from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
 // #endregion
 
 // #region Interfaces
@@ -33,7 +35,6 @@ const emits = defineEmits(['mode-state', 'loading-state', 'show-alertplaceholder
 // #endregion
 
 // #region Refs
-const datalistErrors = ref<Record<string, Array<string>> | null>(null);
 const expandDetail = ref<number | null>(null);
 const userLists = ref<Collection<Array<User>> | null>({
     data: [],
@@ -82,8 +83,7 @@ const getUsers = async (search: string, refresh: boolean, paginate: boolean, pag
     if (result.success && result.data) {
         userLists.value = result.data as Collection<Array<User>>;
     } else {
-        datalistErrors.value = result.errors as Record<string, Array<string>>;
-        emits('show-alertplaceholder', datalistErrors.value);
+        showAlertPlaceholder('danger', '', result.errors as Record<string, Array<string>>);
     }
 
     emits('loading-state', false);
@@ -111,6 +111,16 @@ const editSelected = (itemIdx: number) => {
 const flattenedRoles = (roles: Array<Role>): string => {
     if (roles.length == 0) return '';
     return roles.map((x: Role) => x.display_name).join(', ');
+};
+
+const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
+  let ap: AlertPlaceholderProps = {
+    alertType: pAlertType,
+    title: pTitle,
+    alertList: pAlertList,
+  };
+
+  emits('show-alertplaceholder', ap);
 };
 // #endregion
 
