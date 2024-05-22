@@ -75,6 +75,7 @@ class CompanyRequest extends FormRequest
                 $rules_store = [
                     /* Test Validation Error For Code */
                     //'code' => ['required', 'max:1', 'alpha'],
+                    //'name' => ['required', 'max:1'],
                     /* Test Validation Error For Code */
                     'code' => ['required', 'max:255'],
                     'name' => ['required', 'max:255'],
