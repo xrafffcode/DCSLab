@@ -29,6 +29,7 @@ const computedClass = computed(() =>
         props.theme == 'rubick' && props.layout == 'side-menu' && '',
         props.theme == 'enigma' && 'text-white',
         props.theme == 'tinker' && 'text-white',
+        props.theme == 'icewall' && 'text-white',
     ])
 );
 </script>
