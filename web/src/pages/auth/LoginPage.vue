@@ -17,6 +17,8 @@ const authService = new AuthService();
 
 const appName = import.meta.env.VITE_APP_NAME;
 const loading = ref<boolean>(false);
+const status = ref<'onLoad' | 'success' | 'error'>('onLoad');
+const alertMessage = ref<string>('');
 const requireTwoFactor = ref<boolean>(false);
 const twoFactorRecoveryCodesMode = ref<boolean>(false);
 
@@ -38,7 +40,8 @@ const onSubmit = async () => {
       router.push({ name: 'side-menu-dashboard-maindashboard' });
     }
   }).catch(error => {
-    console.error(error.response.data.message);
+    status.value = 'error';
+    alertMessage.value = error.response.data.message;
   }).finally(() => {
     loading.value = false;
   });
@@ -50,7 +53,8 @@ const onTwoFactorLoginSubmit = async () => {
   twoFactorLoginForm.submit().then(() => {
     router.push({ name: 'side-menu-dashboard-maindashboard' });
   }).catch(error => {
-    console.error(error.response.data.message);
+    status.value = 'error';
+    alertMessage.value = error.response.data.message;
   }).finally(() => {
     loading.value = false;
   });
@@ -105,6 +109,7 @@ const onTwoFactorLoginSubmit = async () => {
               <div class="mt-2 text-center intro-x text-slate-400 xl:hidden">
                 &nbsp;
               </div>
+              <Alert v-if="status != 'onLoad'" :variant="status == 'success' ? 'success' : 'danger'" class="mt-2">{{ alertMessage }}</Alert>
               <form v-if="!requireTwoFactor" id="loginForm" @submit.prevent="onSubmit">
                 <div class="mt-8 intro-x">
                   <FormInput

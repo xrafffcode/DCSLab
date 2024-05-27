@@ -17,7 +17,7 @@ const authService = new AuthService();
 
 const appName = import.meta.env.VITE_APP_NAME;
 const loading = ref<boolean>(false);
-const status = ref<'onLoad' | 'finishSending' | 'sendingError'>('onLoad');
+const status = ref<'onLoad' | 'success' | 'error'>('onLoad');
 const alertMessage = ref<string>('');
 
 const forgotPasswordForm = authService.useRequestResetPasswordForm();
@@ -30,11 +30,11 @@ const onSubmit = async () => {
     loading.value = true;
 
     forgotPasswordForm.submit().then(() => {
-        status.value = 'finishSending';
+        status.value = 'success';
         alertMessage.value = t('views.forgot_password.alert.successfully_send_link');
     }).catch(error => {
-        status.value = 'sendingError';
-        console.error(error.response.data.message);
+        status.value = 'error';
+        alertMessage.value = error.response.data.message;
     }).finally(() => {
         loading.value = false;
     });
@@ -76,7 +76,7 @@ const onSubmit = async () => {
                                 &nbsp;
                             </div>
                             <form id="forgotPasswordForm" @submit.prevent="onSubmit">
-                                <Alert v-if="status != 'onLoad'" :variant="status == 'finishSending' ? 'success' : 'danger'" class="mt-2">{{ alertMessage }}</Alert>
+                                <Alert v-if="status != 'onLoad'" :variant="status == 'success' ? 'success' : 'danger'" class="mt-2">{{ alertMessage }}</Alert>
                                 <div class="mt-8 intro-x">
                                     <FormInput v-model="forgotPasswordForm.email" type="text"
                                         class="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"

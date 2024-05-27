@@ -35,7 +35,8 @@ import { UserProfile } from "@/types/models/UserProfile";
 import { ServiceResponse } from "@/types/services/ServiceResponse";
 import { Dialog } from "@/components/Base/Headless";
 import { Config } from "ziggy-js";
-import Notification, { type NotificationElement } from "@/components/Base/Notification";
+import AlertPlaceholder from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
+import { type NotificationElement } from "@/components/Base/Notification/Notification.vue";
 // #endregion
 
 // #region Interfaces
@@ -125,6 +126,13 @@ const updateAccountSettingsForm = profileServices.useUpdateAccountSettingsForm()
 const updateUserRolesForm = profileServices.useUpdateUserRolesForm();
 const updatePasswordForm = profileServices.useUpdatePasswordForm();
 const updateTokensForm = profileServices.useUpdateTokenForm();
+
+const alertType = ref<'hidden'|'danger'|'success'|'warning'|'pending'|'dark'>('hidden');
+const alertTitle = ref<string>('');
+const alertList = ref<Record<string, Array<string>>|null>(null);
+// #endregion
+
+// #region Provide/Inject
 // #endregion
 
 // #region Computed
@@ -376,7 +384,7 @@ const sendEmailVerification = async () => {
 
     let result = await profileServices.sendEmailVerification();
 
-    if (sendVerificationEmailNotification.value) {
+    if (result.success && sendVerificationEmailNotification.value) {
         sendVerificationEmailNotification.value.showToast();
     }
         
@@ -404,7 +412,8 @@ const onSubmitUpdateUserProfile = async () => {
     await updateUserProfileForm.submit().then(async () => {
         await updateUserProfile();
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         loading.value = false;
     });
@@ -416,7 +425,8 @@ const onSubmitUpdatePersonalInfo = async () => {
     await updatePersonalInfoForm.submit().then(async () => {
         await updateUserProfile();
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         loading.value = false;
     });
@@ -428,7 +438,8 @@ const onSubmitUpdateAccountSettings = async () => {
     await updateAccountSettingsForm.submit().then(async () => {
         await updateUserProfile();
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         loading.value = false;
     });
@@ -441,7 +452,8 @@ const onSubmitUpdateUserRoles = async () => {
         await updateUserProfile();
         await updateUserMenu();
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         loading.value = false;
     });
@@ -454,7 +466,8 @@ const onSubmitUpdatePassword = async () => {
         await updateUserProfile();
         updatePasswordForm.reset();
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         loading.value = false;
     });
@@ -467,10 +480,31 @@ const onSubmitUpdateToken = async () => {
         await updateUserProfile();
         updateTokensForm.reset();
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         loading.value = false;
     });
+};
+
+const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
+    alertType.value = pAlertType;
+    alertTitle.value = pTitle;
+    alertList.value = pAlertList;
+};
+
+const resetAlertPlaceholder = () => {
+    alertTitle.value = '';
+    alertList.value = null;
+    alertType.value = 'hidden';
+};
+
+const convertErrorTypeToAlertListType = (error: Error) => {
+    const record: Record<string, Array<string>> = {};
+
+    record.error = [error.message];
+
+    return record;
 };
 // #region Methods
 
@@ -494,6 +528,8 @@ watchEffect(async () => {
                     {{ t("views.profile.title") }}
                 </template>
             </TitleLayout>
+
+            <AlertPlaceholder :alert-type="alertType" :title="alertTitle" :alert-list="alertList" @dismiss="resetAlertPlaceholder" />
 
             <TwoColumnsLayout :cards="cards" :show-side-tab="true" :using-side-tab="true"
                 @handleExpandCard="handleExpandCard">

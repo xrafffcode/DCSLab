@@ -25,6 +25,7 @@ import Lucide from "@/components/Base/Lucide";
 import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { useRouter } from "vue-router";
 import { ErrorCode } from "@/types/enums/ErrorCode";
+import { type AlertPlaceholderProps } from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
 // #endregion
 
 // #region Interfaces
@@ -122,7 +123,8 @@ const onSubmit = async () => {
         emits('update-profile');
         router.push({ name: 'side-menu-company-branch-list' });
     }).catch(error => {
-        console.error(error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         emits('loading-state', false);
     });
@@ -140,6 +142,24 @@ const setCode = () => {
     } else {
         branchForm.setData({ code: '_AUTO_' });
     }
+};
+
+const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
+  let ap: AlertPlaceholderProps = {
+    alertType: pAlertType,
+    title: pTitle,
+    alertList: pAlertList,
+  };
+
+  emits('show-alertplaceholder', ap);
+};
+
+const convertErrorTypeToAlertListType = (error: Error) => {
+    const record: Record<string, Array<string>> = {};
+
+    record.error = [error.message];
+
+    return record;
 };
 // #endregion
 

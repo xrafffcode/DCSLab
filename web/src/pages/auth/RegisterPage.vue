@@ -9,12 +9,15 @@ import AuthService from "@/services/AuthServices";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import Alert from "@/components/Base/Alert";
 
 const { t } = useI18n();
 const router = useRouter();
 
 const authService = new AuthService();
 
+const status = ref<'onLoad' | 'success' | 'error'>('onLoad');
+const alertMessage = ref<string>('');
 const loading = ref<boolean>(false);
 
 const registerForm = authService.useRegisterForm();
@@ -29,7 +32,8 @@ const onSubmit = async () => {
   registerForm.submit().then(() => {
     router.push({ name: 'side-menu-dashboard-maindashboard' });
   }).catch(error => {
-    console.error(error.response.data.message);
+    status.value = 'error';
+    alertMessage.value = error.response.data.message;
   }).finally(() => {
     loading.value = false;
   });
@@ -76,6 +80,7 @@ const onSubmit = async () => {
                 &nbsp;
               </div>
               <form id="registerForm" @submit.prevent="onSubmit">
+                <Alert v-if="status != 'onLoad'" :variant="status == 'success' ? 'success' : 'danger'" class="mt-2">{{ alertMessage }}</Alert>
                 <div class="mt-8 intro-x">
                   <FormInput v-model="registerForm.name" type="text"
                     :class="{ 'block px-4 py-3 intro-x min-w-full xl:min-w-[350px]': true, 'border-danger': registerForm.invalid('name') }"
