@@ -39,4 +39,9 @@ class Company extends Model
     {
         return $this->hasMany(Branch::class);
     }
+
+    public function warehouses()
+    {
+        return $this->hasMany(Warehouse::class);
+    }
 }
