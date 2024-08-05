@@ -6,16 +6,15 @@ use App\Models\User;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class MaxTokens implements ValidationRule
+class SetCompanyToNonDefault implements ValidationRule
 {
-    private int $maxTokensPerUser;
     private User $user;
 
-    public function __construct($user)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->maxTokensPerUser = 2;
     }
+
     /**
      * Run the validation rule.
      *
@@ -23,8 +22,10 @@ class MaxTokens implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ($this->user->tokens->count() > $this->maxTokensPerUser) {
-            $fail('rules.too_many_tokens')->translate();
-        }
+        if (! boolval($value) && 
+            $this->user->companies &&
+            $this->user->companies->count() == 1) {
+                $fail('rules.company.set_company_to_non_default')->translate();
+            }
     }
 }
