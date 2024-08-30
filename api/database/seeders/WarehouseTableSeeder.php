@@ -6,7 +6,6 @@ use App\Models\Branch;
 use App\Models\Company;
 use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class WarehouseTableSeeder extends Seeder
 {

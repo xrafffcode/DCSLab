@@ -194,7 +194,7 @@ class WarehouseActions
         return $code;
     }
 
-    public function isUniqueCode(string $code, int $companyId, int $exceptId = null): bool
+    public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool
     {
         $result = Warehouse::whereCompanyId($companyId)->where('code', '=', $code);
 

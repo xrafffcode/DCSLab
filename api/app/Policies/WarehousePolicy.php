@@ -34,10 +34,9 @@ class WarehousePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Warehouse $warehouse = null)
+    public function view(User $user, ?Warehouse $warehouse = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -75,10 +74,9 @@ class WarehousePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Warehouse $warehouse = null)
+    public function update(User $user, ?Warehouse $warehouse = null)
     {
         if ($user->roles->isEmpty()) {
             return false;
@@ -96,10 +94,9 @@ class WarehousePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Warehouse $warehouse = null)
+    public function delete(User $user, ?Warehouse $warehouse = null)
     {
         if ($user->roles->isEmpty()) {
             return false;

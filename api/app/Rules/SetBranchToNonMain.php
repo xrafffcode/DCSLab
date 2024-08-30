@@ -14,6 +14,7 @@ class SetBranchToNonMain implements ValidationRule
     {
         $this->branch = $branch;
     }
+
     /**
      * Run the validation rule.
      *
@@ -22,10 +23,8 @@ class SetBranchToNonMain implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $company = $this->branch->company;
-        if (! boolval($value) &&
-            $company &&
-            $company->branches->count() == 1) {
-                $fail('rules.branch.set_branch_to_non_main')->translate();
-            }
+        if (! boolval($value) && $company && $company->branches->count() == 1) {
+            $fail('rules.branch.set_branch_to_non_main')->translate();
+        }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
-use Database\Seeders\RoleTableSeeder;
-use Database\Seeders\UserTableSeeder;
 use Database\Seeders\BranchTableSeeder;
 use Database\Seeders\CompanyTableSeeder;
+use Database\Seeders\RoleTableSeeder;
+use Database\Seeders\UserTableSeeder;
 use Database\Seeders\WarehouseTableSeeder;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 
 class AppSeed extends Command
 {

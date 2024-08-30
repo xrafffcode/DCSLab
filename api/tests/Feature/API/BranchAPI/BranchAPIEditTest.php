@@ -139,8 +139,7 @@ class BranchAPIEditTest extends APITestCase
                     ['default' => true],
                     ['default' => false]
                 ))
-            )
-            ->create();
+            )->create();
 
         $this->actingAs($user);
 
@@ -163,6 +162,7 @@ class BranchAPIEditTest extends APITestCase
         $branchArr = Branch::factory()->make([
             'company_id' => Hashids::encode($companyId_2),
             'code' => 'test1',
+            'is_main' => true,
         ])->toArray();
 
         $api = $this->json('POST', route('api.post.db.company.branch.edit', $company_2->branches()->first()->ulid), $branchArr);
