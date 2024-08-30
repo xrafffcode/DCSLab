@@ -4,19 +4,20 @@ namespace App\Http\Requests;
 
 use App\Enums\RecordStatus;
 use App\Models\Company;
-use App\Rules\DeactivateDefaultCompany;
-use App\Rules\SetCompanyToNonDefault;
+use App\Rules\CompanyStoreValidCode;
+use App\Rules\CompanyStoreValidDefault;
+use App\Rules\CompanyStoreValidStatus;
+use App\Rules\CompanyUpdateValidCode;
+use App\Rules\CompanyUpdateValidDefault;
+use App\Rules\CompanyUpdateValidStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 
 class CompanyRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    protected $user;
+
     public function authorize()
     {
         if (! Auth::check()) {
@@ -24,21 +25,21 @@ class CompanyRequest extends FormRequest
         }
 
         /** @var \App\User */
-        $user = Auth::user();
+        $this->user = Auth::user();
         $company = $this->route('company');
 
         $currentRouteMethod = $this->route()->getActionMethod();
         switch ($currentRouteMethod) {
             case 'readAny':
-                return $user->can('viewAny', Company::class) ? true : false;
+                return $this->user->can('viewAny', Company::class) ? true : false;
             case 'read':
-                return $user->can('view', Company::class, $company) ? true : false;
+                return $this->user->can('view', Company::class, $company) ? true : false;
             case 'store':
-                return $user->can('create', Company::class) ? true : false;
+                return $this->user->can('create', Company::class) ? true : false;
             case 'update':
-                return $user->can('update', Company::class, $company) ? true : false;
+                return $this->user->can('update', Company::class, $company) ? true : false;
             case 'delete':
-                return $user->can('delete', Company::class, $company) ? true : false;
+                return $this->user->can('delete', Company::class, $company) ? true : false;
             default:
                 return false;
         }
@@ -51,57 +52,50 @@ class CompanyRequest extends FormRequest
      */
     public function rules()
     {
-        $nullableArr = [
-            'address' => ['nullable', 'max:255'],
-        ];
-
         $currentRouteMethod = $this->route()->getActionMethod();
         switch ($currentRouteMethod) {
             case 'readAny':
-                $rules_read_any = [
-                    'search' => ['present', 'string'],
+                return [
+                    'refresh' => ['required', 'boolean'],
+                    'with' => ['nullable', 'array'],
+                    'with_trashed' => ['nullable', 'boolean'],
+
+                    'search' => ['nullable', 'string'],
+                    'default' => ['nullable', 'boolean'],
+                    'status' => ['nullable', new Enum(RecordStatus::class)],
+
                     'paginate' => ['required', 'boolean'],
-                    'page' => ['required_if:paginate,true', 'numeric'],
-                    'per_page' => ['required_if:paginate,true', 'numeric'],
-                    'refresh' => ['nullable', 'boolean'],
+                    'page' => ['required_if:paginate,true', 'numeric', 'min:1'],
+                    'per_page' => ['required_if:paginate,true', 'numeric', 'min:10'],
                 ];
-
-                return $rules_read_any;
             case 'read':
-                $rules_read = [
-                ];
+                return [
 
-                return $rules_read;
+                ];
             case 'store':
-                $rules_store = [
+                return [
                     /* Test Validation Error For Code */
                     //'code' => ['required', 'max:1', 'alpha'],
                     //'name' => ['required', 'max:1'],
                     /* Test Validation Error For Code */
-                    'code' => ['required', 'max:255'],
+                    'code' => ['required', 'max:255', new CompanyStoreValidCode($this->user)],
                     'name' => ['required', 'max:255'],
-                    'default' => ['required', 'boolean'],
-                    'status' => [new Enum(RecordStatus::class), new DeactivateDefaultCompany($this->input('default'))],
+                    'address' => ['nullable', 'max:255'],
+                    'default' => ['required', 'boolean', new CompanyStoreValidDefault($this->user)],
+                    'status' => [new Enum(RecordStatus::class), new CompanyStoreValidStatus($this->input('default'))],
                 ];
-
-                return array_merge($rules_store, $nullableArr);
             case 'update':
-                $user = Auth::user();
-                $rules_update = [
-                    'code' => ['required', 'max:255'],
+                return [
+                    'code' => ['required', 'max:255', new CompanyUpdateValidCode($this->user, $this->route('company'))],
                     'name' => ['required', 'max:255'],
-                    'default' => ['required', 'boolean', new SetCompanyToNonDefault($user)],
-                    'status' => [new Enum(RecordStatus::class), new DeactivateDefaultCompany($this->input('default'))],
+                    'address' => ['nullable', 'max:255'],
+                    'default' => ['required', 'boolean', new CompanyUpdateValidDefault($this->user)],
+                    'status' => [new Enum(RecordStatus::class), new CompanyUpdateValidStatus($this->input('default'))],
                 ];
-
-                return array_merge($rules_update, $nullableArr);
-
             case 'delete':
-                $rules_delete = [
+                return [
 
                 ];
-
-                return $rules_delete;
             default:
                 return [
                     '' => 'required',
@@ -134,8 +128,15 @@ class CompanyRequest extends FormRequest
         switch ($currentRouteMethod) {
             case 'readAny':
                 $this->merge([
-                    'search' => $this->has('search') && ! is_null($this->search) ? $this->search : '',
-                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                    'with' => $this->has('with') ? $this->with : [],
+                    'with_trashed' => $this->has('with_trashed') ? $this->with_trashed : null,
+
+                    'search' => $this->has('search') ? $this->search : null,
+                    'default' => $this->has('default') ? $this->default : null,
+                    'status' => $this->has('status') ? $this->status : null,
+
+                    'page' => $this->has('page') ? $this->page : null,
+                    'per_page' => $this->has('per_page') ? $this->per_page : null,
                 ]);
                 break;
             case 'read':

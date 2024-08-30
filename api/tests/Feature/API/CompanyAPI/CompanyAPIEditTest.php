@@ -70,7 +70,7 @@ class CompanyAPIEditTest extends APITestCase
 
         $company = $user->companies->first();
 
-        $companyArr = Company::factory()->setStatusActive()->make()->toArray();
+        $companyArr = Company::factory()->setStatusActive()->setIsDefault()->make()->toArray();
 
         $api = $this->json('POST', route('api.post.db.company.company.edit', $company->ulid), $companyArr);
 

@@ -190,12 +190,18 @@ class CompanyAPIReadTest extends APITestCase
         $testIdx = random_int(0, count($injections));
 
         $api = $this->getJson(route('api.get.db.company.company.read_any', [
-            'userId' => $user->id,
+            'user' => $user,
+            'refresh' => true,
+            'with' => '',
+            'withTrashed' => false,
+
             'search' => $injections[$testIdx],
+            'default' => '',
+            'status' => '',
+
             'paginate' => true,
             'page' => 1,
             'per_page' => 10,
-            'refresh' => true,
         ]));
 
         $api->assertSuccessful();
@@ -398,7 +404,7 @@ class CompanyAPIReadTest extends APITestCase
         ]);
     }
 
-    public function test_company_api_call_read_any_with_negative_value_in_parameters_expect_results()
+    public function test_company_api_call_read_any_with_negative_value_in_parameters_expect_failed()
     {
         $user = User::factory()
             ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
@@ -416,16 +422,7 @@ class CompanyAPIReadTest extends APITestCase
             'refresh' => false,
         ]));
 
-        $api->assertSuccessful();
-        $api->assertJsonStructure([
-            'data',
-            'links' => [
-                'first', 'last', 'prev', 'next',
-            ],
-            'meta' => [
-                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
-            ],
-        ]);
+        $api->assertStatus(422);
     }
 
     public function test_company_api_call_read_expect_successful()

@@ -30,8 +30,15 @@ class CompanyActionsReadTest extends ActionsTestCase
             ->create();
 
         $result = $this->companyActions->readAny(
-            userId: $user->id,
-            search: '',
+            user: $user,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
+            search: null,
+            default: null,
+            status: null,
+
             paginate: true,
             page: 1,
             perPage: 10
@@ -47,9 +54,18 @@ class CompanyActionsReadTest extends ActionsTestCase
             ->create();
 
         $result = $this->companyActions->readAny(
-            userId: $user->id,
-            search: '',
-            paginate: false
+            user: $user,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
+            search: null,
+            default: null,
+            status: null,
+
+            paginate: false,
+            page: null,
+            perPage: null
         );
 
         $this->assertInstanceOf(Collection::class, $result);
@@ -75,8 +91,15 @@ class CompanyActionsReadTest extends ActionsTestCase
             ->create();
 
         $result = $this->companyActions->readAny(
-            userId: $user->id,
+            user: $user,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: 'testing',
+            default: null,
+            status: null,
+
             paginate: true,
             page: 1,
             perPage: 10
@@ -103,8 +126,15 @@ class CompanyActionsReadTest extends ActionsTestCase
             ->create();
 
         $result = $this->companyActions->readAny(
-            userId: $user->id,
+            user: $user,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            default: null,
+            status: null,
+
             paginate: true,
             page: -1,
             perPage: 10
@@ -131,8 +161,15 @@ class CompanyActionsReadTest extends ActionsTestCase
             ->create();
 
         $result = $this->companyActions->readAny(
-            userId: $user->id,
+            user: $user,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            default: null,
+            status: null,
+
             paginate: true,
             page: 1,
             perPage: -10

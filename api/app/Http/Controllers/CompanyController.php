@@ -25,40 +25,14 @@ class CompanyController extends BaseController
     {
         $request = $companyRequest->validated();
 
-        $user = Auth::user();
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->companyActions->generateUniqueCode();
-            } while (! $this->companyActions->isUniqueCode($code, $user->id));
-        } else {
-            if (! $this->companyActions->isUniqueCode($code, $user->id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $companyArr = [
-            'user_id' => $user->id,
-            'code' => $code,
-            'name' => $request['name'],
-            'address' => $request['address'],
-            'default' => $request['default'],
-            'status' => $request['status'],
-
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
-            if ($companyArr['default']) {
-                $this->companyActions->resetDefaultCompany($user);
-            }
-
-            $result = $this->companyActions->create($companyArr);
+            $result = $this->companyActions->create(
+                user: Auth::user(),
+                data: $request
+            );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
         }
@@ -68,26 +42,25 @@ class CompanyController extends BaseController
 
     public function readAny(CompanyRequest $companyRequest)
     {
-        $userId = Auth::id();
         $request = $companyRequest->validated();
-
-        $search = $request['search'];
-        $paginate = $request['paginate'];
-        $page = array_key_exists('page', $request) ? abs($request['page']) : 1;
-        $perPage = array_key_exists('per_page', $request) ? abs($request['per_page']) : 10;
-        $useCache = array_key_exists('refresh', $request) ? boolval($request['refresh']) : true;
 
         $result = null;
         $errorMsg = '';
 
         try {
             $result = $this->companyActions->readAny(
-                userId: $userId,
-                search: $search,
-                paginate: $paginate,
-                page: $page,
-                perPage: $perPage,
-                useCache: $useCache
+                user: Auth::user(),
+                useCache: array_key_exists('refresh', $request) ? boolval($request['refresh']) : true,
+                with: [],
+                withTrashed: false,
+
+                search: $request['search'],
+                default: $request['default'],
+                status: $request['status'],
+
+                paginate: $request['paginate'],
+                page: array_key_exists('page', $request) ? abs($request['page']) : 1,
+                perPage: array_key_exists('per_page', $request) ? abs($request['per_page']) : 10,
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
@@ -126,11 +99,15 @@ class CompanyController extends BaseController
 
     public function getAllActiveCompany(Request $request)
     {
-        $userId = $request->user()->id;
+        $request = $request->validated();
 
-        $with = $request->has('with') ? explode(',', $request['with']) : [];
-
-        $result = $this->companyActions->getAllActiveCompany($userId, $with);
+        $result = $this->companyActions->getAllActiveCompany(
+            user: Auth::user(),
+            with: $request->has('with') ? explode(',', $request['with']) : [],
+            search: $request['search'],
+            includeIds: $request['includeIds'],
+            limit: $request['limit']
+        );
 
         if (is_null($result)) {
             return response()->error();
@@ -153,41 +130,14 @@ class CompanyController extends BaseController
     {
         $request = $companyRequest->validated();
 
-        $user = Auth::user();
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->companyActions->generateUniqueCode();
-            } while (! $this->companyActions->isUniqueCode($code, $user->id, $company->id));
-        } else {
-            if (! $this->companyActions->isUniqueCode($code, $user->id, $company->id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $companyArr = [
-            'code' => $code,
-            'name' => $request['name'],
-            'address' => $request['address'],
-            'default' => $request['default'],
-            'status' => $request['status'],
-            'user_id' => $user->id,
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
-            if ($companyArr['default']) {
-                $this->companyActions->resetDefaultCompany($user);
-            }
-
             $result = $this->companyActions->update(
-                $company,
-                $companyArr
+                user: Auth::user(),
+                company: $company,
+                data: $request
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();

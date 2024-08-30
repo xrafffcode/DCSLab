@@ -44,4 +44,11 @@ class Company extends Model
     {
         return $this->hasMany(Warehouse::class);
     }
+
+    public function scopeSearch($query, string $search)
+    {
+        return $query->where('code', 'like', '%'.$search.'%')
+            ->orWhere('name', 'like', '%'.$search.'%')
+            ->orWhere('address', 'like', '%'.$search.'%');
+    }
 }
