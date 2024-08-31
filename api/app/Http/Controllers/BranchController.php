@@ -24,42 +24,11 @@ class BranchController extends BaseController
     {
         $request = $branchRequest->validated();
 
-        $company_id = $request['company_id'];
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->branchActions->generateUniqueCode();
-            } while (! $this->branchActions->isUniqueCode($code, $company_id));
-        } else {
-            if (! $this->branchActions->isUniqueCode($code, $company_id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $branchArr = [
-            'company_id' => $company_id,
-            'code' => $code,
-            'name' => $request['name'],
-            'address' => $request['address'],
-            'city' => $request['city'],
-            'contact' => $request['contact'],
-            'is_main' => $request['is_main'],
-            'remarks' => $request['remarks'],
-            'status' => $request['status'],
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
-            if ($branchArr['is_main']) {
-                $this->branchActions->resetMainBranch(companyId: $company_id);
-            }
-
-            $result = $this->branchActions->create($branchArr);
+            $result = $this->branchActions->create($request);
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
         }
@@ -71,25 +40,23 @@ class BranchController extends BaseController
     {
         $request = $branchRequest->validated();
 
-        $search = $request['search'];
-        $paginate = $request['paginate'];
-        $page = array_key_exists('page', $request) ? abs($request['page']) : 1;
-        $perPage = array_key_exists('per_page', $request) ? abs($request['per_page']) : 10;
-        $useCache = array_key_exists('refresh', $request) ? boolval($request['refresh']) : true;
-
-        $companyId = $request['company_id'];
-
         $result = null;
         $errorMsg = '';
 
         try {
             $result = $this->branchActions->readAny(
-                companyId: $companyId,
-                search: $search,
-                paginate: $paginate,
-                page: $page,
-                perPage: $perPage,
-                useCache: $useCache
+                companyId: $request['company_id'],
+                useCache: $request['refresh'],
+                with: [],
+                withTrashed: false,
+
+                search: $request['search'],
+                isMain: $request['is_main'],
+                status: $request['status'],
+
+                paginate: $request['paginate'],
+                page: $request['page'],
+                perPage: $request['per_page'],
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
@@ -168,43 +135,13 @@ class BranchController extends BaseController
     {
         $request = $branchRequest->validated();
 
-        $company_id = $request['company_id'];
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->branchActions->generateUniqueCode();
-            } while (! $this->branchActions->isUniqueCode($code, $company_id, $branch->id));
-        } else {
-            if (! $this->branchActions->isUniqueCode($code, $company_id, $branch->id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $branchArr = [
-            'code' => $code,
-            'name' => $request['name'],
-            'address' => $request['address'],
-            'city' => $request['city'],
-            'contact' => $request['contact'],
-            'is_main' => $request['is_main'],
-            'remarks' => $request['remarks'],
-            'status' => $request['status'],
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
-            if ($branchArr['is_main']) {
-                $this->branchActions->resetMainBranch(companyId: $company_id);
-            }
-
             $result = $this->branchActions->update(
-                $branch,
-                $branchArr
+                branch: $branch,
+                data: $request
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();

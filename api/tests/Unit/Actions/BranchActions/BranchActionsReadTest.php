@@ -35,7 +35,14 @@ class BranchActionsReadTest extends ActionsTestCase
 
         $result = $this->branchActions->readAny(
             companyId: $company->id,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            isMain: null,
+            status: null,
+
             paginate: true,
             page: 1,
             perPage: 10
@@ -55,7 +62,14 @@ class BranchActionsReadTest extends ActionsTestCase
 
         $result = $this->branchActions->readAny(
             companyId: $company->id,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            isMain: null,
+            status: null,
+
             paginate: false
         );
 
@@ -67,7 +81,14 @@ class BranchActionsReadTest extends ActionsTestCase
         $maxId = Company::max('id') + 1;
         $result = $this->branchActions->readAny(
             companyId: $maxId,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            isMain: null,
+            status: null,
+
             paginate: false
         );
 
@@ -100,7 +121,14 @@ class BranchActionsReadTest extends ActionsTestCase
 
         $result = $this->branchActions->readAny(
             companyId: $company->id,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: 'testing',
+            isMain: null,
+            status: null,
+
             paginate: true,
             page: 1,
             perPage: 10
@@ -131,7 +159,14 @@ class BranchActionsReadTest extends ActionsTestCase
 
         $result = $this->branchActions->readAny(
             companyId: $company->id,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            isMain: null,
+            status: null,
+
             paginate: true,
             page: -1,
             perPage: 10
@@ -162,7 +197,14 @@ class BranchActionsReadTest extends ActionsTestCase
 
         $result = $this->branchActions->readAny(
             companyId: $company->id,
+            useCache: true,
+            with: [],
+            withTrashed: false,
+
             search: '',
+            isMain: null,
+            status: null,
+
             paginate: true,
             page: 1,
             perPage: -10

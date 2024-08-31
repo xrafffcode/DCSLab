@@ -3,13 +3,18 @@
 namespace App\Http\Requests;
 
 use App\Enums\RecordStatus;
+use App\Helpers\HashidsHelper;
 use App\Models\Branch;
+use App\Rules\BranchStoreValidCode;
+use App\Rules\BranchStoreValidName;
+use App\Rules\BranchStoreValidStatus;
+use App\Rules\BranchUpdateValidCode;
+use App\Rules\BranchUpdateValidIsMain;
+use App\Rules\BranchUpdateValidName;
+use App\Rules\BranchUpdateValidStatus;
 use App\Rules\IsValidCompany;
-use App\Rules\SetBranchToNonMain;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Enum;
-use Vinkla\Hashids\Facades\Hashids;
 
 class BranchRequest extends FormRequest
 {
@@ -52,53 +57,51 @@ class BranchRequest extends FormRequest
      */
     public function rules()
     {
-        $nullableArr = [
-            'address' => ['nullable', 'max:255'],
-            'city' => ['nullable', 'max:255'],
-            'contact' => ['nullable', 'max:255'],
-            'remarks' => ['nullable', 'max:255'],
-        ];
-
         $currentRouteMethod = $this->route()->getActionMethod();
         switch ($currentRouteMethod) {
             case 'readAny':
-                $rules_read_any = [
-                    'company_id' => ['required', new IsValidCompany(), 'bail'],
-                    'search' => ['present', 'string'],
-                    'paginate' => ['required', 'boolean'],
-                    'page' => ['required_if:paginate,true', 'numeric'],
-                    'per_page' => ['required_if:paginate,true', 'numeric'],
+                return [
+                    'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
                     'refresh' => ['nullable', 'boolean'],
-                ];
+                    'with' => ['nullable', 'array'],
+                    'with_trashed' => ['nullable', 'boolean'],
 
-                return $rules_read_any;
+                    'search' => ['nullable', 'string'],
+                    'is_main' => ['nullable', 'boolean'],
+                    'status' => ['nullable', 'string', 'in:'.implode(',', RecordStatus::toArrayValue())],
+
+                    'paginate' => ['required', 'boolean'],
+                    'page' => ['required_if:paginate,true', 'numeric', 'min:1'],
+                    'per_page' => ['required_if:paginate,true', 'numeric', 'min:10'],
+                ];
             case 'read':
-                $rules_read = [
+                return [
 
                 ];
-
-                return $rules_read;
             case 'store':
-                $rules_store = [
-                    'company_id' => ['required', new IsValidCompany(), 'bail'],
-                    'code' => ['required', 'max:255'],
-                    'name' => ['required', 'max:255'],
-                    'is_main' => ['boolean'],
-                    'status' => [new Enum(RecordStatus::class)],
+                return [
+                    'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
+                    'code' => ['required', 'string', 'max:255', new BranchStoreValidCode($this->input('company_id'))],
+                    'name' => ['required', 'string', 'max:255', new BranchStoreValidName($this->input('company_id'))],
+                    'address' => ['nullable', 'string', 'max:255'],
+                    'city' => ['nullable', 'string', 'max:255'],
+                    'contact' => ['nullable', 'string', 'max:255'],
+                    'is_main' => ['required', 'boolean'],
+                    'remarks' => ['nullable', 'string', 'max:255'],
+                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue()), 'bail', new BranchStoreValidStatus($this->input('is_main'))],
                 ];
-
-                return array_merge($rules_store, $nullableArr);
             case 'update':
-                $branch = $this->route('branch');
-                $rules_update = [
-                    'company_id' => ['required', new IsValidCompany(), 'bail'],
-                    'code' => ['required', 'max:255'],
-                    'name' => ['required', 'max:255'],
-                    'is_main' => ['boolean', new SetBranchToNonMain($branch)],
-                    'status' => [new Enum(RecordStatus::class)],
+                return [
+                    'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
+                    'code' => ['required', 'string', 'max:255', new BranchUpdateValidCode($this->input('company_id'), $this->route('branch'))],
+                    'name' => ['required', 'string', 'max:255', new BranchUpdateValidName($this->input('company_id'), $this->route('branch'))],
+                    'address' => ['nullable', 'string', 'max:255'],
+                    'city' => ['nullable', 'string', 'max:255'],
+                    'contact' => ['nullable', 'string', 'max:255'],
+                    'is_main' => ['required', 'boolean', 'bail', new BranchUpdateValidIsMain($this->route('branch'))],
+                    'remarks' => ['nullable', 'string', 'max:255'],
+                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue()), 'bail', new BranchUpdateValidStatus($this->route('is_main'))],
                 ];
-
-                return array_merge($rules_update, $nullableArr);
             case 'delete':
                 $rules_delete = [
 
@@ -140,9 +143,16 @@ class BranchRequest extends FormRequest
         switch ($currentRouteMethod) {
             case 'readAny':
                 $this->merge([
-                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'search' => $this->has('search') && ! is_null($this->search) ? $this->search : '',
-                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+                    'with' => $this->has('with') ? $this->with : [],
+                    'with_trashed' => $this->has('with_trashed') ? $this->with_trashed : null,
+
+                    'search' => $this->has('search') ? $this->search : null,
+                    'is_main' => $this->has('is_main') ? $this->is_main : null,
+                    'status' => $this->has('status') ? $this->status : null,
+
+                    'page' => $this->has('page') ? $this->page : null,
+                    'per_page' => $this->has('per_page') ? $this->per_page : null,
                 ]);
                 break;
             case 'read':
@@ -151,9 +161,11 @@ class BranchRequest extends FormRequest
             case 'store':
             case 'update':
                 $this->merge([
-                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'is_main' => $this->has('is_main') ? filter_var($this->is_main, FILTER_VALIDATE_BOOLEAN) : false,
-                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : -1,
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+                    'address' => $this->has('address') ? $this->address : null,
+                    'city' => $this->has('city') ? $this->city : null,
+                    'contact' => $this->has('contact') ? $this->contact : null,
+                    'remarks' => $this->has('remarks') ? $this->remarks : null,
                 ]);
                 break;
             default:

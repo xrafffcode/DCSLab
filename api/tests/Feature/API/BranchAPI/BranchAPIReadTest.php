@@ -545,16 +545,7 @@ class BranchAPIReadTest extends APITestCase
             'refresh' => false,
         ]));
 
-        $api->assertSuccessful();
-        $api->assertJsonStructure([
-            'data',
-            'links' => [
-                'first', 'last', 'prev', 'next',
-            ],
-            'meta' => [
-                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
-            ],
-        ]);
+        $api->assertStatus(422);
     }
 
     public function test_branch_api_call_read_expect_successful()

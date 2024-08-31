@@ -38,4 +38,20 @@ class Branch extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function warehouses()
+    {
+        return $this->hasMany(Warehouse::class);
+    }
+
+    public function scopeSearch($query, string $search)
+    {
+        return $query->whereHas('company', fn ($query) => $query->search($search))
+            ->orWhere('code', 'like', '%'.$search.'%')
+            ->orWhere('name', 'like', '%'.$search.'%')
+            ->orWhere('address', 'like', '%'.$search.'%')
+            ->orWhere('city', 'like', '%'.$search.'%')
+            ->orWhere('contact', 'like', '%'.$search.'%')
+            ->orWhere('remarks', 'like', '%'.$search.'%');
+    }
 }
