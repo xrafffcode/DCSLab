@@ -50,7 +50,7 @@ class CompanyController extends BaseController
         try {
             $result = $this->companyActions->readAny(
                 user: Auth::user(),
-                useCache: array_key_exists('refresh', $request) ? boolval($request['refresh']) : true,
+                useCache: $request['refresh'],
                 with: [],
                 withTrashed: false,
 
@@ -59,8 +59,8 @@ class CompanyController extends BaseController
                 status: $request['status'],
 
                 paginate: $request['paginate'],
-                page: array_key_exists('page', $request) ? abs($request['page']) : 1,
-                perPage: array_key_exists('per_page', $request) ? abs($request['per_page']) : 10,
+                page: $request['page'],
+                perPage: $request['per_page'],
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();

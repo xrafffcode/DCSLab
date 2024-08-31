@@ -8,9 +8,9 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class CompanyUpdateValidStatus implements ValidationRule
 {
-    private bool $isDefault;
+    private ?bool $isDefault;
 
-    public function __construct(bool $isDefault)
+    public function __construct(?bool $isDefault)
     {
         $this->isDefault = $isDefault;
     }

@@ -77,7 +77,7 @@ class CompanyActions
 
         $query = Company::with($relationship)->whereIn('id', $companyIds)->withTrashed()
             ->where(function ($query) use ($withTrashed, $search, $default, $status) {
-                if ($withTrashed != null) {
+                if ($withTrashed !== null) {
                     if ($withTrashed) {
                         $query = $query->withTrashed();
                     } else {
@@ -310,7 +310,7 @@ class CompanyActions
             $tryCount = 0;
             do {
                 $count = $user->companies()->withTrashed()->count() + 1 + $tryCount;
-                $code = 'C'.str_pad($count, 3, '0', STR_PAD_LEFT);
+                $code = 'CP'.str_pad($count, 3, '0', STR_PAD_LEFT);
                 $tryCount++;
             } while (! $this->isUniqueCode($user->id, $code, $exceptId));
 
