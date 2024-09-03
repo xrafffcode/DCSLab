@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Actions\Warehouse\WarehouseActions;
 use App\Http\Requests\WarehouseRequest;
 use App\Http\Resources\WarehouseResource;
-use App\Models\Company;
 use App\Models\Warehouse;
 use Exception;
 
@@ -24,45 +23,11 @@ class WarehouseController extends BaseController
     {
         $request = $warehouseRequest->validated();
 
-        $company_id = $request['company_id'];
-        $branch_id = $request['branch_id'];
-
-        if (! Company::find($company_id)->branches()->where('id', '=', $branch_id)->exists()) {
-            return response()->error([
-                'branch_id' => [trans('rules.valid_branch')],
-            ], 422);
-        }
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->warehouseActions->generateUniqueCode();
-            } while (! $this->warehouseActions->isUniqueCode($code, $company_id));
-        } else {
-            if (! $this->warehouseActions->isUniqueCode($code, $company_id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $warehouseArr = [
-            'company_id' => $company_id,
-            'branch_id' => $branch_id,
-            'code' => $code,
-            'name' => $request['name'],
-            'address' => $request['address'],
-            'city' => $request['city'],
-            'contact' => $request['contact'],
-            'remarks' => $request['remarks'],
-            'status' => $request['status'],
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
-            $result = $this->warehouseActions->create($warehouseArr);
+            $result = $this->warehouseActions->create($request);
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
         }
@@ -74,25 +39,24 @@ class WarehouseController extends BaseController
     {
         $request = $warehouseRequest->validated();
 
-        $search = $request['search'];
-        $paginate = $request['paginate'];
-        $page = array_key_exists('page', $request) ? abs($request['page']) : 1;
-        $perPage = array_key_exists('per_page', $request) ? abs($request['per_page']) : 10;
-        $useCache = array_key_exists('refresh', $request) ? boolval($request['refresh']) : true;
-
-        $companyId = $request['company_id'];
-
         $result = null;
         $errorMsg = '';
 
         try {
             $result = $this->warehouseActions->readAny(
-                companyId: $companyId,
-                search: $search,
-                paginate: $paginate,
-                page: $page,
-                perPage: $perPage,
-                useCache: $useCache
+                useCache: $request['refresh'],
+                with: [],
+                withTrashed: $request['with_trashed'],
+
+                search: $request['search'],
+                companyId: $request['company_id'],
+                branchId: $request['branch_id'],
+                status: $request['status'],
+
+                paginate: $request['paginate'],
+                page: $request['page'],
+                perPage: $request['per_page'],
+                limit: $request['limit'],
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
@@ -133,45 +97,13 @@ class WarehouseController extends BaseController
     {
         $request = $warehouseRequest->validated();
 
-        $company_id = $request['company_id'];
-        $branch_id = $request['branch_id'];
-
-        if (! Company::find($company_id)->branches()->where('id', '=', $branch_id)->exists()) {
-            return response()->error([
-                'branch_id' => [trans('rules.valid_branch')],
-            ], 422);
-        }
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->warehouseActions->generateUniqueCode();
-            } while (! $this->warehouseActions->isUniqueCode($code, $company_id, $warehouse->id));
-        } else {
-            if (! $this->warehouseActions->isUniqueCode($code, $company_id, $warehouse->id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $warehouseArr = [
-            'code' => $code,
-            'name' => $request['name'],
-            'address' => $request['address'],
-            'city' => $request['city'],
-            'contact' => $request['contact'],
-            'remarks' => $request['remarks'],
-            'status' => $request['status'],
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
             $result = $this->warehouseActions->update(
                 $warehouse,
-                $warehouseArr
+                $request
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();

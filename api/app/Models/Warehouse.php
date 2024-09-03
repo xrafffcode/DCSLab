@@ -22,8 +22,8 @@ class Warehouse extends Model
         'address',
         'city',
         'contact',
-        'status',
         'remarks',
+        'status',
     ];
 
     protected $casts = [
@@ -38,5 +38,16 @@ class Warehouse extends Model
     public function branch()
     {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function scopeSearch($query, string $search)
+    {
+        return $query->whereHas('company', fn ($query) => $query->search($search))
+            ->orWhereHas('branch', fn ($query) => $query->search($search))
+            ->orWhere('code', 'like', '%'.$search.'%')
+            ->orWhere('name', 'like', '%'.$search.'%')
+            ->orWhere('address', 'like', '%'.$search.'%')
+            ->orWhere('city', 'like', '%'.$search.'%')
+            ->orWhere('contact', 'like', '%'.$search.'%');
     }
 }

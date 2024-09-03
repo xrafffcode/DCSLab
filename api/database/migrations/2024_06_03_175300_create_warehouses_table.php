@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('company_id')->references('id')->on('companies');
             $table->foreignId('branch_id')->references('id')->on('branches');
             $table->string('code');
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('contact')->nullable();

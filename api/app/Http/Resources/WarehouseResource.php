@@ -30,8 +30,8 @@ class WarehouseResource extends JsonResource
             'address' => $this->address,
             'city' => $this->city,
             'contact' => $this->contact,
-            'status' => $this->setStatus($this->status, $this->deleted_at),
             'remarks' => $this->remarks,
+            'status' => $this->setStatus($this->status, $this->deleted_at),
         ];
     }
 

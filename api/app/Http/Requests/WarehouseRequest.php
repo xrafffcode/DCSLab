@@ -3,12 +3,16 @@
 namespace App\Http\Requests;
 
 use App\Enums\RecordStatus;
+use App\Helpers\HashidsHelper;
 use App\Models\Warehouse;
+use App\Rules\IsValidBranch;
 use App\Rules\IsValidCompany;
+use App\Rules\WarehouseStoreValidCode;
+use App\Rules\WarehouseStoreValidName;
+use App\Rules\WarehouseUpdateValidCode;
+use App\Rules\WarehouseUpdateValidName;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Enum;
-use Vinkla\Hashids\Facades\Hashids;
 
 class WarehouseRequest extends FormRequest
 {
@@ -51,58 +55,53 @@ class WarehouseRequest extends FormRequest
      */
     public function rules()
     {
-        $nullableArr = [
-            'address' => ['nullable', 'max:255'],
-            'city' => ['nullable', 'max:255'],
-            'contact' => ['nullable', 'max:255'],
-            'remarks' => ['nullable', 'max:255'],
-        ];
-
         $currentRouteMethod = $this->route()->getActionMethod();
         switch ($currentRouteMethod) {
             case 'readAny':
-                $rules_read_any = [
-                    'company_id' => ['required', new IsValidCompany(), 'bail'],
-                    'search' => ['present', 'string'],
+                return [
+                    'refresh' => ['required', 'boolean'],
+                    'with_trashed' => ['required', 'boolean'],
+
+                    'search' => ['nullable', 'string'],
+                    'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
+                    'branch_id' => ['nullable', 'integer', 'bail', new IsValidBranch($this->company_id, false)],
+                    'status' => ['nullable', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
+
                     'paginate' => ['required', 'boolean'],
-                    'page' => ['required_if:paginate,true', 'numeric'],
-                    'per_page' => ['required_if:paginate,true', 'numeric'],
-                    'refresh' => ['nullable', 'boolean'],
+                    'page' => ['nullable', 'required_if:paginate,true', 'numeric', 'min:1'],
+                    'per_page' => ['nullable', 'required_if:paginate,true', 'numeric', 'min:10'],
+                    'limit' => ['nullable', 'integer', 'min:1'],
                 ];
-
-                return $rules_read_any;
             case 'read':
-                $rules_read = [
-                ];
-
-                return $rules_read;
+                return [];
             case 'store':
-                $rules_store = [
-                    'company_id' => ['required', new IsValidCompany(), 'bail'],
-                    'branch_id' => ['required'],
-                    'code' => ['required', 'max:255'],
-                    'name' => 'required|max:255',
-                    'status' => [new Enum(RecordStatus::class)],
+                return [
+                    'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
+                    'branch_id' => ['required', 'integer', 'bail', new IsValidBranch($this->company_id, true)],
+                    'code' => ['required', 'string', 'max:255', new WarehouseStoreValidCode($this->company_id)],
+                    'name' => ['required', 'string', 'max:255', new WarehouseStoreValidName($this->company_id)],
+                    'address' => ['nullable', 'string', 'max:255'],
+                    'city' => ['nullable', 'string', 'max:255'],
+                    'contact' => ['nullable', 'string', 'max:255'],
+                    'remarks' => ['nullable', 'string', 'max:255'],
+                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
                 ];
-
-                return array_merge($rules_store, $nullableArr);
             case 'update':
-                $rules_update = [
-                    'company_id' => ['required', new IsValidCompany(), 'bail'],
-                    'branch_id' => ['required'],
-                    'code' => ['required', 'max:255'],
-                    'name' => 'required|max:255',
-                    'status' => [new Enum(RecordStatus::class)],
+                return [
+                    'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
+                    'branch_id' => ['required', 'integer', 'bail', new IsValidBranch($this->company_id, true)],
+                    'code' => ['required', 'string', 'max:255', new WarehouseUpdateValidCode($this->company_id, $this->route('warehouse'))],
+                    'name' => ['required', 'string', 'max:255', new WarehouseUpdateValidName($this->company_id, $this->route('warehouse'))],
+                    'address' => ['nullable', 'string', 'max:255'],
+                    'city' => ['nullable', 'string', 'max:255'],
+                    'contact' => ['nullable', 'string', 'max:255'],
+                    'remarks' => ['nullable', 'string', 'max:255'],
+                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
                 ];
-
-                return array_merge($rules_update, $nullableArr);
-
             case 'delete':
-                $rules_delete = [
+                return [
 
                 ];
-
-                return $rules_delete;
             default:
                 return [
                     '' => 'required',
@@ -138,10 +137,16 @@ class WarehouseRequest extends FormRequest
         switch ($currentRouteMethod) {
             case 'readAny':
                 $this->merge([
-                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'branch_id' => $this->has('branch_id') ? Hashids::decode($this['branch_id'])[0] : '',
-                    'search' => $this->has('search') && ! is_null($this->search) ? $this->search : '',
-                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                    'with_trashed' => $this->has('with_trashed') ? $this->with_trashed : null,
+
+                    'search' => $this->has('search') ? $this->search : null,
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+                    'branch_id' => $this->has('branch_id') ? HashidsHelper::decodeId($this->branch_id) : null,
+                    'status' => $this->has('status') ? $this->status : null,
+
+                    'page' => $this->has('page') ? $this->page : null,
+                    'per_page' => $this->has('per_page') ? $this->per_page : null,
+                    'limit' => $this->has('limit') ? $this->limit : null,
                 ]);
                 break;
             case 'read':
@@ -150,9 +155,12 @@ class WarehouseRequest extends FormRequest
             case 'store':
             case 'update':
                 $this->merge([
-                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'branch_id' => $this->has('branch_id') ? Hashids::decode($this['branch_id'])[0] : '',
-                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : -1,
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+                    'branch_id' => $this->has('branch_id') ? HashidsHelper::decodeId($this->branch_id) : null,
+                    'address' => $this->has('address') ? $this['address'] : null,
+                    'city' => $this->has('city') ? $this['city'] : null,
+                    'contact' => $this->has('contact') ? $this['contact'] : null,
+                    'remarks' => $this->has('remarks') ? $this['remarks'] : null,
                 ]);
                 break;
             default:

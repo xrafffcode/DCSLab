@@ -2,7 +2,7 @@
 
 namespace App\Actions\Warehouse;
 
-use App\Actions\Randomizer\RandomizerActions;
+use App\Models\Company;
 use App\Models\Warehouse;
 use App\Traits\CacheHelper;
 use App\Traits\LoggerHelper;
@@ -21,23 +21,22 @@ class WarehouseActions
     {
     }
 
-    public function create(
-        array $warehouseArr
-    ): Warehouse {
+    public function create(array $data): Warehouse
+    {
         DB::beginTransaction();
         $timer_start = microtime(true);
 
         try {
             $warehouse = new Warehouse();
-            $warehouse->company_id = $warehouseArr['company_id'];
-            $warehouse->branch_id = $warehouseArr['branch_id'];
-            $warehouse->code = $warehouseArr['code'];
-            $warehouse->name = $warehouseArr['name'];
-            $warehouse->address = $warehouseArr['address'];
-            $warehouse->city = $warehouseArr['city'];
-            $warehouse->contact = $warehouseArr['contact'];
-            $warehouse->remarks = $warehouseArr['remarks'];
-            $warehouse->status = $warehouseArr['status'];
+            $warehouse->company_id = $data['company_id'];
+            $warehouse->branch_id = $data['branch_id'];
+            $warehouse->code = $this->generateUniqueCode($data['company_id'], $data['code'], null);
+            $warehouse->name = $data['name'];
+            $warehouse->address = $data['address'];
+            $warehouse->city = $data['city'];
+            $warehouse->contact = $data['contact'];
+            $warehouse->remarks = $data['remarks'];
+            $warehouse->status = $data['status'];
             $warehouse->save();
 
             DB::commit();
@@ -55,21 +54,73 @@ class WarehouseActions
         }
     }
 
-    public function readAny(
+    private function readAnyQuery(
+        ?array $with,
+        ?bool $withTrashed,
+
+        ?string $search,
         int $companyId,
-        string $search = '',
-        bool $paginate = true,
-        int $page = 1,
-        int $perPage = 10,
-        array $with = [],
-        bool $withTrashed = false,
-        bool $useCache = true
+        ?int $branchId,
+        ?int $status,
+
+        ?int $limit
+    ) {
+        $query = Warehouse::with($with ?? ['company', 'branch'])->withTrashed()
+            ->withAggregate('company', 'name')
+            ->withAggregate('branch', 'name')
+            ->where(function ($query) use ($withTrashed, $search, $companyId, $branchId, $status) {
+                if ($withTrashed == true) {
+                    $query = $query->withTrashed();
+                } else {
+                    $query = $query->withoutTrashed();
+                }
+
+                if ($search) {
+                    $query->search($search);
+                }
+
+                $query->whereCompanyId($companyId);
+
+                if ($branchId) {
+                    $query->where('branch_id', $branchId);
+                }
+
+                if ($status) {
+                    $query->where('status', $status);
+                }
+            });
+
+        $query->orderBy('company_name', 'asc')
+            ->orderBy('branch_name', 'asc')
+            ->orderBy('name', 'asc');
+
+        if ($limit) {
+            $query->limit($limit);
+        }
+
+        return $query;
+    }
+
+    public function readAny(
+        ?bool $useCache,
+        ?array $with,
+        ?bool $withTrashed,
+
+        ?string $search,
+        int $companyId,
+        ?int $branchId,
+        ?int $status,
+
+        bool $paginate,
+        ?int $page,
+        ?int $perPage,
+        ?int $limit
     ): Paginator|Collection {
         $timer_start = microtime(true);
 
         try {
             $cacheKey = '';
-            if ($useCache) {
+            if ($useCache === true) {
                 $cacheKey = 'read_'.$companyId.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
                 $cacheResult = $this->readFromCache($cacheKey);
 
@@ -80,33 +131,26 @@ class WarehouseActions
 
             $result = null;
 
-            if (! $companyId) {
-                return null;
-            }
-
-            $warehouse = count($with) != 0 ? Warehouse::with($with) : Warehouse::with('company', 'branch');
-            $warehouse = $warehouse->whereCompanyId($companyId);
-
-            if ($withTrashed) {
-                $warehouse = $warehouse->withTrashed();
-            }
-
-            if (empty($search)) {
-                $warehouse = $warehouse->latest();
-            } else {
-                $warehouse = $warehouse->where('name', 'like', '%'.$search.'%')->latest();
-            }
+            $query = $this->readAnyQuery(
+                with: $with,
+                withTrashed: $withTrashed,
+                search: $search,
+                companyId: $companyId,
+                branchId: $branchId,
+                status: $status,
+                limit: $paginate ? null : $limit
+            );
 
             if ($paginate) {
                 $perPage = is_numeric($perPage) ? abs($perPage) : Config::get('dcslab.PAGINATION_LIMIT');
                 $page = is_numeric($page) ? abs($page) : 1;
 
-                $result = $warehouse->paginate(
+                $result = $query->paginate(
                     perPage: $perPage,
                     page: $page
                 );
             } else {
-                $result = $warehouse->get();
+                $result = $query->get();
             }
 
             if ($useCache) {
@@ -128,23 +172,20 @@ class WarehouseActions
         return $warehouse->with('company', 'branch')->first();
     }
 
-    public function update(
-        Warehouse $warehouse,
-        array $warehouseArr
-    ): Warehouse {
+    public function update(Warehouse $warehouse, array $data): Warehouse
+    {
         DB::beginTransaction();
         $timer_start = microtime(true);
 
         try {
-            $warehouse->update([
-                'code' => $warehouseArr['code'],
-                'name' => $warehouseArr['name'],
-                'address' => $warehouseArr['address'],
-                'city' => $warehouseArr['city'],
-                'contact' => $warehouseArr['contact'],
-                'remarks' => $warehouseArr['remarks'],
-                'status' => $warehouseArr['status'],
-            ]);
+            $warehouse->code = $this->generateUniqueCode($warehouse->company_id, $data['code'], $warehouse->id);
+            $warehouse->name = $data['name'];
+            $warehouse->address = $data['address'];
+            $warehouse->city = $data['city'];
+            $warehouse->contact = $data['contact'];
+            $warehouse->remarks = $data['remarks'];
+            $warehouse->status = $data['status'];
+            $warehouse->save();
 
             DB::commit();
 
@@ -186,15 +227,25 @@ class WarehouseActions
         }
     }
 
-    public function generateUniqueCode(): string
+    public function generateUniqueCode(int $companyId, string $code, ?int $exceptId): string
     {
-        $rand = app(RandomizerActions::class);
-        $code = $rand->generateAlpha().$rand->generateNumeric();
+        if ($code == config('dcslab.KEYWORDS.AUTO')) {
+            $company = Company::find($companyId);
 
-        return $code;
+            $tryCount = 0;
+            do {
+                $count = $company->warehouses()->withTrashed()->count() + 1 + $tryCount;
+                $code = 'WH'.str_pad($count, 3, '0', STR_PAD_LEFT);
+                $tryCount++;
+            } while (! $this->isUniqueCode($companyId, $code, $exceptId));
+
+            return $code;
+        } else {
+            return $code;
+        }
     }
 
-    public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool
+    public function isUniqueCode(int $companyId, string $code, ?int $exceptId = null): bool
     {
         $result = Warehouse::whereCompanyId($companyId)->where('code', '=', $code);
 

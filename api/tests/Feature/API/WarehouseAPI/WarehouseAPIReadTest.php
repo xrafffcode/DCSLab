@@ -222,12 +222,17 @@ class WarehouseAPIReadTest extends APITestCase
         $testIdx = random_int(0, count($injections));
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
+            'refresh' => true,
+            'with_trashed' => false,
+
             'search' => $injections[$testIdx],
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => Hashids::encode($branch->id),
+            'status' => null,
+
             'paginate' => true,
             'page' => 1,
             'per_page' => 10,
-            'refresh' => true,
         ]));
 
         $api->assertSuccessful();
@@ -249,12 +254,16 @@ class WarehouseAPIReadTest extends APITestCase
         $testIdx = random_int(0, count($injections));
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
-            'search' => $injections[$testIdx],
-            'paginate' => false,
-            'page' => 1,
-            'per_page' => 10,
             'refresh' => true,
+            'with_trashed' => false,
+
+            'search' => $injections[$testIdx],
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => Hashids::encode($branch->id),
+            'status' => null,
+
+            'paginate' => false,
+            'limit' => 10,
         ]));
 
         $api->assertSuccessful();
@@ -280,12 +289,17 @@ class WarehouseAPIReadTest extends APITestCase
         Warehouse::factory()->for($company)->for($branch)->create();
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
+            'refresh' => true,
+            'with_trashed' => false,
+
             'search' => '',
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => null,
+            'status' => null,
+
             'paginate' => true,
             'page' => 1,
             'per_page' => 10,
-            'refresh' => true,
         ]));
 
         $api->assertSuccessful();
@@ -300,12 +314,15 @@ class WarehouseAPIReadTest extends APITestCase
         ]);
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
-            'search' => '',
-            'paginate' => false,
-            'page' => 1,
-            'per_page' => 10,
             'refresh' => true,
+            'with_trashed' => false,
+
+            'search' => '',
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => null,
+            'status' => null,
+
+            'paginate' => false,
         ]));
 
         $api->assertSuccessful();
@@ -327,12 +344,17 @@ class WarehouseAPIReadTest extends APITestCase
         Warehouse::factory()->for($company)->for($branch)->create();
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
+            'refresh' => true,
+            'with_trashed' => false,
+
             'search' => '',
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => null,
+            'status' => null,
+
             'paginate' => true,
             'page' => 1,
             'per_page' => 25,
-            'refresh' => true,
         ]));
 
         $api->assertSuccessful();
@@ -373,12 +395,17 @@ class WarehouseAPIReadTest extends APITestCase
             ->count(3)->create();
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
+            'refresh' => true,
+            'with_trashed' => false,
+
             'search' => 'testing',
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => null,
+            'status' => null,
+
             'paginate' => true,
             'page' => 1,
-            'per_page' => 10,
-            'refresh' => true,
+            'per_page' => 25,
         ]));
 
         $api->assertSuccessful();
@@ -435,12 +462,17 @@ class WarehouseAPIReadTest extends APITestCase
         Warehouse::factory()->for($company)->for($branch)->create();
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
+            'refresh' => false,
+            'with_trashed' => false,
+
             'search' => " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~",
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => null,
+            'status' => null,
+
             'paginate' => true,
             'page' => 1,
-            'per_page' => 10,
-            'refresh' => false,
+            'per_page' => 25,
         ]));
 
         $api->assertSuccessful();
@@ -471,24 +503,20 @@ class WarehouseAPIReadTest extends APITestCase
         Warehouse::factory()->for($company)->for($branch)->create();
 
         $api = $this->getJson(route('api.get.db.company.warehouse.read_any', [
-            'company_id' => Hashids::encode($company->id),
+            'refresh' => false,
+            'with_trashed' => false,
+
             'search' => '',
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => null,
+            'status' => null,
+
             'paginate' => true,
             'page' => -1,
-            'per_page' => -10,
-            'refresh' => false,
+            'per_page' => -25,
         ]));
 
-        $api->assertSuccessful();
-        $api->assertJsonStructure([
-            'data',
-            'links' => [
-                'first', 'last', 'prev', 'next',
-            ],
-            'meta' => [
-                'current_page', 'from', 'last_page', 'links', 'path', 'per_page', 'to', 'total',
-            ],
-        ]);
+        $api->assertStatus(422);
     }
 
     public function test_warehouse_api_call_read_expect_successful()
