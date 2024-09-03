@@ -68,7 +68,7 @@ class BranchRequest extends FormRequest
 
                     'search' => ['nullable', 'string'],
                     'is_main' => ['nullable', 'boolean'],
-                    'status' => ['nullable', 'string', 'in:'.implode(',', RecordStatus::toArrayValue())],
+                    'status' => ['nullable', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
 
                     'paginate' => ['required', 'boolean'],
                     'page' => ['required_if:paginate,true', 'numeric', 'min:1'],
@@ -144,6 +144,7 @@ class BranchRequest extends FormRequest
             case 'readAny':
                 $this->merge([
                     'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+                    'refresh' => $this->has('refresh') ? $this->refresh : null,
                     'with' => $this->has('with') ? $this->with : [],
                     'with_trashed' => $this->has('with_trashed') ? $this->with_trashed : null,
 
