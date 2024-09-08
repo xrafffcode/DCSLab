@@ -12,6 +12,7 @@ use App\Rules\CompanyUpdateValidDefault;
 use App\Rules\CompanyUpdateValidStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
 class CompanyRequest extends FormRequest
 {
@@ -61,11 +62,12 @@ class CompanyRequest extends FormRequest
 
                     'search' => ['nullable', 'string'],
                     'default' => ['nullable', 'boolean'],
-                    'status' => ['nullable', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
+                    'status' => ['nullable', new Enum(RecordStatus::class)],
 
                     'paginate' => ['required', 'boolean'],
                     'page' => ['required_if:paginate,true', 'numeric', 'min:1'],
                     'per_page' => ['required_if:paginate,true', 'numeric', 'min:10'],
+                    'limit' => ['nullable', 'integer', 'min:10'],
                 ];
             case 'read':
                 return [
@@ -81,7 +83,7 @@ class CompanyRequest extends FormRequest
                     'name' => ['required', 'string', 'max:255'],
                     'address' => ['nullable', 'string', 'max:255'],
                     'default' => ['required', 'boolean', new CompanyStoreValidDefault($this->user)],
-                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue()), new CompanyStoreValidStatus($this->input('default'))],
+                    'status' => ['required', new Enum(RecordStatus::class), new CompanyStoreValidStatus($this->input('default'))],
                 ];
             case 'update':
                 return [
@@ -89,7 +91,7 @@ class CompanyRequest extends FormRequest
                     'name' => ['required', 'string', 'max:255'],
                     'address' => ['nullable', 'string', 'max:255'],
                     'default' => ['required', 'boolean', new CompanyUpdateValidDefault($this->user)],
-                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue()), new CompanyUpdateValidStatus($this->input('default'))],
+                    'status' => ['required', new Enum(RecordStatus::class), new CompanyUpdateValidStatus($this->input('default'))],
                 ];
             case 'delete':
                 return [
@@ -132,10 +134,11 @@ class CompanyRequest extends FormRequest
 
                     'search' => $this->has('search') ? $this->search : null,
                     'default' => $this->has('default') ? $this->default : null,
-                    'status' => $this->has('status') ? $this->status : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
 
                     'page' => $this->has('page') ? $this->page : null,
                     'per_page' => $this->has('per_page') ? $this->per_page : null,
+                    'limit' => $this->has('limit') ? $this->limit : null,
                 ]);
                 break;
             case 'read':
@@ -144,11 +147,13 @@ class CompanyRequest extends FormRequest
             case 'store':
                 $this->merge([
                     'address' => $this->has('address') ? $this['address'] : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
                 ]);
                 break;
             case 'update':
                 $this->merge([
                     'address' => $this->has('address') ? $this['address'] : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
                 ]);
                 break;
             default:

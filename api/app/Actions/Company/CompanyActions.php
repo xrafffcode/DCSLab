@@ -29,7 +29,7 @@ class CompanyActions
 
         try {
             if ($data['default'] == true) {
-                $this->resetDefaultCompany($user);
+                $this->resetDefault($user);
             }
 
             $company = new Company();
@@ -68,21 +68,10 @@ class CompanyActions
 
         ?int $limit
     ) {
-        $companyIds = $user->companies()->pluck('company_id');
-
-        $relationship = ['branches'];
-        if ($with) {
-            $relationship = $with;
-        }
-
-        $query = Company::with($relationship)->whereIn('id', $companyIds)->withTrashed()
-            ->where(function ($query) use ($withTrashed, $search, $default, $status) {
-                if ($withTrashed !== null) {
-                    if ($withTrashed) {
-                        $query = $query->withTrashed();
-                    } else {
-                        $query = $query->withoutTrashed();
-                    }
+        $query = Company::with($with ?? ['branches'])->withTrashed()
+            ->where(function ($query) use ($user, $withTrashed, $search, $default, $status) {
+                if ($withTrashed == true) {
+                    $query = $query->withTrashed();
                 } else {
                     $query = $query->withoutTrashed();
                 }
@@ -91,6 +80,8 @@ class CompanyActions
                     $query = $query->search($search);
                 }
 
+                $query = $query->whereIn('id', $user->companies()->pluck('company_id'));
+
                 if ($default !== null) {
                     $query = $query->where('default', $default);
                 }
@@ -98,7 +89,9 @@ class CompanyActions
                 if ($status !== null) {
                     $query = $query->where('status', $status);
                 }
-            })->latest();
+            });
+
+        $query->orderBy('name', 'asc');
 
         if ($limit) {
             $query->take($limit);
@@ -109,7 +102,7 @@ class CompanyActions
 
     public function readAny(
         User $user,
-        bool $useCache,
+        ?bool $useCache,
         ?array $with,
         ?bool $withTrashed,
 
@@ -120,13 +113,14 @@ class CompanyActions
         bool $paginate,
         ?int $page,
         ?int $perPage,
+        ?int $limit
     ): Paginator|Collection {
         $timer_start = microtime(true);
         $recordsCount = 0;
 
         try {
             $cacheKey = 'readAny_'.$user->id.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
-            if ($useCache) {
+            if ($useCache === true) {
                 $cacheResult = $this->readFromCache($cacheKey);
 
                 if (! is_null($cacheResult)) {
@@ -137,13 +131,13 @@ class CompanyActions
             $result = null;
 
             $query = $this->readAnyQuery(
-                user: $user,
                 with: $with,
                 withTrashed: $withTrashed,
                 search: $search,
+                user: $user,
                 default: $default,
                 status: $status,
-                limit: null
+                limit: $paginate ? null : $limit
             );
 
             if ($paginate) {
@@ -157,7 +151,9 @@ class CompanyActions
 
             $recordsCount = $result->count();
 
-            $this->saveToCache($cacheKey, $result);
+            if ($useCache === true) {
+                $this->saveToCache($cacheKey, $result);
+            }
 
             return $result;
         } catch (Exception $e) {
@@ -174,11 +170,11 @@ class CompanyActions
         return $company->load('branches');
     }
 
-    public function getAllActiveCompany(
+    public function getAllActive(
         User $user,
         ?array $with,
         ?string $search,
-        ?int $includeIds,
+        ?array $includeIds,
         ?int $limit
     ) {
         $timer_start = microtime(true);
@@ -214,19 +210,19 @@ class CompanyActions
         }
     }
 
-    public function isDefaultCompany(Company $company): bool
+    public function isDefault(Company $company): bool
     {
         $result = $company->default;
 
         return is_null($result) ? false : $result;
     }
 
-    public function getCompanyById(int $companyId): Company
+    public function getById(int $companyId): Company
     {
         return Company::find($companyId)->first();
     }
 
-    public function getDefaultCompany(User $user): Company
+    public function getDefault(User $user): Company
     {
         return $user->companies()->where('default', '=', true)->first();
     }
@@ -238,7 +234,7 @@ class CompanyActions
 
         try {
             if ($data['default'] == true) {
-                $this->resetDefaultCompany($user);
+                $this->resetDefault($user);
                 $company->refresh();
             }
 
@@ -264,7 +260,7 @@ class CompanyActions
         }
     }
 
-    private function resetDefaultCompany(User $user)
+    private function resetDefault(User $user)
     {
         $timer_start = microtime(true);
 

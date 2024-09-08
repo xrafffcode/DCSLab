@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Company\CompanyActions;
+use App\Enums\RecordStatus;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
@@ -29,6 +30,8 @@ class CompanyController extends BaseController
         $errorMsg = '';
 
         try {
+            $request['status'] = RecordStatus::resolveToEnum($request['status'])->value;
+
             $result = $this->companyActions->create(
                 user: Auth::user(),
                 data: $request
@@ -51,16 +54,17 @@ class CompanyController extends BaseController
             $result = $this->companyActions->readAny(
                 user: Auth::user(),
                 useCache: $request['refresh'],
-                with: [],
-                withTrashed: false,
+                with: $request['with'],
+                withTrashed: $request['with_trashed'],
 
                 search: $request['search'],
                 default: $request['default'],
-                status: $request['status'],
+                status: $request['status'] ? RecordStatus::resolveToEnum($request['status'])->value : null,
 
                 paginate: $request['paginate'],
                 page: $request['page'],
                 perPage: $request['per_page'],
+                limit: $request['limit'],
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
@@ -97,13 +101,13 @@ class CompanyController extends BaseController
         }
     }
 
-    public function getAllActiveCompany(Request $request)
+    public function getAllActive(Request $request)
     {
         $request = $request->validated();
 
-        $result = $this->companyActions->getAllActiveCompany(
+        $result = $this->companyActions->getAllActive(
             user: Auth::user(),
-            with: $request->has('with') ? explode(',', $request['with']) : [],
+            with: $request['with'],
             search: $request['search'],
             includeIds: $request['includeIds'],
             limit: $request['limit']
@@ -118,10 +122,10 @@ class CompanyController extends BaseController
         }
     }
 
-    public function getDefaultCompany()
+    public function getDefault()
     {
         $user = Auth::user();
-        $defaultCompany = $this->companyActions->getDefaultCompany($user);
+        $defaultCompany = $this->companyActions->getDefault($user);
 
         return $defaultCompany->hId;
     }
@@ -134,6 +138,8 @@ class CompanyController extends BaseController
         $errorMsg = '';
 
         try {
+            $request['status'] = RecordStatus::resolveToEnum($request['status'])->value;
+
             $result = $this->companyActions->update(
                 user: Auth::user(),
                 company: $company,
@@ -164,7 +170,7 @@ class CompanyController extends BaseController
         $errorMsg = '';
 
         try {
-            if ($this->companyActions->isDefaultCompany($company)) {
+            if ($this->companyActions->isDefault($company)) {
                 return response()->error(trans('rules.company.delete_default_company'), 422);
             }
 

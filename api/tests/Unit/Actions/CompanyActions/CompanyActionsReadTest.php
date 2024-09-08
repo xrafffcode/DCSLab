@@ -41,7 +41,8 @@ class CompanyActionsReadTest extends ActionsTestCase
 
             paginate: true,
             page: 1,
-            perPage: 10
+            perPage: 10,
+            limit: null
         );
 
         $this->assertInstanceOf(Paginator::class, $result);
@@ -65,7 +66,8 @@ class CompanyActionsReadTest extends ActionsTestCase
 
             paginate: false,
             page: null,
-            perPage: null
+            perPage: null,
+            limit: null
         );
 
         $this->assertInstanceOf(Collection::class, $result);
@@ -102,7 +104,8 @@ class CompanyActionsReadTest extends ActionsTestCase
 
             paginate: true,
             page: 1,
-            perPage: 10
+            perPage: 10,
+            limit: null
         );
 
         $this->assertInstanceOf(Paginator::class, $result);
@@ -137,7 +140,8 @@ class CompanyActionsReadTest extends ActionsTestCase
 
             paginate: true,
             page: -1,
-            perPage: 10
+            perPage: 10,
+            limit: null
         );
 
         $this->assertInstanceOf(Paginator::class, $result);
@@ -172,7 +176,8 @@ class CompanyActionsReadTest extends ActionsTestCase
 
             paginate: true,
             page: 1,
-            perPage: -10
+            perPage: -10,
+            limit: null
         );
 
         $this->assertInstanceOf(Paginator::class, $result);
