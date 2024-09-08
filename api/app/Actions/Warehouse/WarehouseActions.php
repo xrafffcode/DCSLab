@@ -2,6 +2,7 @@
 
 namespace App\Actions\Warehouse;
 
+use App\Enums\RecordStatus;
 use App\Models\Company;
 use App\Models\Warehouse;
 use App\Traits\CacheHelper;
@@ -117,11 +118,11 @@ class WarehouseActions
         ?int $limit
     ): Paginator|Collection {
         $timer_start = microtime(true);
+        $recordsCount = 0;
 
         try {
-            $cacheKey = '';
+            $cacheKey = 'read_'.$companyId.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
             if ($useCache === true) {
-                $cacheKey = 'read_'.$companyId.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
                 $cacheResult = $this->readFromCache($cacheKey);
 
                 if (! is_null($cacheResult)) {
@@ -145,15 +146,14 @@ class WarehouseActions
                 $perPage = is_numeric($perPage) ? abs($perPage) : Config::get('dcslab.PAGINATION_LIMIT');
                 $page = is_numeric($page) ? abs($page) : 1;
 
-                $result = $query->paginate(
-                    perPage: $perPage,
-                    page: $page
-                );
+                $result = $query->paginate(perPage: $perPage, page: $page);
             } else {
                 $result = $query->get();
             }
 
-            if ($useCache) {
+            $recordsCount = $result->count();
+
+            if ($useCache === true) {
                 $this->saveToCache($cacheKey, $result);
             }
 
@@ -163,13 +163,53 @@ class WarehouseActions
             throw $e;
         } finally {
             $execution_time = microtime(true) - $timer_start;
-            $this->loggerPerformance(__METHOD__, $execution_time);
+            $this->loggerPerformance(__METHOD__, $execution_time, $recordsCount);
         }
     }
 
     public function read(Warehouse $warehouse): Warehouse
     {
         return $warehouse->with('company', 'branch')->first();
+    }
+
+    public function getAllActiveWarehouse(
+        ?array $with,
+        ?bool $withTrashed,
+
+        ?string $search,
+        int $companyId,
+        ?int $branchId,
+        ?array $includeIds,
+
+        ?int $limit
+    ) {
+        $timer_start = microtime(true);
+
+        try {
+            $query = $this->readAnyQuery(
+                with: $with,
+                withTrashed: $withTrashed,
+
+                search: $search,
+                companyId: $companyId,
+                branchId: $branchId,
+                status: RecordStatus::ACTIVE->value,
+
+                limit: $limit
+            );
+
+            if ($includeIds) {
+                $query = $query->orWhereIn('id', $includeIds);
+            }
+
+            return $query->get();
+        } catch (Exception $e) {
+            $this->loggerDebug(__METHOD__, $e);
+            throw $e;
+        } finally {
+            $execution_time = microtime(true) - $timer_start;
+            $this->loggerPerformance(__METHOD__, $execution_time);
+        }
     }
 
     public function update(Warehouse $warehouse, array $data): Warehouse
