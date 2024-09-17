@@ -29,7 +29,7 @@ class BranchActions
 
         try {
             if ($data['is_main'] == true) {
-                $this->resetMainBranch($data['company_id']);
+                $this->resetMainByCompany($data['company_id']);
             }
 
             $branch = new Branch();
@@ -60,10 +60,10 @@ class BranchActions
     }
 
     private function readAnyQuery(
-        int $companyId,
         ?array $with,
         ?bool $withTrashed,
 
+        int $companyId,
         ?string $search,
         ?bool $isMain,
         ?int $status,
@@ -71,12 +71,10 @@ class BranchActions
         ?int $limit
     ) {
         $relationship = ['company'];
-        if ($with) {
-            $relationship = $with;
-        }
+        if ($with) $relationship = $with;
 
-        $query = Branch::with($relationship)->whereCompanyId($companyId)->withTrashed()
-            ->where(function ($query) use ($withTrashed, $search, $isMain, $status) {
+        $query = Branch::with($relationship)->withTrashed()
+            ->where(function ($query) use ($withTrashed, $companyId, $search, $isMain, $status) {
                 if ($withTrashed !== null) {
                     if ($withTrashed) {
                         $query = $query->withTrashed();
@@ -86,6 +84,8 @@ class BranchActions
                 } else {
                     $query = $query->withoutTrashed();
                 }
+
+                $query->whereCompanyId($companyId);
 
                 if ($search) {
                     $query->search($search);
@@ -175,7 +175,7 @@ class BranchActions
         return $branch->load('company');
     }
 
-    public function getBranchByCompany(int $companyId = 0, ?Company $company = null): Collection
+    public function getByCompany(int $companyId = 0, ?Company $company = null): Collection
     {
         if (! is_null($company)) {
             return $company->branches;
@@ -188,7 +188,7 @@ class BranchActions
         return null;
     }
 
-    public function getMainBranchByCompany(int $companyId = 0, ?Company $company = null): Branch
+    public function getMainByCompany(int $companyId = 0, ?Company $company = null): Branch
     {
         if (! is_null($company)) {
             return $company->branches()->where('is_main', '=', true)->first();
@@ -210,7 +210,7 @@ class BranchActions
 
         try {
             if ($data['is_main'] == true) {
-                $this->resetMainBranch($branch->company_id);
+                $this->resetMainByCompany($branch->company_id);
             }
 
             $branch->code = $this->generateUniqueCode($branch->company_id, $data['code'], $branch->id);
@@ -238,13 +238,12 @@ class BranchActions
         }
     }
 
-    public function resetMainBranch(int $companyId): bool
+    public function resetMainByCompany(int $companyId): bool
     {
         $timer_start = microtime(true);
 
         try {
-            $companyActions = new CompanyActions();
-            $company = $companyActions->getCompanyById($companyId);
+            $company = (new CompanyActions())->getById($companyId);
 
             return $company->branches()->update(['is_main' => false]);
         } catch (Exception $e) {
