@@ -198,6 +198,15 @@ class CompanyActions
 
             if ($includeIds) {
                 $query = $query->orWhereIn('id', $includeIds);
+
+                $orders = $query->getQuery()->orders;
+                $query->reorder();
+                $query->orderByRaw('FIELD(id, '.implode(',', $includeIds).') desc');
+                if (! empty($orders)) {
+                    foreach ($orders as $order) {
+                        $query->orderBy($order['column'], $order['direction']);
+                    }
+                }
             }
 
             return $query->get();
