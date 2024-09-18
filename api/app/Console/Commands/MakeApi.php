@@ -221,7 +221,7 @@ class MakeApi extends Command
     {
         $this->info('Creating Actions Create Test...');
 
-        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'CreateActionsTest.php');
+        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsCreateTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
@@ -235,7 +235,7 @@ class MakeApi extends Command
 
         $this->info('Creating Actions Read Test...');
 
-        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ReadActionsTest.php');
+        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsReadTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
@@ -247,14 +247,14 @@ class MakeApi extends Command
 
         $this->openInVSCode($path);
 
-        $this->info('Creating Actions Update Test...');
+        $this->info('Creating Actions Edit Test...');
 
-        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'UpdateActionsTest.php');
+        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsUpdateTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsUpdateTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsEditTest.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -263,7 +263,7 @@ class MakeApi extends Command
 
         $this->info('Creating Actions Delete Test...');
 
-        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'DeleteActionsTest.php');
+        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsDeleteTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
@@ -280,7 +280,7 @@ class MakeApi extends Command
     {
         $this->info('Creating API Create Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'CreateAPITest.php');
+        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APICreateTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
@@ -294,7 +294,7 @@ class MakeApi extends Command
 
         $this->info('Creating API Read Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'ReadAPITest.php');
+        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APIReadTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
@@ -308,12 +308,12 @@ class MakeApi extends Command
 
         $this->info('Creating API Update Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'UpdateAPITest.php');
+        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APIEditTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIUpdateTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIEditTest.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -322,7 +322,7 @@ class MakeApi extends Command
 
         $this->info('Creating API Delete Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'DeleteAPITest.php');
+        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APIDeleteTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
