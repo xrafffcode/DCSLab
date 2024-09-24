@@ -99,7 +99,7 @@ class BranchController extends BaseController
         $errorMsg = '';
 
         try {
-            $result = $this->branchActions->getBranchByCompany(company: $company);
+            $result = $this->branchActions->getByCompany(company: $company);
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
         }
@@ -119,7 +119,7 @@ class BranchController extends BaseController
         $errorMsg = '';
 
         try {
-            $result = $this->branchActions->getMainBranchByCompany(company: $company);
+            $result = $this->branchActions->getMainByCompany(company: $company);
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
         }
