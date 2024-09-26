@@ -25,14 +25,14 @@ class MakeApi extends Command
         $this->createModel($name);
         $this->createFactory($name);
         $this->createSeeder($name);
-        $openFilesCommand->openAppSeed();
+        $this->createRoutes($name);
         $this->createActions($name);
         $this->createResource($name);
         $this->createPolicy($name);
         $this->createRequest($name);
         $this->createController($name);
-        $openFilesCommand->openLaratrustSeeder();
-        $this->createApiRoutes();
+        $this->openApiRoutes();
+        $this->openApiRoutes();
         $this->createActionsTest($name);
         $this->createAPITest($name);
     }
@@ -177,6 +177,18 @@ class MakeApi extends Command
         file_put_contents($path, $content);
 
         $this->openInVSCode($path);
+    }
+
+    public function openAppSeed()
+    {
+        $path = app_path('Console/Commands/AppSeed.php');
+
+        if (! File::exists($path)) {
+            $this->error("Seeder file not found: {$path}");
+        } else {
+            $this->info("Opening: {$path}");
+            $this->openInVSCode($path);
+        }
     }
 
     public function createActions(string $name)
@@ -410,6 +422,30 @@ class MakeApi extends Command
         file_put_contents($path, $content);
 
         $this->openInVSCode($path);
+    }
+
+    public function openLaratrustSeeder()
+    {
+        $path = base_path('config/laratrust_seeder.php');
+
+        if (! File::exists($path)) {
+            $this->error("laratrust_seeder file not found: {$path}");
+        } else {
+            $this->info("Opening: {$path}");
+            $this->openInVSCode($path);
+        }
+    }
+
+    public function openApiRoutes()
+    {
+        $path = base_path('routes/api.php');
+
+        if (! File::exists($path)) {
+            $this->error("API routes file not found: {$path}");
+        } else {
+            $this->info("Opening: {$path}");
+            $this->openInVSCode($path);
+        }
     }
 
     public function createActionsTest(string $name)

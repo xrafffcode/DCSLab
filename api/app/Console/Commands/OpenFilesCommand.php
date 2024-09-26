@@ -105,7 +105,7 @@ class OpenFilesCommand extends Command
 
     public function openAppSeed()
     {
-        $path = app_path('console/commands/AppSeed.php');
+        $path = app_path('Console/Commands/AppSeed.php');
 
         if (! File::exists($path)) {
             $this->error("Seeder file not found: {$path}");
