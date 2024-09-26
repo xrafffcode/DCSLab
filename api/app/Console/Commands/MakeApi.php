@@ -452,6 +452,11 @@ class MakeApi extends Command
     {
         $this->info('Creating Actions Create Test...');
 
+        // check if directory exists
+        if (! is_dir(base_path('tests/Unit/Actions/'.$name.'Actions'))) {
+            mkdir(base_path('tests/Unit/Actions/'.$name.'Actions'), 0777, true);
+        }
+
         // Check if actions create test already exists
         $files = File::allFiles(base_path('tests/Unit/Actions/'.$name.'Actions'));
         $files = array_map(function ($file) {
