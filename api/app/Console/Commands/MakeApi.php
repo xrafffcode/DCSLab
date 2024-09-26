@@ -39,12 +39,32 @@ class MakeApi extends Command
         $name = Str::snake($name);
         $name = Str::plural($name);
 
+        // Check if migration already exists
+        $files = File::allFiles(database_path('migrations'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            $nameWithoutDate = Str::before($file, '.php');
+            $nameWithoutDate = Str::snake($nameWithoutDate);
+
+            return Str::contains($nameWithoutDate, 'create_'.$name.'_table');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Migration already exists!');
+
+            return;
+        }
+
+        // Create Migration
         Artisan::call('make:migration', ['name' => 'create_'.$name.'_table']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/migration.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/migration.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -56,12 +76,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Model...');
 
+        // Check if model already exists
+        $files = File::allFiles(app_path('Models'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Model already exists!');
+
+            return;
+        }
+
+        // Create Model
         Artisan::call('make:model', ['name' => $name]);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/model.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/model.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -73,12 +110,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Factory...');
 
+        // Check if factory already exists
+        $files = File::allFiles(database_path('factories'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'Factory.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Factory already exists!');
+
+            return;
+        }
+
+        // Create Factory
         Artisan::call('make:factory', ['name' => $name]);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/factory.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/factory.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -90,12 +144,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Seeder...');
 
+        // Check if seeder already exists
+        $files = File::allFiles(database_path('seeders'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'TableSeeder.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Seeder already exists!');
+
+            return;
+        }
+
+        // Create Seeder
         Artisan::call('make:seeder', ['name' => $name.'TableSeeder']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/seeder.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/seeder.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -107,13 +178,30 @@ class MakeApi extends Command
     {
         $this->info('Creating Actions...');
 
+        // Check if actions already exists
+        $files = File::allFiles(base_path('app/Actions'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'Actions.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Actions already exists!');
+
+            return;
+        }
+
+        // Create Actions
         if (! is_dir(base_path('app/Actions/'.$name))) {
             mkdir(base_path('app/Actions/'.$name));
         }
 
         $path = base_path('app/Actions/'.$name.'/'.$name.'Actions.php');
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/actions.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/actions.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -125,12 +213,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Resource...');
 
+        // Check if resource already exists
+        $files = File::allFiles(base_path('app/Http/Resources'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'Resource.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Resource already exists!');
+
+            return;
+        }
+
+        // Create Resource
         Artisan::call('make:resource', ['name' => $name.'Resource']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/resource.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/resource.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -142,12 +247,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Policy...');
 
+        // Check if policy already exists
+        $files = File::allFiles(base_path('app/Policies'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'Policy.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Policy already exists!');
+
+            return;
+        }
+
+        // Create Policy
         Artisan::call('make:policy', ['name' => $name.'Policy']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/policy.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/policy.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -159,12 +281,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Request...');
 
+        // Check if request already exists
+        $files = File::allFiles(base_path('app/Http/Requests'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'Request.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Request already exists!');
+
+            return;
+        }
+
+        // Create Request
         Artisan::call('make:request', ['name' => $name.'Request']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/request.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/request.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -173,12 +312,29 @@ class MakeApi extends Command
 
         $this->info('Creating Store Code Rules...');
 
+        // Check if rule already exists
+        $files = File::allFiles(base_path('app/Rules'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'StoreValidCode.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Rule already exists!');
+
+            return;
+        }
+
+        // Create Rule Store
         Artisan::call('make:rule', ['name' => $name.'StoreValidCode']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ruleStoreValidCode.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ruleStoreValidCode.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -187,12 +343,29 @@ class MakeApi extends Command
 
         $this->info('Creating Update Code Rules...');
 
+        // Check if rule already exists
+        $files = File::allFiles(base_path('app/Rules'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'UpdateValidCode.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Rule already exists!');
+
+            return;
+        }
+
+        // Create Rule Update
         Artisan::call('make:rule', ['name' => $name.'UpdateValidCode']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ruleUpdateValidCode.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ruleUpdateValidCode.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -204,12 +377,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Controller...');
 
+        // Check if controller already exists
+        $files = File::allFiles(app_path('Http/Controllers'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'Controller.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Controller already exists!');
+
+            return;
+        }
+
+        // Create Controller
         Artisan::call('make:controller', ['name' => $name.'Controller']);
         $output = Artisan::output();
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/controller.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/controller.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -221,12 +411,29 @@ class MakeApi extends Command
     {
         $this->info('Creating Actions Create Test...');
 
+        // Check if actions create test already exists
+        $files = File::allFiles(base_path('tests/Unit/Actions/'.$name.'Actions'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'ActionsCreateTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Actions Create Test already exists!');
+
+            return;
+        }
+
+        // Create Actions Create Test
         $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsCreateTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsCreateTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsCreateTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -235,12 +442,29 @@ class MakeApi extends Command
 
         $this->info('Creating Actions Read Test...');
 
+        // Check if actions read test already exists
+        $files = File::allFiles(base_path('tests/Unit/Actions/'.$name.'Actions'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'ActionsReadTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Actions Read Test already exists!');
+
+            return;
+        }
+
+        // Create Actions Read Test
         $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsReadTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsReadTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsReadTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -249,12 +473,29 @@ class MakeApi extends Command
 
         $this->info('Creating Actions Edit Test...');
 
-        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsUpdateTest.php');
+        // Check if actions edit test already exists
+        $files = File::allFiles(base_path('tests/Unit/Actions/'.$name.'Actions'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'ActionsEditTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Actions Edit Test already exists!');
+
+            return;
+        }
+
+        // Create Actions Edit Test
+        $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsEditTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsEditTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsEditTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -263,12 +504,29 @@ class MakeApi extends Command
 
         $this->info('Creating Actions Delete Test...');
 
+        // Check if actions delete test already exists
+        $files = File::allFiles(base_path('tests/Unit/Actions/'.$name.'Actions'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'ActionsDeleteTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('Actions Delete Test already exists!');
+
+            return;
+        }
+
+        // Create Actions Delete Test
         $path = base_path('tests/Unit/Actions/'.$name.'Actions/'.$name.'ActionsDeleteTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsDeleteTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsDeleteTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -280,12 +538,34 @@ class MakeApi extends Command
     {
         $this->info('Creating API Create Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APICreateTest.php');
+        // check if directory exists
+        if (! is_dir(base_path('tests/Feature/API/'.$name.'API'))) {
+            mkdir(base_path('tests/Feature/API/'.$name.'API'), 0777, true);
+        }
+
+        // Check if API create test already exists
+        $files = File::allFiles(base_path('tests/Feature/API/'.$name.'API'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'APICreateTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('API Create Test already exists!');
+
+            return;
+        }
+
+        // Create API Create Test
+        $path = base_path('tests/Feature/API/'.$name.'API/'.$name.'APICreateTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APICreateTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APICreateTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -294,12 +574,29 @@ class MakeApi extends Command
 
         $this->info('Creating API Read Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APIReadTest.php');
+        // Check if API read test already exists
+        $files = File::allFiles(base_path('tests/Feature/API/'.$name.'API'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'APIReadTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('API Read Test already exists!');
+
+            return;
+        }
+
+        // Create API Read Test
+        $path = base_path('tests/Feature/API/'.$name.'API/'.$name.'APIReadTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIReadTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIReadTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -308,12 +605,29 @@ class MakeApi extends Command
 
         $this->info('Creating API Update Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APIEditTest.php');
+        // Check if API update test already exists
+        $files = File::allFiles(base_path('tests/Feature/API/'.$name.'API'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'APIUpdateTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('API Delete Test already exists!');
+
+            return;
+        }
+
+        // Create API Update Test
+        $path = base_path('tests/Feature/API/'.$name.'API/'.$name.'APIEditTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIEditTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIEditTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -322,12 +636,29 @@ class MakeApi extends Command
 
         $this->info('Creating API Delete Test...');
 
-        $path = base_path('tests/Unit/API/'.$name.'API/'.$name.'APIDeleteTest.php');
+        // Check if API delete test already exists
+        $files = File::allFiles(base_path('tests/Feature/API/'.$name.'API'));
+        $files = array_map(function ($file) {
+            return $file->getFilename();
+        }, $files);
+
+        $files = array_filter($files, function ($file) use ($name) {
+            return Str::contains($file, $name.'APIDeleteTest.php');
+        });
+
+        if (count($files) > 0) {
+            $this->error('API Delete Test already exists!');
+
+            return;
+        }
+
+        // Create API Delete Test
+        $path = base_path('tests/Feature/API/'.$name.'API/'.$name.'APIDeleteTest.php');
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIDeleteTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIDeleteTest.php.bak');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);

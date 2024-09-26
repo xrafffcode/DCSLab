@@ -11,96 +11,94 @@ use App\Models\Warehouse;
 use Tests\APITestCase;
 use Vinkla\Hashids\Facades\Hashids;
 
-class WarehouseAPIEditTest extends APITestCase
+class RepToPascalThisAPICreateTest extends APITestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
     }
 
-    public function test_warehouse_api_call_update_without_authorization_expect_unauthorized_message()
+    public function test_warehouse_api_call_store_without_authorization_expect_unauthorized_message()
     {
         $user = User::factory()
             ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
             ->has(Company::factory()->setStatusActive()->setIsDefault()
-                ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
-            )->create();
+                ->has(Branch::factory()->setStatusActive()->setIsMainBranch()))
+            ->create();
 
         $company = $user->companies()->inRandomOrder()->first();
+
         $branch = $company->branches()->inRandomOrder()->first();
-        $warehouse = Warehouse::factory()->for($company)->for($branch)->create();
 
         $warehouseArr = Warehouse::factory()->make([
             'company_id' => Hashids::encode($company->id),
             'branch_id' => Hashids::encode($branch->id),
         ])->toArray();
 
-        $api = $this->json('POST', route('api.post.db.company.warehouse.edit', $warehouse->ulid), $warehouseArr);
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
 
         $api->assertStatus(401);
     }
 
-    public function test_warehouse_api_call_update_without_access_right_expect_unauthorized_message()
+    public function test_warehouse_api_call_store_without_access_right_expect_unauthorized_message()
     {
         $user = User::factory()
             ->has(Company::factory()->setStatusActive()->setIsDefault()
-                ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
-            )->create();
+                ->has(Branch::factory()->setStatusActive()->setIsMainBranch()))
+            ->create();
 
         $this->actingAs($user);
 
         $company = $user->companies()->inRandomOrder()->first();
+
         $branch = $company->branches()->inRandomOrder()->first();
-        $warehouse = Warehouse::factory()->for($company)->for($branch)->create();
 
         $warehouseArr = Warehouse::factory()->make([
             'company_id' => Hashids::encode($company->id),
             'branch_id' => Hashids::encode($branch->id),
         ])->toArray();
 
-        $api = $this->json('POST', route('api.post.db.company.warehouse.edit', $warehouse->ulid), $warehouseArr);
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
 
         $api->assertStatus(403);
     }
 
-    public function test_warehouse_api_call_update_with_script_tags_in_payload_expect_stripped()
+    public function test_warehouse_api_call_store_with_script_tags_in_payload_expect_stripped()
     {
         $this->markTestSkipped('Test under construction');
     }
 
-    public function test_warehouse_api_call_update_with_script_tags_in_payload_expect_encoded()
+    public function test_warehouse_api_call_store_with_script_tags_in_payload_expect_encoded()
     {
         $this->markTestSkipped('Test under construction');
     }
 
-    public function test_warehouse_api_call_update_expect_successful()
+    public function test_warehouse_api_call_store_expect_successful()
     {
         $user = User::factory()
             ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
             ->has(Company::factory()->setStatusActive()->setIsDefault()
-                ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
-            )->create();
+                ->has(Branch::factory()->setStatusActive()->setIsMainBranch()))
+            ->create();
 
         $this->actingAs($user);
 
         $company = $user->companies()->inRandomOrder()->first();
+
         $branch = $company->branches()->inRandomOrder()->first();
-        $warehouse = Warehouse::factory()->for($company)->for($branch)->create();
 
         $warehouseArr = Warehouse::factory()->make([
             'company_id' => Hashids::encode($company->id),
             'branch_id' => Hashids::encode($branch->id),
         ])->toArray();
 
-        $api = $this->json('POST', route('api.post.db.company.warehouse.edit', $warehouse->ulid), $warehouseArr);
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
 
         $api->assertSuccessful();
         $this->assertDatabaseHas('warehouses', [
-            'id' => $warehouse->id,
             'company_id' => $company->id,
             'branch_id' => $branch->id,
             'code' => $warehouseArr['code'],
-            'name' => $warehouseArr['name'],
             'name' => $warehouseArr['name'],
             'address' => $warehouseArr['address'],
             'city' => $warehouseArr['city'],
@@ -110,59 +108,59 @@ class WarehouseAPIEditTest extends APITestCase
         ]);
     }
 
-    public function test_warehouse_api_call_update_with_nonexistance_branch_id_expect_failed()
+    public function test_warehouse_api_call_store_with_nonexistance_branch_id_expect_failed()
     {
         $user = User::factory()
             ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
             ->has(Company::factory()->setStatusActive()->setIsDefault()
-                ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
+                ->has(Branch::factory()->setStatusActive()->setIsMainBranch()))
+            ->create();
+
+        $this->actingAs($user);
+
+        $company = $user->companies->first();
+
+        $branchId = Branch::max('id') + 1;
+
+        $warehouseArr = Warehouse::factory()->make([
+            'company_id' => Hashids::encode($company->id),
+            'branch_id' => Hashids::encode($branchId),
+        ])->toArray();
+
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
+
+        $api->assertStatus(422);
+        $api->assertJsonStructure([
+            'errors',
+        ]);
+    }
+
+    public function test_warehouse_api_call_store_with_existing_code_in_same_company_expect_failed()
+    {
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+            ->has(
+                Company::factory()->setStatusActive()->setIsDefault()
+                    ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
             )->create();
 
         $this->actingAs($user);
 
         $company = $user->companies()->inRandomOrder()->first();
+
         $branch = $company->branches()->inRandomOrder()->first();
-        $warehouse = Warehouse::factory()->for($company)->for($branch)->create();
 
-        $newBranchId = Branch::max('id') + 1;
-        $warehouseArr = Warehouse::factory()->make([
-            'company_id' => Hashids::encode($company->id),
-            'branch_id' => Hashids::encode($newBranchId),
-        ])->toArray();
-
-        $api = $this->json('POST', route('api.post.db.company.warehouse.edit', $warehouse->ulid), $warehouseArr);
-
-        $api->assertStatus(422);
-        $api->assertJsonStructure([
-            'errors',
+        Warehouse::factory()->for($company)->for($branch)->create([
+            'code' => 'test1',
         ]);
-    }
-
-    public function test_warehouse_api_call_update_and_use_existing_code_in_same_company_expect_failed()
-    {
-        $user = User::factory()
-            ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
-            ->has(Company::factory()->setStatusActive()->setIsDefault()
-                ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
-            )->create();
-
-        $this->actingAs($user);
-
-        $company = $user->companies->first();
-        $branch = $company->branches()->inRandomOrder()->first();
-        Warehouse::factory()->for($company)->for($branch)->count(2)->create();
-
-        $warehouses = $company->warehouses()->inRandomOrder()->take(2)->get();
-        $warehouse_1 = $warehouses[0];
-        $warehouse_2 = $warehouses[1];
 
         $warehouseArr = Warehouse::factory()->make([
             'company_id' => Hashids::encode($company->id),
             'branch_id' => Hashids::encode($branch->id),
-            'code' => $warehouse_1->code,
+            'code' => 'test1',
         ])->toArray();
 
-        $api = $this->json('POST', route('api.post.db.company.warehouse.edit', $warehouse_2->ulid), $warehouseArr);
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
 
         $api->assertStatus(422);
         $api->assertJsonStructure([
@@ -170,7 +168,7 @@ class WarehouseAPIEditTest extends APITestCase
         ]);
     }
 
-    public function test_warehouse_api_call_update_and_use_existing_code_in_different_company_expect_successful()
+    public function test_warehouse_api_call_store_with_existing_code_in_different_company_expect_successful()
     {
         $user = User::factory()
             ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
@@ -182,18 +180,16 @@ class WarehouseAPIEditTest extends APITestCase
 
         $this->actingAs($user);
 
-        $companies = $user->companies()->inRandomOrder()->get();
+        $companies = $user->companies()->inRandomOrder()->take(2)->get();
 
         $company_1 = $companies[0];
-        $branch_1 = $company_1->branches()->first();
-        Warehouse::factory()->for($company_1)->for($branch_1)->create([
-            'code' => 'test1',
-        ]);
+        $branch_1 = $company_1->branches()->inRandomOrder()->first();
 
         $company_2 = $companies[1];
-        $branch_2 = $company_2->branches()->first();
-        $warehouse_2 = Warehouse::factory()->for($company_2)->for($branch_2)->create([
-            'code' => 'test2',
+        $branch_2 = $company_2->branches()->inRandomOrder()->first();
+
+        Warehouse::factory()->for($company_1)->for($branch_1)->create([
+            'code' => 'test1',
         ]);
 
         $warehouseArr = Warehouse::factory()->make([
@@ -202,8 +198,37 @@ class WarehouseAPIEditTest extends APITestCase
             'code' => 'test1',
         ])->toArray();
 
-        $api = $this->json('POST', route('api.post.db.company.warehouse.edit', $warehouse_2->ulid), $warehouseArr);
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
 
         $api->assertSuccessful();
+        $this->assertDatabaseHas('warehouses', [
+            'company_id' => $company_2->id,
+            'branch_id' => $branch_2->id,
+            'code' => $warehouseArr['code'],
+            'name' => $warehouseArr['name'],
+            'name' => $warehouseArr['name'],
+            'address' => $warehouseArr['address'],
+            'city' => $warehouseArr['city'],
+            'contact' => $warehouseArr['contact'],
+            'remarks' => $warehouseArr['remarks'],
+            'status' => $warehouseArr['status'],
+        ]);
+    }
+
+    public function test_warehouse_api_call_store_with_empty_string_parameters_expect_validation_error()
+    {
+        $user = User::factory()
+            ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
+            ->has(Company::factory()->setStatusActive()->setIsDefault()
+                ->has(Branch::factory()->setStatusActive()->setIsMainBranch()))
+            ->create();
+
+        $this->actingAs($user);
+
+        $warehouseArr = [];
+
+        $api = $this->json('POST', route('api.post.db.company.warehouse.save'), $warehouseArr);
+
+        $api->assertJsonValidationErrors(['company_id', 'code', 'name']);
     }
 }
