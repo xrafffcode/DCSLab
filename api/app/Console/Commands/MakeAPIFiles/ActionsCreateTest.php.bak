@@ -1,23 +1,23 @@
 <?php
 
-namespace Tests\Unit\Actions\BranchActions;
+namespace Tests\Unit\Actions\RepToPascalThisActions;
 
-use App\Actions\Branch\BranchActions;
-use App\Models\Branch;
+use App\Actions\RepToPascalThis\RepToPascalThisActions;
 use App\Models\Company;
+use App\Models\RepToPascalThis;
 use App\Models\User;
 use Exception;
 use Tests\ActionsTestCase;
 
-class BranchActionsCreateTest extends ActionsTestCase
+class RepToPascalThisActionsCreateTest extends ActionsTestCase
 {
-    private BranchActions $branchActions;
+    private RepToPascalThisActions $branchActions;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->branchActions = new BranchActions();
+        $this->branchActions = new RepToPascalThisActions();
     }
 
     public function test_branch_actions_call_create_expect_db_has_record()
@@ -28,7 +28,7 @@ class BranchActionsCreateTest extends ActionsTestCase
 
         $company = $user->companies()->inRandomOrder()->first();
 
-        $branchArr = Branch::factory()->for($company)
+        $branchArr = RepToPascalThis::factory()->for($company)
             ->setStatusActive()->setIsMainBranch()
             ->make()->toArray();
 

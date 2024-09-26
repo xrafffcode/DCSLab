@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Database\Seeders\BranchTableSeeder;
 use Database\Seeders\CompanyTableSeeder;
+use Database\Seeders\ProductGroupTableSeeder;
 use Database\Seeders\RoleTableSeeder;
 use Database\Seeders\UserTableSeeder;
 use Database\Seeders\WarehouseTableSeeder;
@@ -89,6 +90,10 @@ class AppSeed extends Command
                 case 'warehousetableseeder':
                     $this->runWarehouseTableSeederInteractive();
                     break;
+                case 'productgroup':
+                case 'productgrouptableseeder':
+                    $this->runProductGroupTableSeederInteractive();
+                    break;
                 default:
                     $this->info('Cannot find seeder for '.$args);
                     break;
@@ -110,6 +115,8 @@ class AppSeed extends Command
         $this->runCompanyTableSeeder(5, 0);
         $progressBar->advance();
         $this->runBranchTableSeeder(5, 0);
+        $progressBar->advance();
+        $this->runProductGroupTableSeeder(5, 0);
         $progressBar->advance();
 
         $progressBar->finish();
@@ -210,5 +217,11 @@ class AppSeed extends Command
     {
         $seeder = new WarehouseTableSeeder();
         $seeder->callWith(WarehouseTableSeeder::class, [$warehousePerCompanies, $onlyThisCompanyId]);
+    }
+
+    private function runProductGroupTableSeeder($productGroupPerCompanies, $onlyThisCompanyId)
+    {
+        $seeder = new ProductGroupTableSeeder();
+        $seeder->callWith(ProductGroupTableSeeder::class, [$productGroupPerCompanies, $onlyThisCompanyId]);
     }
 }

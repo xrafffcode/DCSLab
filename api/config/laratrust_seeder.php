@@ -34,6 +34,7 @@ return [
             'company' => 'c,r,ra,u,d',
             'branch' => 'c,r,ra,u,d',
             'warehouse' => 'c,r,ra,u,d',
+            'product_group' => 'c,r,ra,u,d',
         ],
         /* #endregion */
     ],

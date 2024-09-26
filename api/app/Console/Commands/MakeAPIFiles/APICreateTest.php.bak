@@ -11,7 +11,7 @@ use App\Models\Warehouse;
 use Tests\APITestCase;
 use Vinkla\Hashids\Facades\Hashids;
 
-class WarehouseAPICreateTest extends APITestCase
+class RepToPascalThisAPICreateTest extends APITestCase
 {
     protected function setUp(): void
     {

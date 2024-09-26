@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use Tests\APITestCase;
 use Vinkla\Hashids\Facades\Hashids;
 
-class WarehouseAPIReadTest extends APITestCase
+class ProductGroupAPIReadTest extends APITestCase
 {
     protected function setUp(): void
     {

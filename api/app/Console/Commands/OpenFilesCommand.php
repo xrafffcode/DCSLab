@@ -22,11 +22,14 @@ class OpenFilesCommand extends Command
         $this->openModel($name);
         $this->openFactory($name);
         $this->openSeeder($name);
+        $this->openAppSeed();
         $this->openActions($name);
         $this->openResource($name);
         $this->openPolicy($name);
         $this->openRequest($name);
         $this->openController($name);
+        $this->openLaratrustSeeder();
+        $this->openApiRoutes();
         $this->openActionsTest($name);
         $this->openAPITest($name);
     }
@@ -100,6 +103,18 @@ class OpenFilesCommand extends Command
         }
     }
 
+    public function openAppSeed()
+    {
+        $path = app_path('console/commands/AppSeed.php');
+
+        if (! File::exists($path)) {
+            $this->error("Seeder file not found: {$path}");
+        } else {
+            $this->info("Opening: {$path}");
+            $this->openInVSCode($path);
+        }
+    }
+
     public function openActions($name)
     {
         $ActionsPath = app_path("Actions/{$name}/{$name}Actions.php");
@@ -168,9 +183,33 @@ class OpenFilesCommand extends Command
         }
     }
 
+    public function openLaratrustSeeder()
+    {
+        $path = base_path('config/laratrust_seeder.php');
+
+        if (! File::exists($path)) {
+            $this->error("laratrust_seeder file not found: {$path}");
+        } else {
+            $this->info("Opening: {$path}");
+            $this->openInVSCode($path);
+        }
+    }
+
+    public function openApiRoutes()
+    {
+        $path = base_path('routes/api.php');
+
+        if (! File::exists($path)) {
+            $this->error("API routes file not found: {$path}");
+        } else {
+            $this->info("Opening: {$path}");
+            $this->openInVSCode($path);
+        }
+    }
+
     public function openActionsTest($name)
     {
-        $createTest = base_path("tests/Unit/Actions/{$name}Actions/{$name}ActionsTest.php");
+        $createTest = base_path("tests/Unit/Actions/{$name}Actions/{$name}ActionsCreateTest.php");
 
         if (! File::exists($createTest)) {
             $this->error("Test file not found: {$createTest}");
@@ -222,8 +261,6 @@ class OpenFilesCommand extends Command
 
         if (! File::exists($readTest)) {
             $this->error("Test file not found: {$readTest}");
-
-            return;
         } else {
             $this->info("Opening: {$readTest}");
             $this->openInVSCode($readTest);

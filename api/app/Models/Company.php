@@ -45,6 +45,11 @@ class Company extends Model
         return $this->hasMany(Warehouse::class);
     }
 
+    public function productGroups()
+    {
+        return $this->hasMany(ProductGroup::class);
+    }
+
     public function scopeSearch($query, string $search)
     {
         return $query->where('code', 'like', '%'.$search.'%')
