@@ -25,13 +25,13 @@ class MakeApi extends Command
         $this->createModel($name);
         $this->createFactory($name);
         $this->createSeeder($name);
-        $this->createRoutes($name);
+        $this->openAppSeed();
         $this->createActions($name);
         $this->createResource($name);
         $this->createPolicy($name);
         $this->createRequest($name);
         $this->createController($name);
-        $this->openApiRoutes();
+        $this->openLaratrustSeeder();
         $this->openApiRoutes();
         $this->createActionsTest($name);
         $this->createAPITest($name);
