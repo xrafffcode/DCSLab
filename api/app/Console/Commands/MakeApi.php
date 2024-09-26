@@ -69,7 +69,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/migration.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/migration.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -103,7 +103,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/model.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/model.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -137,7 +137,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/factory.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/factory.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -171,7 +171,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/seeder.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/seeder.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -218,7 +218,7 @@ class MakeApi extends Command
 
         $path = base_path('app/Actions/'.$name.'/'.$name.'Actions.php');
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/actions.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/actions.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -252,7 +252,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/resource.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/resource.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -286,7 +286,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/policy.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/policy.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -320,7 +320,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/request.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/request.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -351,7 +351,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ruleStoreValidCode.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ruleStoreValidCode.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -382,7 +382,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ruleUpdateValidCode.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ruleUpdateValidCode.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -416,7 +416,7 @@ class MakeApi extends Command
         preg_match('/\[(.*?)\]/', $output, $matches);
         $path = $matches[1] ?? null;
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/controller.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/controller.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -479,7 +479,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsCreateTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsCreateTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -510,7 +510,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsReadTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsReadTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -541,7 +541,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsEditTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsEditTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -572,7 +572,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsDeleteTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/ActionsDeleteTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -611,7 +611,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APICreateTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APICreateTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -642,7 +642,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIReadTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIReadTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -673,7 +673,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIEditTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIEditTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
@@ -704,7 +704,7 @@ class MakeApi extends Command
             mkdir(dirname($path), 0777, true);
         }
 
-        $content = File::get(__DIR__.'/MakeAPIFiles/APIDeleteTest.php');
+        $content = File::get(__DIR__.'/MakeAPIFiles/APIDeleteTest.ignore.php');
         $content = $this->replaceNameInContent($content, $name);
 
         file_put_contents($path, $content);
