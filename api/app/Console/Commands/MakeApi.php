@@ -15,6 +15,8 @@ class MakeApi extends Command
 
     public function handle()
     {
+        $openFilesCommand = new OpenFilesCommand();
+
         $this->info('Starting API Creation...');
 
         $name = $this->argument('args');
@@ -23,11 +25,14 @@ class MakeApi extends Command
         $this->createModel($name);
         $this->createFactory($name);
         $this->createSeeder($name);
+        $openFilesCommand->openAppSeed();
         $this->createActions($name);
         $this->createResource($name);
         $this->createPolicy($name);
         $this->createRequest($name);
         $this->createController($name);
+        $openFilesCommand->openLaratrustSeeder();
+        $this->createApiRoutes();
         $this->createActionsTest($name);
         $this->createAPITest($name);
     }
