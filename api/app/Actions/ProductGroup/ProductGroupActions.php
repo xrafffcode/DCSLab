@@ -146,7 +146,7 @@ class ProductGroupActions
         $timer_start = microtime(true);
 
         try {
-            $productGroup->code = $this->generateUniqueCode($productGroup->company_id, $productGroup->code, $productGroup->id);
+            $productGroup->code = $this->generateUniqueCode($productGroup->company_id, $data['code'], $productGroup->id);
             $productGroup->name = $data['name'];
             $productGroup->category = $data['category'];
             $productGroup->save();

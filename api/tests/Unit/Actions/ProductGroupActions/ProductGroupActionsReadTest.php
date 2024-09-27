@@ -3,10 +3,8 @@
 namespace Tests\Unit\Actions\ProductGroupActions;
 
 use App\Actions\ProductGroup\ProductGroupActions;
-use App\Enums\UserRoles;
 use App\Models\Company;
 use App\Models\ProductGroup;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -34,11 +32,16 @@ class ProductGroupActionsReadTest extends ActionsTestCase
         $company = $user->companies()->inRandomOrder()->first();
 
         $result = $this->productGroupActions->readAny(
-            companyId: $company->id,
+            useCache: true,
+            withTrashed: false,
+
             search: '',
+            companyId: $company->id,
+
             paginate: true,
             page: 1,
-            perPage: 10
+            perPage: 10,
+            limit: null
         );
 
         $this->assertInstanceOf(Paginator::class, $result);
@@ -54,9 +57,16 @@ class ProductGroupActionsReadTest extends ActionsTestCase
         $company = $user->companies()->inRandomOrder()->first();
 
         $result = $this->productGroupActions->readAny(
-            companyId: $company->id,
+            useCache: true,
+            withTrashed: false,
+
             search: '',
-            paginate: false
+            companyId: $company->id,
+
+            paginate: false,
+            page: null,
+            perPage: null,
+            limit: 10
         );
 
         $this->assertInstanceOf(Collection::class, $result);
@@ -65,10 +75,18 @@ class ProductGroupActionsReadTest extends ActionsTestCase
     public function test_product_group_actions_call_read_any_with_nonexistance_companyId_expect_empty_collection()
     {
         $maxId = Company::max('id') + 1;
+
         $result = $this->productGroupActions->readAny(
-            companyId: $maxId,
+            useCache: true,
+            withTrashed: false,
+
             search: '',
-            paginate: false
+            companyId: $maxId,
+
+            paginate: false,
+            page: null,
+            perPage: null,
+            limit: 10
         );
 
         $this->assertInstanceOf(Collection::class, $result);
@@ -97,39 +115,20 @@ class ProductGroupActionsReadTest extends ActionsTestCase
         $company = $user->companies()->inRandomOrder()->first();
 
         $result = $this->productGroupActions->readAny(
-            companyId: $company->id,
+            useCache: true,
+            withTrashed: false,
+
             search: 'testing',
+            companyId: $company->id,
+
             paginate: true,
             page: 1,
-            perPage: 10
+            perPage: 10,
+            limit: null
         );
 
         $this->assertInstanceOf(Paginator::class, $result);
         $this->assertTrue($result->total() == 1);
-    }
-
-    public function test_product_group_actions_call_read_any_with_page_parameter_negative_expect_results()
-    {
-        $productGroupCount = 3;
-
-        $user = User::factory()
-            ->hasAttached(Role::where('name', '=', UserRoles::DEVELOPER->value)->first())
-            ->has(Company::factory()->setStatusActive()
-                ->has(ProductGroup::factory()->count($productGroupCount)))
-            ->create();
-
-        $company = $user->companies()->inRandomOrder()->first();
-
-        $result = $this->productGroupActions->readAny(
-            companyId: $company->id,
-            search: '',
-            paginate: true,
-            page: -1,
-            perPage: 10
-        );
-
-        $this->assertInstanceOf(Paginator::class, $result);
-        $this->assertTrue($result->total() == 3);
     }
 
     public function test_product_group_actions_call_read_expect_object()

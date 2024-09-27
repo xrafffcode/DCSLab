@@ -24,4 +24,10 @@ class ProductGroup extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function scopeSearch($query, string $search)
+    {
+        return $query->where('code', 'like', '%'.$search.'%')
+            ->orWhere('name', 'like', '%'.$search.'%');
+    }
 }
