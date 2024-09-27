@@ -2,14 +2,13 @@
 
 namespace App\Actions\ProductGroup;
 
-use App\Actions\Randomizer\RandomizerActions;
+use App\Models\Company;
 use App\Models\ProductGroup;
 use App\Traits\CacheHelper;
 use App\Traits\LoggerHelper;
 use Exception;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class ProductGroupActions
@@ -21,23 +20,17 @@ class ProductGroupActions
     {
     }
 
-    public function create(
-        array $productGroupArr
-    ): ProductGroup {
+    public function create(array $data): ProductGroup
+    {
         DB::beginTransaction();
         $timer_start = microtime(true);
 
         try {
-            $company_id = $productGroupArr['company_id'];
-            $code = $productGroupArr['code'];
-            $name = $productGroupArr['name'];
-            $category = $productGroupArr['category'];
-
             $productGroup = new ProductGroup();
-            $productGroup->company_id = $company_id;
-            $productGroup->code = $code;
-            $productGroup->name = $name;
-            $productGroup->category = $category;
+            $productGroup->company_id = $data['company_id'];
+            $productGroup->code = $this->generateUniqueCode($data['company_id'], $data['code'], null);
+            $productGroup->name = $data['name'];
+            $productGroup->category = $data['category'];
             $productGroup->save();
 
             DB::commit();
@@ -55,58 +48,74 @@ class ProductGroupActions
         }
     }
 
-    public function readAny(
+    private function readAnyQuery(
+        ?bool $withTrashed,
+
+        ?string $search,
         int $companyId,
-        string $search = '',
-        bool $paginate = true,
-        int $page = 1,
-        int $perPage = 10,
-        array $with = [],
-        bool $withTrashed = false,
-        bool $useCache = true
+
+        ?int $limit
+    ) {
+        $query = ProductGroup::with('company')->withTrashed()
+            ->withAggregate('company', 'name')
+            ->where(function ($query) use ($withTrashed, $search, $companyId) {
+                if ($withTrashed == true) {
+                    $query = $query->withTrashed();
+                } else {
+                    $query = $query->withoutTrashed();
+                }
+
+                if ($search) {
+                    $query->search($search);
+                }
+
+                $query->whereCompanyId($companyId);
+            });
+
+        $query->orderBy('company_name', 'asc')
+            ->orderBy('name', 'asc');
+
+        if ($limit) {
+            $query->limit($limit);
+        }
+
+        return $query;
+    }
+
+    public function readAny(
+        ?bool $useCache,
+        ?bool $withTrashed,
+
+        ?string $search,
+        int $companyId,
+
+        bool $paginate,
+        ?int $page,
+        ?int $perPage,
+        ?int $limit
     ): Paginator|Collection {
         $timer_start = microtime(true);
         $recordsCount = 0;
 
         try {
             $cacheSearch = empty($search) ? '[empty]' : $search;
-            $cacheKey = 'readAny_'.$companyId.'_'.$cacheSearch.'-'.$paginate.'-'.$page.'-'.$perPage;
-            if ($useCache) {
+            $cacheKey = 'readAny_'.$companyId.'-'.$cacheSearch.'-'.$paginate.'-'.$page.'-'.$perPage;
+            if ($useCache === true) {
                 $cacheResult = $this->readFromCache($cacheKey);
 
-                if (! is_null($cacheResult)) {
-                    return $cacheResult;
-                }
+                if (! is_null($cacheResult)) return $cacheResult;
             }
 
             $result = null;
 
-            if (! $companyId) {
-                return null;
-            }
-
-            $relationship = ['company'];
-            $relationship = count($with) > 0 ? $with : $relationship;
-            $query = ProductGroup::with($relationship);
-
-            $query = $query->whereCompanyId($companyId);
-
-            if (! empty($search)) {
-                $query = $query->where(function ($query) use ($search) {
-                    $query->where('name', 'like', '%'.$search.'%');
-                });
-            }
-
-            if ($withTrashed) {
-                $query = $query->withTrashed();
-            }
-
-            $query = $query->latest();
+            $query = $this->readAnyQuery(
+                withTrashed: $withTrashed,
+                search: $search,
+                companyId: $companyId,
+                limit: $paginate ? $limit : null
+            );
 
             if ($paginate) {
-                $perPage = is_numeric($perPage) ? abs($perPage) : Config::get('dcslab.PAGINATION_LIMIT');
-                $page = is_numeric($page) ? abs($page) : 1;
-
                 $result = $query->paginate(perPage: $perPage, page: $page);
             } else {
                 $result = $query->get();
@@ -114,7 +123,7 @@ class ProductGroupActions
 
             $recordsCount = $result->count();
 
-            $this->saveToCache($cacheKey, $result);
+            if ($useCache === true) $this->saveToCache($cacheKey, $result);
 
             return $result;
         } catch (Exception $e) {
@@ -122,32 +131,25 @@ class ProductGroupActions
             throw $e;
         } finally {
             $execution_time = microtime(true) - $timer_start;
-            $this->loggerPerformance(__METHOD__, $execution_time);
+            $this->loggerPerformance(__METHOD__, $execution_time, $recordsCount);
         }
     }
 
     public function read(ProductGroup $productGroup): ProductGroup
     {
-        return $productGroup->load('company');
+        return $productGroup->with('company')->first();
     }
 
-    public function update(
-        ProductGroup $productGroup,
-        array $productGroupArr,
-    ): ProductGroup {
+    public function update(ProductGroup $productGroup, array $data): ProductGroup
+    {
         DB::beginTransaction();
         $timer_start = microtime(true);
 
         try {
-            $code = $productGroupArr['code'];
-            $name = $productGroupArr['name'];
-            $category = $productGroupArr['category'];
-
-            $productGroup->update([
-                'code' => $code,
-                'name' => $name,
-                'category' => $category,
-            ]);
+            $productGroup->code = $this->generateUniqueCode($productGroup->company_id, $productGroup->code, $productGroup->id);
+            $productGroup->name = $data['name'];
+            $productGroup->category = $data['category'];
+            $productGroup->save();
 
             DB::commit();
 
@@ -188,15 +190,25 @@ class ProductGroupActions
         }
     }
 
-    public function generateUniqueCode(): string
+    public function generateUniqueCode(int $companyId, string $code, ?int $exceptId): string
     {
-        $rand = app(RandomizerActions::class);
-        $code = $rand->generateAlpha().$rand->generateNumeric();
+        if ($code == config('dcslab.KEYWORDS.AUTO')) {
+            $company = Company::find($companyId);
 
-        return $code;
+            $tryCount = 0;
+            do {
+                $count = $company->productGroups()->withTrashed()->count() + 1 + $tryCount;
+                $code = 'PG'.str_pad($count, 3, '0', STR_PAD_LEFT);
+                $tryCount++;
+            } while (! $this->isUniqueCode($companyId, $code, $exceptId));
+
+            return $code;
+        } else {
+            return $code;
+        }
     }
 
-    public function isUniqueCode(string $code, int $companyId, ?int $exceptId = null): bool
+    public function isUniqueCode(int $companyId, string $code, ?int $exceptId): bool
     {
         $result = ProductGroup::whereCompanyId($companyId)->where('code', '=', $code);
 

@@ -8,21 +8,15 @@ use Illuminate\Database\Seeder;
 
 class ProductGroupTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run($productGroupPerCompanies = 3, $onlyThisCompanyId = 0)
+    public function run(?int $companyId, ?int $qtyPerCompany)
     {
-        if ($onlyThisCompanyId != 0) {
-            $companies = Company::where('id', '=', $onlyThisCompanyId)->get();
-        } else {
-            $companies = Company::get();
-        }
+        $query = Company::query();
+        if ($companyId) $query->where('id', '=', $companyId);
+        $companies = $query->get();
 
+        if (! $qtyPerCompany) $qtyPerCompany = 5;
         foreach ($companies as $company) {
-            for ($i = 0; $i < $productGroupPerCompanies; $i++) {
+            for ($i = 0; $i < $qtyPerCompany; $i++) {
                 $productGroupFactory = ProductGroup::factory()->for($company);
                 $productGroupFactory->create();
             }

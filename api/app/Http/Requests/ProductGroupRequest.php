@@ -2,17 +2,15 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\HashidsHelper;
+use App\Helpers\RequestHelper;
 use App\Models\ProductGroup;
 use App\Rules\IsValidCompany;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Vinkla\Hashids\Facades\Hashids;
 
 class ProductGroupRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         if (! Auth::check()) {
@@ -40,11 +38,6 @@ class ProductGroupRequest extends FormRequest
         }
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         $currentRouteMethod = $this->route()->getActionMethod();
@@ -121,9 +114,14 @@ class ProductGroupRequest extends FormRequest
         switch ($currentRouteMethod) {
             case 'readAny':
                 $this->merge([
-                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
-                    'search' => $this->has('search') && ! is_null($this->search) ? $this->search : '',
-                    'paginate' => $this->has('paginate') ? filter_var($this->paginate, FILTER_VALIDATE_BOOLEAN) : true,
+                    'with_trashed' => $this->has('with_trashed') ? RequestHelper::safeReturn($this->with_trashed) : null,
+
+                    'search' => $this->has('search') ? RequestHelper::safeReturn($this->search) : null,
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+
+                    'page' => $this->has('page') ? RequestHelper::safeReturn($this->page) : null,
+                    'per_page' => $this->has('per_page') ? RequestHelper::safeReturn($this->per_page) : null,
+                    'limit' => $this->has('limit') ? RequestHelper::safeReturn($this->limit) : null,
                 ]);
                 break;
             case 'read':
@@ -132,7 +130,7 @@ class ProductGroupRequest extends FormRequest
             case 'store':
             case 'update':
                 $this->merge([
-                    'company_id' => $this->has('company_id') ? Hashids::decode($this['company_id'])[0] : '',
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
                 ]);
                 break;
             default:

@@ -17,6 +17,7 @@ class ProductGroupFactory extends Factory
      */
     public function definition()
     {
+
         return [
             'code' => strtoupper(fake()->lexify()).fake()->numerify(),
             'name' => 'Kelompok Produk'.fake()->randomElement(['Buku', 'Elektronik', 'Tas']),

@@ -23,33 +23,11 @@ class ProductGroupController extends Controller
     {
         $request = $productGroupRequest->validated();
 
-        $company_id = $request['company_id'];
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->productGroupActions->generateUniqueCode();
-            } while (! $this->productGroupActions->isUniqueCode($code, $company_id));
-        } else {
-            if (! $this->productGroupActions->isUniqueCode($code, $company_id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $productGroupArr = [
-            'company_id' => $company_id,
-            'code' => $code,
-            'name' => $request['name'],
-            'category' => $request['category'],
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
-            $result = $this->productGroupActions->store($productGroupArr);
+            $result = $this->productGroupActions->create($request);
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
         }
@@ -61,12 +39,6 @@ class ProductGroupController extends Controller
     {
         $request = $productGroupRequest->validated();
 
-        $search = $request['search'];
-        $paginate = $request['paginate'];
-        $page = array_key_exists('page', $request) ? abs($request['page']) : 1;
-        $perPage = array_key_exists('per_page', $request) ? abs($request['per_page']) : 10;
-        $useCache = array_key_exists('refresh', $request) ? boolval($request['refresh']) : true;
-
         $companyId = $request['company_id'];
 
         $result = null;
@@ -74,12 +46,16 @@ class ProductGroupController extends Controller
 
         try {
             $result = $this->productGroupActions->readAny(
-                companyId: $companyId,
-                search: $search,
-                paginate: $paginate,
-                page: $page,
-                perPage: $perPage,
-                useCache: $useCache
+                useCache: $request['refresh'],
+                withTrashed: $request['with_trashed'],
+
+                search: $request['search'],
+                companyId: $request['company_id'],
+
+                paginate: $request['paginate'],
+                page: $request['page'],
+                perPage: $request['per_page'],
+                limit: $request['limit'],
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
@@ -120,34 +96,13 @@ class ProductGroupController extends Controller
     {
         $request = $productGroupRequest->validated();
 
-        $company_id = $request['company_id'];
-
-        $code = $request['code'];
-        if ($code == config('dcslab.KEYWORDS.AUTO')) {
-            do {
-                $code = $this->productGroupActions->generateUniqueCode();
-            } while (! $this->productGroupActions->isUniqueCode($code, $company_id, $productGroup->id));
-        } else {
-            if (! $this->productGroupActions->isUniqueCode($code, $company_id, $productGroup->id)) {
-                return response()->error([
-                    'code' => [trans('rules.unique_code')],
-                ], 422);
-            }
-        }
-
-        $productGroupArr = [
-            'code' => $code,
-            'name' => $request['name'],
-            'category' => $request['category'],
-        ];
-
         $result = null;
         $errorMsg = '';
 
         try {
             $result = $this->productGroupActions->update(
-                $productGroup,
-                $productGroupArr
+                productGroup: $productGroup,
+                data: $request
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();
@@ -159,7 +114,6 @@ class ProductGroupController extends Controller
     public function delete(ProductGroup $productGroup, ProductGroupRequest $productGroupRequest)
     {
         $result = false;
-
         $errorMsg = '';
 
         try {
