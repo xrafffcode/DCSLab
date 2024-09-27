@@ -45,7 +45,6 @@ class RepToPascalThisController extends BaseController
         try {
             $result = $this->RepToCamelThisActions->readAny(
                 useCache: $request['refresh'],
-                with: [],
                 withTrashed: $request['with_trashed'],
 
                 search: $request['search'],
@@ -100,8 +99,8 @@ class RepToPascalThisController extends BaseController
 
         try {
             $result = $this->RepToCamelThisActions->update(
-                $RepToCamelThis,
-                $request
+                RepToCamelThis: $RepToCamelThis,
+                data: $request
             );
         } catch (Exception $e) {
             $errorMsg = app()->environment('production') ? '' : $e->getMessage();

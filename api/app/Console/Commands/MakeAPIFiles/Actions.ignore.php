@@ -9,7 +9,6 @@ use App\Traits\LoggerHelper;
 use Exception;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 
 class RepToPascalThisActions
@@ -29,6 +28,8 @@ class RepToPascalThisActions
         try {
             $RepToCamelThis = new RepToPascalThis();
             $RepToCamelThis->company_id = $data['company_id'];
+            $RepToCamelThis->code = $this->generateUniqueCode($data['company_id'], $data['code'], null);
+            $RepToCamelThis->remarks = $data['remarks'];
             $RepToCamelThis->save();
 
             DB::commit();
@@ -47,7 +48,6 @@ class RepToPascalThisActions
     }
 
     private function readAnyQuery(
-        ?array $with,
         ?bool $withTrashed,
 
         ?string $search,
@@ -55,7 +55,7 @@ class RepToPascalThisActions
 
         ?int $limit
     ) {
-        $query = RepToPascalThis::with($with ?? [])->withTrashed()
+        $query = RepToPascalThis::with('company')->withTrashed()
             ->where(function ($query) use ($withTrashed, $search, $companyId) {
                 if ($withTrashed == true) {
                     $query = $query->withTrashed();
@@ -82,7 +82,6 @@ class RepToPascalThisActions
 
     public function readAny(
         ?bool $useCache,
-        ?array $with,
         ?bool $withTrashed,
 
         ?string $search,
@@ -97,19 +96,17 @@ class RepToPascalThisActions
         $recordsCount = 0;
 
         try {
-            $cacheKey = 'read_'.$companyId.'-'.(empty($search) ? '[empty]' : $search).'-'.$paginate.'-'.$page.'-'.$perPage;
+            $cacheSearch = empty($search) ? '[empty]' : $search;
+            $cacheKey = 'readAny_'.$companyId.'-'.$cacheSearch.'-'.$paginate.'-'.$page.'-'.$perPage;
             if ($useCache === true) {
                 $cacheResult = $this->readFromCache($cacheKey);
 
-                if (! is_null($cacheResult)) {
-                    return $cacheResult;
-                }
+                if (! is_null($cacheResult)) return $cacheResult;
             }
 
             $result = null;
 
             $query = $this->readAnyQuery(
-                with: $with,
                 withTrashed: $withTrashed,
                 search: $search,
                 companyId: $companyId,
@@ -117,9 +114,6 @@ class RepToPascalThisActions
             );
 
             if ($paginate) {
-                $perPage = is_numeric($perPage) ? abs($perPage) : Config::get('dcslab.PAGINATION_LIMIT');
-                $page = is_numeric($page) ? abs($page) : 1;
-
                 $result = $query->paginate(perPage: $perPage, page: $page);
             } else {
                 $result = $query->get();
@@ -127,9 +121,7 @@ class RepToPascalThisActions
 
             $recordsCount = $result->count();
 
-            if ($useCache === true) {
-                $this->saveToCache($cacheKey, $result);
-            }
+            if ($useCache === true) $this->saveToCache($cacheKey, $result);
 
             return $result;
         } catch (Exception $e) {
@@ -143,7 +135,7 @@ class RepToPascalThisActions
 
     public function read(RepToPascalThis $RepToCamelThis): RepToPascalThis
     {
-        return $RepToCamelThis->with([])->first();
+        return $RepToCamelThis->with('company')->first();
     }
 
     public function getAllActiveRepToPascalThis(
@@ -199,6 +191,7 @@ class RepToPascalThisActions
 
         try {
             $RepToCamelThis->code = $this->generateUniqueCode($RepToCamelThis->company_id, $data['code'], $RepToCamelThis->id);
+            $RepToCamelThis->remarks = $data['remarks'];
             $RepToCamelThis->save();
 
             DB::commit();
@@ -259,7 +252,7 @@ class RepToPascalThisActions
         }
     }
 
-    public function isUniqueCode(int $companyId, string $code, ?int $exceptId = null): bool
+    public function isUniqueCode(int $companyId, string $code, ?int $exceptId): bool
     {
         $result = RepToPascalThis::whereCompanyId($companyId)->where('code', '=', $code);
 

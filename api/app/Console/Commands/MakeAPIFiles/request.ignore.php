@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class RepToPascalThisRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         if (! Auth::check()) {

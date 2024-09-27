@@ -1,40 +1,23 @@
 <?php
 
-namespace Tests\Unit\Actions\BranchActions;
+namespace Tests\Unit\Actions\RepToPascalThisActions;
 
-use App\Actions\Branch\BranchActions;
-use App\Models\Branch;
-use App\Models\Company;
-use App\Models\User;
+use App\Actions\RepToPascalThis\RepToPascalThisActions;
 use Tests\ActionsTestCase;
 
 class RepToPascalThisActionsDeleteTest extends ActionsTestCase
 {
-    private BranchActions $branchActions;
+    private RepToPascalThisActions $RepToCamelThisActions;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->branchActions = new BranchActions();
+        $this->RepToCamelThisActions = new RepToPascalThisActions();
     }
 
-    public function test_branch_actions_call_delete_expect_bool()
+    public function test_RepToSnakeThis_actions_call_delete_expect_bool()
     {
-        $user = User::factory()
-            ->has(Company::factory()->setStatusActive()->setIsDefault()
-                ->has(Branch::factory()->setStatusActive()->setIsMainBranch())
-            )->create();
-
-        $branch = $user->companies()->inRandomOrder()->first()
-            ->branches()->inRandomOrder()->first();
-
-        $result = $this->branchActions->delete($branch);
-
-        $this->assertIsBool($result);
-        $this->assertTrue($result);
-        $this->assertSoftDeleted('branches', [
-            'id' => $branch->id,
-        ]);
+        $this->markTestIncomplete('Need to implement test');
     }
 }

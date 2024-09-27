@@ -8,13 +8,17 @@ use Illuminate\Database\Seeder;
 
 class RepToPascalThisTableSeeder extends Seeder
 {
-    public function run(): void
+    public function run(?int $companyId, ?int $qtyPerCompany)
     {
-        $companies = Company::get();
+        $query = Company::query();
+        if ($companyId) $query->where('id', '=', $companyId);
+        $companies = $query->get();
 
+        if (! $qtyPerCompany) $qtyPerCompany = 5;
         foreach ($companies as $company) {
-            for ($i = 0; $i < 5; $i++) {
-                RepToPascalThis::factory()->for($company)->create();
+            for ($i = 0; $i < $qtyPerCompany; $i++) {
+                $RepToCamelThisFactory = RepToPascalThis::factory()->for($company);
+                $RepToCamelThisFactory->create();
             }
         }
     }

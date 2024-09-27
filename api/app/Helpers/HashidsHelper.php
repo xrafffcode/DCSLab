@@ -8,12 +8,16 @@ class HashidsHelper
 {
     public static function decodeId($encoded)
     {
-        $result = Hashids::decode((string) $encoded);
+        try {
+            $result = Hashids::decode((string) $encoded);
 
-        if (count($result) != 1) {
+            if (count($result) != 1) {
+                return (int) 0;
+            }
+
+            return $result[0];
+        } catch (\Exception $e) {
             return (int) 0;
         }
-
-        return $result[0];
     }
 }
