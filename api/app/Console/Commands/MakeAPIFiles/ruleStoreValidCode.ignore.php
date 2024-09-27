@@ -20,7 +20,7 @@ class RepToPascalThisStoreValidCode implements ValidationRule
         if ($value !== config('dcslab.KEYWORDS.AUTO')) {
             $RepToCamelThisActions = new RepToPascalThisActions();
 
-            if (! $RepToCamelThisActions->isUniqueCode($this->companyId, $value)) {
+            if (! $RepToCamelThisActions->isUniqueCode($this->companyId, $value, null)) {
                 $fail('rules.unique_code')->translate();
 
                 return;

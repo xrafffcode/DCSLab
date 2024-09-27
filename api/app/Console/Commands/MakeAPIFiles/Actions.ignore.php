@@ -152,7 +152,6 @@ class RepToPascalThisActions
 
         try {
             $query = $this->readAnyQuery(
-                with: $with,
                 withTrashed: $withTrashed,
 
                 search: $search,
