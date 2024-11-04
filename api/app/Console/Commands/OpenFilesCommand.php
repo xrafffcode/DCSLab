@@ -25,6 +25,8 @@ class OpenFilesCommand extends Command
         $this->openAppSeed();
         $this->openActions($name);
         $this->openResource($name);
+        // $this->openEnMenuJson();
+        // $this->openIdMenuJson();
         $this->openPolicy($name);
         $this->openRequest($name);
         $this->openController($name);
@@ -142,6 +144,30 @@ class OpenFilesCommand extends Command
             $this->openInVSCode($resourcePath);
         }
     }
+
+    // public function openEnMenuJson()
+    // {
+    //     $path = base_path('src/lang/en/components/menu.json');
+
+    //     if (! File::exists($path)) {
+    //         $this->error("menu json file not found: {$path}");
+    //     } else {
+    //         $this->info("Opening: {$path}");
+    //         $this->openInVSCode($path);
+    //     }
+    // }
+
+    // public function openIdMenuJson()
+    // {
+    //     $path = base_path('src/lang/id/components/menu.json');
+
+    //     if (! File::exists($path)) {
+    //         $this->error("menu json file not found: {$path}");
+    //     } else {
+    //         $this->info("Opening: {$path}");
+    //         $this->openInVSCode($path);
+    //     }
+    // }
 
     public function openPolicy($name)
     {

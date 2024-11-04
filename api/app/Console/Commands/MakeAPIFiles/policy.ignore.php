@@ -21,7 +21,7 @@ class RepToPascalThisPolicy
             return true;
         }
 
-        if ($user->hasPermission('RepToSnakeThis-readAny')) {
+        if ($user->hasPermission('RepToCamelThis-readAny')) {
             return true;
         }
     }
@@ -36,7 +36,7 @@ class RepToPascalThisPolicy
             return true;
         }
 
-        if ($user->hasPermission('RepToSnakeThis-read')) {
+        if ($user->hasPermission('RepToCamelThis-read')) {
             return true;
         }
     }
@@ -51,7 +51,7 @@ class RepToPascalThisPolicy
             return true;
         }
 
-        if ($user->hasPermission('RepToSnakeThis-create')) {
+        if ($user->hasPermission('RepToCamelThis-create')) {
             return true;
         }
     }
@@ -66,7 +66,7 @@ class RepToPascalThisPolicy
             return true;
         }
 
-        if ($user->hasPermission('RepToSnakeThis-update')) {
+        if ($user->hasPermission('RepToCamelThis-update')) {
             return true;
         }
     }
@@ -81,7 +81,7 @@ class RepToPascalThisPolicy
             return true;
         }
 
-        if ($user->hasPermission('RepToSnakeThis-delete')) {
+        if ($user->hasPermission('RepToCamelThis-delete')) {
             return true;
         }
     }
