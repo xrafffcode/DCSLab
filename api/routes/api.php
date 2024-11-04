@@ -2,13 +2,17 @@
 
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CommonController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductGroupController;
+use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +38,28 @@ Route::group(['prefix' => 'get', 'middleware' => ['auth:sanctum', 'throttle:100,
         });
 
         Route::group(['prefix' => 'product', 'as' => '.product'], function () {
-            Route::group(['prefix' => 'product_group', 'as' => '.product_group'], function () {
-                Route::get('read', [ProductGroupController::class, 'readAny'])->name('.read_any');
-                Route::get('read/{product_group:ulid}', [ProductGroupController::class, 'read'])->name('.read');
+            Route::group(['prefix' => 'product_category', 'as' => '.product_category'], function () {
+                Route::get('read', [ProductCategoryController::class, 'readAny'])->name('.read_any');
+                Route::get('read/{product_category:ulid}', [ProductCategoryController::class, 'read'])->name('.read');
+            });
+            Route::group(['prefix' => 'brand', 'as' => '.brand'], function () {
+                Route::get('read', [BrandController::class, 'readAny'])->name('.read_any');
+                Route::get('read/{brand:ulid}', [BrandController::class, 'read'])->name('.read');
+            });
+            Route::group(['prefix' => 'unit', 'as' => '.unit'], function () {
+                Route::get('read', [UnitController::class, 'readAny'])->name('.read_any');
+                Route::get('read/{unit:ulid}', [UnitController::class, 'read'])->name('.read');
+            });
+            Route::group(['prefix' => 'product', 'as' => '.product'], function () {
+                Route::get('read', [ProductController::class, 'readAny'])->name('.read_any');
+                Route::get('read/{product:ulid}', [ProductController::class, 'read'])->name('.read');
+            });
+        });
+
+        Route::group(['prefix' => 'supplier', 'as' => '.supplier'], function () {
+            Route::group(['prefix' => 'supplier', 'as' => '.supplier'], function () {
+                Route::get('read', [SupplierController::class, 'readAny'])->name('.read_any');
+                Route::get('read/{supplier:ulid}', [SupplierController::class, 'read'])->name('.read');
             });
         });
         /* #endregion */
@@ -98,10 +121,33 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum', 'throttle:50,
         });
 
         Route::group(['prefix' => 'product', 'middleware' => ['precognitive'], 'as' => '.product'], function () {
-            Route::group(['prefix' => 'product_group', 'as' => '.product_group'], function () {
-                Route::post('save', [ProductGroupController::class, 'store'])->name('.save');
-                Route::post('edit/{product_group:ulid}', [ProductGroupController::class, 'update'])->name('.edit');
-                Route::post('delete/{product_group:ulid}', [ProductGroupController::class, 'delete'])->name('.delete');
+            Route::group(['prefix' => 'product_category', 'as' => '.product_category'], function () {
+                Route::post('save', [ProductCategoryController::class, 'store'])->name('.save');
+                Route::post('edit/{product_category:ulid}', [ProductCategoryController::class, 'update'])->name('.edit');
+                Route::post('delete/{product_category:ulid}', [ProductCategoryController::class, 'delete'])->name('.delete');
+            });
+            Route::group(['prefix' => 'brand', 'as' => '.brand'], function () {
+                Route::post('save', [BrandController::class, 'store'])->name('.save');
+                Route::post('edit/{brand:ulid}', [BrandController::class, 'update'])->name('.edit');
+                Route::post('delete/{brand:ulid}', [BrandController::class, 'delete'])->name('.delete');
+            });
+            Route::group(['prefix' => 'unit', 'as' => '.unit'], function () {
+                Route::post('save', [UnitController::class, 'store'])->name('.save');
+                Route::post('edit/{unit:ulid}', [UnitController::class, 'update'])->name('.edit');
+                Route::post('delete/{unit:ulid}', [UnitController::class, 'delete'])->name('.delete');
+            });
+            Route::group(['prefix' => 'product', 'as' => '.product'], function () {
+                Route::post('save', [ProductController::class, 'store'])->name('.save');
+                Route::post('edit/{product:ulid}', [ProductController::class, 'update'])->name('.edit');
+                Route::post('delete/{product:ulid}', [ProductController::class, 'delete'])->name('.delete');
+            });
+        });
+
+        Route::group(['prefix' => 'supplier', 'middleware' => ['precognitive'], 'as' => '.supplier'], function () {
+            Route::group(['prefix' => 'supplier', 'as' => '.supplier'], function () {
+                Route::post('save', [SupplierController::class, 'store'])->name('.save');
+                Route::post('edit/{supplier:ulid}', [SupplierController::class, 'update'])->name('.edit');
+                Route::post('delete/{supplier:ulid}', [SupplierController::class, 'delete'])->name('.delete');
             });
         });
         /* #endregion */

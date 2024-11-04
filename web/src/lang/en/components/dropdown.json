@@ -6,7 +6,7 @@
             "inactive": "Inactive",
             "deleted": "Deleted"
         },
-        "productGroupCategoryDDL": {
+        "productCategoryDDL": {
             "product": "Product",
             "service": "Service"
         },
