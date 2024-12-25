@@ -14,6 +14,7 @@ class RepToPascalThis extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'company_id',
         'code',
         'remarks',
     ];

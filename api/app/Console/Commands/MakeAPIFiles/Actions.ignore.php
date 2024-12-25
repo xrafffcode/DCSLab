@@ -56,6 +56,7 @@ class RepToPascalThisActions
         ?int $limit
     ) {
         $query = RepToPascalThis::with('company')->withTrashed()
+            ->withAggregate('company', 'name')
             ->where(function ($query) use ($withTrashed, $search, $companyId) {
                 if ($withTrashed == true) {
                     $query = $query->withTrashed();
@@ -71,7 +72,7 @@ class RepToPascalThisActions
             });
 
         $query->orderBy('company_name', 'asc')
-            ->orderBy('', 'asc');
+            ->orderBy('name', 'asc');
 
         if ($limit) {
             $query->limit($limit);

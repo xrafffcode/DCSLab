@@ -3,9 +3,12 @@
 namespace App\Console\Commands;
 
 use Database\Seeders\BranchTableSeeder;
+use Database\Seeders\BrandTableSeeder;
 use Database\Seeders\CompanyTableSeeder;
-use Database\Seeders\ProductGroupTableSeeder;
+use Database\Seeders\ProductCategoryTableSeeder;
+use Database\Seeders\ProductTableSeeder;
 use Database\Seeders\RoleTableSeeder;
+use Database\Seeders\UnitTableSeeder;
 use Database\Seeders\UserTableSeeder;
 use Database\Seeders\WarehouseTableSeeder;
 use Illuminate\Console\Command;
@@ -90,10 +93,26 @@ class AppSeed extends Command
                 case 'warehousetableseeder':
                     $this->runWarehouseTableSeederInteractive();
                     break;
-                case 'productgroup':
-                case 'productgrouptableseeder':
-                    $this->runProductGroupTableSeederInteractive();
+                case 'productcategory':
+                case 'productcategorytableseeder':
+                    $this->runProductCategoryTableSeederInteractive();
                     break;
+                case 'brand':
+                case 'brandtableseeder':
+                    $this->runBrandTableSeederInteractive();
+                    break;
+                case 'unit':
+                case 'unittableseeder':
+                    $this->runUnitTableSeederInteractive();
+                    break;
+                case 'product':
+                case 'producttableseeder':
+                    $this->runProductTableSeederInteractive();
+                    break;
+                    // case 'supplier':
+                    // case 'suppliertableseeder':
+                    //     $this->runSupplierTableSeederInteractive();
+                    //     break;
                 default:
                     $this->info('Cannot find seeder for '.$args);
                     break;
@@ -116,8 +135,16 @@ class AppSeed extends Command
         $progressBar->advance();
         $this->runBranchTableSeeder(5, 0);
         $progressBar->advance();
-        $this->runProductGroupTableSeeder(5, 0);
+        $this->runProductCategoryTableSeeder(5, 0);
         $progressBar->advance();
+        $this->runBrandTableSeeder(5, 0);
+        $progressBar->advance();
+        $this->runUnitTableSeeder(5, 0);
+        $progressBar->advance();
+        $this->runProductTableSeeder(5, 0);
+        $progressBar->advance();
+        // $this->runSupplierTableSeeder(5, 0);
+        // $progressBar->advance();
 
         $progressBar->finish();
         $this->info('');
@@ -219,9 +246,33 @@ class AppSeed extends Command
         $seeder->callWith(WarehouseTableSeeder::class, [$warehousePerCompanies, $onlyThisCompanyId]);
     }
 
-    private function runProductGroupTableSeeder($productGroupPerCompanies, $onlyThisCompanyId)
+    private function runProductCategoryTableSeeder($productCategoryPerCompanies, $onlyThisCompanyId)
     {
-        $seeder = new ProductGroupTableSeeder();
-        $seeder->callWith(ProductGroupTableSeeder::class, [$productGroupPerCompanies, $onlyThisCompanyId]);
+        $seeder = new ProductCategoryTableSeeder();
+        $seeder->callWith(ProductCategoryTableSeeder::class, [$productCategoryPerCompanies, $onlyThisCompanyId]);
     }
+
+    private function runBrandTableSeeder($brandPerCompanies, $onlyThisCompanyId)
+    {
+        $seeder = new BrandTableSeeder();
+        $seeder->callWith(BrandTableSeeder::class, [$brandPerCompanies, $onlyThisCompanyId]);
+    }
+
+    private function runUnitTableSeeder($unitPerCompanies, $onlyThisCompanyId)
+    {
+        $seeder = new UnitTableSeeder();
+        $seeder->callWith(UnitTableSeeder::class, [$unitPerCompanies, $onlyThisCompanyId]);
+    }
+
+    private function runProductTableSeeder($productPerCompanies, $onlyThisCompanyId)
+    {
+        $seeder = new ProductTableSeeder();
+        $seeder->callWith(ProductTableSeeder::class, [$productPerCompanies, $onlyThisCompanyId]);
+    }
+
+    // private function runSupplierTableSeeder($supplierPerCompanies, $onlyThisCompanyId)
+    // {
+    //     $seeder = new SupplierTableSeeder();
+    //     $seeder->callWith(SupplierTableSeeder::class, [$supplierPerCompanies, $onlyThisCompanyId]);
+    // }
 }

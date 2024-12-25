@@ -6,7 +6,7 @@
             "inactive": "Tidak Aktif",
             "deleted": "Dihapus"
         },
-        "productGroupCategoryDDL": {
+        "productCategoryDDL": {
             "product": "Produk",
             "service": "Jasa"
         },

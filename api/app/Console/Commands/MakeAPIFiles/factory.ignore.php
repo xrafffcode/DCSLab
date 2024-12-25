@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class RepToPascalThis extends Factory
+class RepToPascalThisFactory extends Factory
 {
     public function definition(): array
     {

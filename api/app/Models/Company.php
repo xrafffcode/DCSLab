@@ -45,9 +45,29 @@ class Company extends Model
         return $this->hasMany(Warehouse::class);
     }
 
-    public function productGroups()
+    public function productCategories()
     {
-        return $this->hasMany(ProductGroup::class);
+        return $this->hasMany(ProductCategory::class);
+    }
+
+    public function brands()
+    {
+        return $this->hasMany(Brand::class);
+    }
+
+    public function units()
+    {
+        return $this->hasMany(Unit::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class);
     }
 
     public function scopeSearch($query, string $search)

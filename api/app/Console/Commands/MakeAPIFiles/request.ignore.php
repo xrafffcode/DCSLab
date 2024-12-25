@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Enums\RecordStatus;
 use App\Helpers\HashidsHelper;
 use App\Models\RepToPascalThis;
-use App\Rules\IsValidBranch;
 use App\Rules\IsValidCompany;
 use App\Rules\RepToPascalThisStoreValidCode;
 use App\Rules\RepToPascalThisUpdateValidCode;
@@ -57,7 +56,6 @@ class RepToPascalThisRequest extends FormRequest
 
                     'search' => ['nullable', 'string'],
                     'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
-                    'branch_id' => ['nullable', 'integer', 'bail', new IsValidBranch($this->company_id, false)],
                     'status' => ['nullable', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
 
                     'paginate' => ['required', 'boolean'],
