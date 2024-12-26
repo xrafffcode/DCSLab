@@ -95,25 +95,25 @@ class DashboardActions
         $company = [
             'icon' => 'ChevronRight',
             'pageName' => 'side-menu-company-company',
-            'title' => 'components.menu.company-company',
+            'title' => 'components.menu.company',
         ];
 
         $branches = [
             'icon' => 'ChevronRight',
             'pageName' => 'side-menu-company-branch',
-            'title' => 'components.menu.company-branch',
+            'title' => 'components.menu.branch',
         ];
 
         $warehouse = [
             'icon' => 'ChevronRight',
             'pageName' => 'side-menu-company-warehouse',
-            'title' => 'components.menu.company-warehouse',
+            'title' => 'components.menu.warehouse',
         ];
 
         $root_array = [
             'icon' => 'Umbrella',
             'pageName' => 'side-menu-company',
-            'title' => 'components.menu.company',
+            'title' => 'components.menu.company-management',
             'subMenu' => [],
         ];
 
