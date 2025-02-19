@@ -70,9 +70,7 @@ class CompanyRequest extends FormRequest
                     'limit' => ['nullable', 'integer', 'min:10'],
                 ];
             case 'read':
-                return [
-
-                ];
+                return [];
             case 'store':
                 return [
                     /* Test Validation Error For Code */
@@ -94,9 +92,7 @@ class CompanyRequest extends FormRequest
                     'status' => ['required', new Enum(RecordStatus::class), new CompanyUpdateValidStatus($this->input('default'))],
                 ];
             case 'delete':
-                return [
-
-                ];
+                return [];
             default:
                 return [
                     '' => 'required',

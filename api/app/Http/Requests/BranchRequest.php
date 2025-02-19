@@ -15,6 +15,7 @@ use App\Rules\BranchUpdateValidStatus;
 use App\Rules\IsValidCompany;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
 class BranchRequest extends FormRequest
 {
@@ -86,7 +87,7 @@ class BranchRequest extends FormRequest
                     'contact' => ['nullable', 'string', 'max:255'],
                     'is_main' => ['required', 'boolean'],
                     'remarks' => ['nullable', 'string', 'max:255'],
-                    'status' => ['required', 'integer', 'in:' . implode(',', RecordStatus::toArrayValue()), 'bail', new BranchStoreValidStatus($this->input('is_main'))],
+                    'status' => ['required', new Enum(RecordStatus::class), 'bail', new BranchStoreValidStatus($this->input('is_main'))],
                 ];
             case 'update':
                 return [
@@ -98,7 +99,7 @@ class BranchRequest extends FormRequest
                     'contact' => ['nullable', 'string', 'max:255'],
                     'is_main' => ['required', 'boolean', 'bail', new BranchUpdateValidIsMain($this->route('branch'))],
                     'remarks' => ['nullable', 'string', 'max:255'],
-                    'status' => ['required', 'integer', 'in:' . implode(',', RecordStatus::toArrayValue()), 'bail', new BranchUpdateValidStatus($this->route('is_main'))],
+                    'status' => ['required', new Enum(RecordStatus::class), 'bail', new BranchUpdateValidStatus($this->route('is_main'))],
                 ];
             case 'delete':
                 $rules_delete = [];
@@ -146,7 +147,7 @@ class BranchRequest extends FormRequest
 
                     'search' => $this->has('search') ? $this->search : null,
                     'is_main' => $this->has('is_main') ? $this->is_main : null,
-                    'status' => $this->has('status') ? $this->status : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
 
                     'page' => $this->has('page') ? $this->page : null,
                     'per_page' => $this->has('per_page') ? $this->per_page : null,
@@ -156,6 +157,10 @@ class BranchRequest extends FormRequest
                 $this->merge([]);
                 break;
             case 'store':
+                $this->merge([
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
+                ]);
+                break;
             case 'update':
                 $this->merge([
                     'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
@@ -163,6 +168,7 @@ class BranchRequest extends FormRequest
                     'city' => $this->has('city') ? $this->city : null,
                     'contact' => $this->has('contact') ? $this->contact : null,
                     'remarks' => $this->has('remarks') ? $this->remarks : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
                 ]);
                 break;
             default:
