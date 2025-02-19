@@ -38,7 +38,7 @@ class BranchResource extends JsonResource
         if (! is_null($deleted_at)) {
             return RecordStatus::DELETED->name;
         } else {
-            return $status->value;
+            return $status->name;
         }
     }
 }
