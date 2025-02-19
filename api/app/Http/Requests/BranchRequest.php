@@ -158,6 +158,7 @@ class BranchRequest extends FormRequest
                 break;
             case 'store':
                 $this->merge([
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
                     'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
                 ]);
                 break;
