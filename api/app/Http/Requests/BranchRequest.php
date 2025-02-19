@@ -68,16 +68,14 @@ class BranchRequest extends FormRequest
 
                     'search' => ['nullable', 'string'],
                     'is_main' => ['nullable', 'boolean'],
-                    'status' => ['nullable', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
+                    'status' => ['nullable', 'integer', 'in:' . implode(',', RecordStatus::toArrayValue())],
 
                     'paginate' => ['required', 'boolean'],
                     'page' => ['required_if:paginate,true', 'numeric', 'min:1'],
                     'per_page' => ['required_if:paginate,true', 'numeric', 'min:10'],
                 ];
             case 'read':
-                return [
-
-                ];
+                return [];
             case 'store':
                 return [
                     'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
@@ -88,7 +86,7 @@ class BranchRequest extends FormRequest
                     'contact' => ['nullable', 'string', 'max:255'],
                     'is_main' => ['required', 'boolean'],
                     'remarks' => ['nullable', 'string', 'max:255'],
-                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue()), 'bail', new BranchStoreValidStatus($this->input('is_main'))],
+                    'status' => ['required', 'integer', 'in:' . implode(',', RecordStatus::toArrayValue()), 'bail', new BranchStoreValidStatus($this->input('is_main'))],
                 ];
             case 'update':
                 return [
@@ -100,12 +98,10 @@ class BranchRequest extends FormRequest
                     'contact' => ['nullable', 'string', 'max:255'],
                     'is_main' => ['required', 'boolean', 'bail', new BranchUpdateValidIsMain($this->route('branch'))],
                     'remarks' => ['nullable', 'string', 'max:255'],
-                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue()), 'bail', new BranchUpdateValidStatus($this->route('is_main'))],
+                    'status' => ['required', 'integer', 'in:' . implode(',', RecordStatus::toArrayValue()), 'bail', new BranchUpdateValidStatus($this->route('is_main'))],
                 ];
             case 'delete':
-                $rules_delete = [
-
-                ];
+                $rules_delete = [];
 
                 return $rules_delete;
             default:

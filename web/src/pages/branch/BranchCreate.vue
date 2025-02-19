@@ -144,14 +144,14 @@ const setCode = () => {
     }
 };
 
-const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
-  let ap: AlertPlaceholderProps = {
-    alertType: pAlertType,
-    title: pTitle,
-    alertList: pAlertList,
-  };
+const showAlertPlaceholder = (pAlertType: 'hidden' | 'danger' | 'success' | 'warning' | 'pending' | 'dark', pTitle: string, pAlertList: Record<string, Array<string>> | null) => {
+    let ap: AlertPlaceholderProps = {
+        alertType: pAlertType,
+        title: pTitle,
+        alertList: pAlertList,
+    };
 
-  emits('show-alertplaceholder', ap);
+    emits('show-alertplaceholder', ap);
 };
 
 const convertErrorTypeToAlertListType = (error: Error) => {
@@ -195,7 +195,8 @@ watch(
                         </FormLabel>
                         <FormInputCode v-model="branchForm.code" type="text"
                             :class="{ 'border-danger': branchForm.invalid('code') }"
-                            :placeholder="t('views.branch.fields.code')" @set-auto="setCode" @change="branchForm.validate('code')" />
+                            :placeholder="t('views.branch.fields.code')" @set-auto="setCode"
+                            @change="branchForm.validate('code')" />
                         <FormErrorMessages :messages="branchForm.errors.code" />
                     </div>
                     <div class="pb-4">
@@ -218,8 +219,7 @@ watch(
                         <FormLabel>
                             {{ t('views.branch.fields.city') }}
                         </FormLabel>
-                        <FormInput v-model="branchForm.city" type="text"
-                            :placeholder="t('views.branch.fields.city')" />
+                        <FormInput v-model="branchForm.city" type="text" :placeholder="t('views.branch.fields.city')" />
                     </div>
                     <div class="pb-4">
                         <FormLabel>
@@ -229,14 +229,14 @@ watch(
                             :placeholder="t('views.branch.fields.contact')" />
                     </div>
                     <div class="pb-4">
-                        <FormLabel :class="{ 'text-danger': branchForm.invalid('is_main') }"
-                            class="pr-5">
+                        <FormLabel :class="{ 'text-danger': branchForm.invalid('is_main') }" class="pr-5">
                             {{ t('views.branch.fields.is_main') }}
                         </FormLabel>
                         <FormSwitch>
                             <FormSwitch.Input v-model="branchForm.is_main" type="checkbox"
                                 :class="{ 'border-danger': branchForm.invalid('is_main') }"
-                                :placeholder="t('views.branch.fields.is_main')" @change="branchForm.validate('is_main')" />
+                                :placeholder="t('views.branch.fields.is_main')"
+                                @change="branchForm.validate('is_main')" />
                         </FormSwitch>
                         <FormErrorMessages :messages="branchForm.errors.is_main" />
                     </div>
