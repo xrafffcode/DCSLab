@@ -14,12 +14,12 @@ import { client, useForm } from "laravel-precognition-vue";
 export default class WarehouseService {
     private ziggyRoute: Config;
     private ziggyRouteStore = useZiggyRouteStore();
-    
+
     private errorHandlerService;
 
     constructor() {
         this.ziggyRoute = this.ziggyRouteStore.getZiggy;
-        
+
         this.errorHandlerService = new ErrorHandlerService();
     }
 
@@ -54,7 +54,6 @@ export default class WarehouseService {
             queryParams['search'] = args.search ? args.search : '';
             if (args.company_id) queryParams['company_id'] = args.company_id;
             if (args.branch_id) queryParams['branch_id'] = args.branch_id;
-            if (args.status) queryParams['status'] = args.status ? args.status : '';
             queryParams['refresh'] = args.refresh;
             queryParams['paginate'] = args.paginate;
             if (args.page) queryParams['page'] = args.page;

@@ -2,66 +2,115 @@
 // #region Imports
 import { onMounted, ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import WarehouseService from "@/services/WarehouseService";
+import BranchService from "@/services/BranchService";
 import DashboardService from "@/services/DashboardService";
 import CacheService from "@/services/CacheService";
 import { DropDownOption } from "@/types/models/DropDownOption";
+import { TwoColumnsLayout } from "@/components/Base/Form/FormLayout";
+import {
+    FormInput,
+    FormLabel,
+    FormTextarea,
+    FormSelect,
+    FormInputCode,
+    FormSwitch,
+    FormErrorMessages
+} from "@/components/Base/Form";
 import { TwoColumnsLayoutCards } from "@/components/Base/Form/FormLayout/TwoColumnsLayout.vue";
 import { CardState } from "@/types/enums/CardState";
 import Button from "@/components/Base/Button";
 import { ViewMode } from "@/types/enums/ViewMode";
 import { debounce } from "lodash";
-import { FormInput, FormLabel, FormTextarea, FormSelect, FormSwitch, FormErrorMessages } from "@/components/Base/Form";
+import Lucide from "@/components/Base/Lucide";
+import { useSelectedUserLocationStore } from "@/stores/selected-user-location";
 import { useRouter } from "vue-router";
 import { ErrorCode } from "@/types/enums/ErrorCode";
 import { type AlertPlaceholderProps } from "@/components/AlertPlaceholder/AlertPlaceholder.vue";
+import WarehouseService from "@/services/WarehouseService";
+// #endregion
+
+// #region Interfaces
 // #endregion
 
 // #region Declarations
 const { t } = useI18n();
 const router = useRouter();
-const warehouseService = new WarehouseService();
-const dashboardService = new DashboardService();
-const cacheService = new CacheService();
+const warehouseServices = new WarehouseService();
+const dashboardServices = new DashboardService();
+const cacheServices = new CacheService();
 
+const selectedUserLocationStore = useSelectedUserLocationStore();
+// #endregion
+
+// #region Props, Emits
 const emits = defineEmits(['mode-state', 'loading-state', 'update-profile', 'show-alertplaceholder']);
 // #endregion
 
 // #region Refs
 const cards = ref<Array<TwoColumnsLayoutCards>>([
-    { title: 'views.warehouse.field_groups.general_info', state: CardState.Expanded },
-    { title: 'views.warehouse.field_groups.location_info', state: CardState.Expanded }
+    { title: 'views.warehouse.field_groups.company_info', state: CardState.Expanded, },
+    { title: 'views.warehouse.field_groups.warehouse_data', state: CardState.Expanded, },
+    { title: '', state: CardState.Hidden, id: 'button' }
 ]);
 
 const statusDDL = ref<Array<DropDownOption> | null>(null);
 
-const warehouseForm = warehouseService.useWarehouseCreateForm();
+const warehouseForm = warehouseServices.useWarehouseCreateForm();
 // #endregion
 
 // #region Computed
-const isFormValid = computed(() => !warehouseForm.hasErrors);
+const isUserLocationSelected = computed(() => selectedUserLocationStore.isUserLocationSelected);
+const selectedUserLocation = computed(() => selectedUserLocationStore.selectedUserLocation);
 // #endregion
 
 // #region Lifecycle Hooks
 onMounted(async () => {
     emits('mode-state', ViewMode.FORM_CREATE);
 
+    if (!isUserLocationSelected.value) {
+        router.push({ name: 'side-menu-error-code', params: { code: ErrorCode.USERLOCATION_REQUIRED } });
+    }
+
     getDDL();
+
+    setCompanyIdData();
     loadFromCache();
 });
 // #endregion
 
 // #region Methods
-const getDDL = (): void => {
-    dashboardService.getStatusDDL().then((result: Array<DropDownOption> | null) => {
-        statusDDL.value = result;
+const setCompanyIdData = () => {
+    warehouseForm.setData({
+        company_id: selectedUserLocation.value.company.id,
     });
 };
 
 const loadFromCache = () => {
-    const data = cacheService.getLastEntity('WAREHOUSE_CREATE') as Record<string, unknown>;
+    let data = cacheServices.getLastEntity('WAREHOUSE_CREATE') as Record<string, unknown>;
     if (!data) return;
     warehouseForm.setData(data);
+};
+
+const getDDL = (): void => {
+    dashboardServices.getStatusDDL().then((result: Array<DropDownOption> | null) => {
+        statusDDL.value = result;
+    });
+};
+
+const handleExpandCard = (index: number) => {
+    if (cards.value[index].state === CardState.Collapsed) {
+        cards.value[index].state = CardState.Expanded
+    } else if (cards.value[index].state === CardState.Expanded) {
+        cards.value[index].state = CardState.Collapsed
+    }
+};
+
+const scrollToError = (id: string): void => {
+    let el = document.getElementById(id);
+
+    if (!el) return;
+
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
 const onSubmit = async () => {
@@ -73,9 +122,9 @@ const onSubmit = async () => {
     await warehouseForm.submit().then(() => {
         resetForm();
         emits('update-profile');
-        router.push({ name: 'warehouse-list' });
+        router.push({ name: 'side-menu-company-branch-list' });
     }).catch(error => {
-        const errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
+        let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
         showAlertPlaceholder('danger', '', errorList);
     }).finally(() => {
         emits('loading-state', false);
@@ -87,24 +136,30 @@ const resetForm = () => {
     warehouseForm.setErrors({});
 };
 
-const scrollToError = (id: string): void => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+const setCode = () => {
+    warehouseForm.forgetError('code');
+    if (warehouseForm.code == '_AUTO_') {
+        warehouseForm.setData({ code: '' });
+    } else {
+        warehouseForm.setData({ code: '_AUTO_' });
+    }
 };
 
-const showAlertPlaceholder = (type: 'hidden' | 'danger' | 'success' | 'warning' | 'pending' | 'dark', title: string, alertList: Record<string, Array<string>> | null) => {
-    const alertProps: AlertPlaceholderProps = {
-        alertType: type,
-        title,
-        alertList,
+const showAlertPlaceholder = (pAlertType: 'hidden' | 'danger' | 'success' | 'warning' | 'pending' | 'dark', pTitle: string, pAlertList: Record<string, Array<string>> | null) => {
+    let ap: AlertPlaceholderProps = {
+        alertType: pAlertType,
+        title: pTitle,
+        alertList: pAlertList,
     };
-    emits('show-alertplaceholder', alertProps);
+
+    emits('show-alertplaceholder', ap);
 };
 
 const convertErrorTypeToAlertListType = (error: Error) => {
     const record: Record<string, Array<string>> = {};
+
     record.error = [error.message];
+
     return record;
 };
 // #endregion
@@ -113,7 +168,7 @@ const convertErrorTypeToAlertListType = (error: Error) => {
 watch(
     warehouseForm,
     debounce((newValue): void => {
-        cacheService.setLastEntity('WAREHOUSE_CREATE', newValue.data());
+        cacheServices.setLastEntity('WAREHOUSE_CREATE', newValue.data())
     }, 500),
     { deep: true }
 );
@@ -122,89 +177,84 @@ watch(
 
 <template>
     <form id="warehouseForm" @submit.prevent="onSubmit">
-        <TwoColumnsLayout :cards="cards" :using-side-tab="false">
-            <!-- Card 1: General Info -->
+        <TwoColumnsLayout :cards="cards" :using-side-tab="false" @handle-expand-card="handleExpandCard">
             <template #card-items-0>
                 <div class="p-5">
-                    <!-- Company ID -->
-                    <FormLabel>{{ t('views.warehouse.fields.company_id') }}</FormLabel>
+                    <FormLabel>
+                        {{ selectedUserLocation.company.code }}
+                        <br />
+                        {{ selectedUserLocation.company.name }}
+                    </FormLabel>
                     <FormInput type="hidden" v-model="warehouseForm.company_id" />
-
-                    <!-- Branch ID -->
-                    <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.branch_id') }}</FormLabel>
-                        <FormInput v-model="warehouseForm.branch_id" type="text" placeholder="Enter Branch ID" />
-                        <FormErrorMessages :messages="warehouseForm.errors.branch_id" />
-                    </div>
-
-                    <!-- Code -->
-                    <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.code') }}</FormLabel>
-                        <FormInput v-model="warehouseForm.code" type="text" placeholder="Enter Code" />
-                        <FormErrorMessages :messages="warehouseForm.errors.code" />
-                    </div>
                 </div>
             </template>
-
-            <!-- Card 2: Location Info -->
             <template #card-items-1>
                 <div class="p-5">
-                    <!-- Name -->
                     <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.name') }}</FormLabel>
-                        <FormInput v-model="warehouseForm.name" type="text" placeholder="Enter Name" />
+                        <FormLabel :class="{ 'text-danger': warehouseForm.invalid('code') }">
+                            {{ t('views.warehouse.fields.code') }}
+                        </FormLabel>
+                        <FormInputCode v-model="warehouseForm.code" type="text"
+                            :class="{ 'border-danger': warehouseForm.invalid('code') }"
+                            :placeholder="t('views.warehouse.fields.code')" @set-auto="setCode"
+                            @change="warehouseForm.validate('code')" />
+                        <FormErrorMessages :messages="warehouseForm.errors.code" />
+                    </div>
+                    <div class="pb-4">
+                        <FormLabel :class="{ 'text-danger': warehouseForm.invalid('name') }">
+                            {{ t('views.warehouse.fields.name') }}
+                        </FormLabel>
+                        <FormInput v-model="warehouseForm.name" type="text"
+                            :class="{ 'border-danger': warehouseForm.invalid('name') }"
+                            :placeholder="t('views.warehouse.fields.name')" @change="warehouseForm.validate('name')" />
                         <FormErrorMessages :messages="warehouseForm.errors.name" />
                     </div>
-
-                    <!-- Address -->
                     <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.address') }}</FormLabel>
-                        <FormTextarea v-model="warehouseForm.address" placeholder="Enter Address" />
-                        <FormErrorMessages :messages="warehouseForm.errors.address" />
+                        <FormLabel>
+                            {{ t('views.warehouse.fields.address') }}
+                        </FormLabel>
+                        <FormTextarea v-model="warehouseForm.address" type="text"
+                            :placeholder="t('views.warehouse.fields.address')" />
                     </div>
-
-                    <!-- City -->
                     <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.city') }}</FormLabel>
-                        <FormInput v-model="warehouseForm.city" type="text" placeholder="Enter City" />
-                        <FormErrorMessages :messages="warehouseForm.errors.city" />
+                        <FormLabel>
+                            {{ t('views.warehouse.fields.city') }}
+                        </FormLabel>
+                        <FormInput v-model="warehouseForm.city" type="text"
+                            :placeholder="t('views.warehouse.fields.city')" />
                     </div>
-
-                    <!-- Contact -->
                     <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.contact') }}</FormLabel>
-                        <FormInput v-model="warehouseForm.contact" type="text" placeholder="Enter Contact" />
-                        <FormErrorMessages :messages="warehouseForm.errors.contact" />
+                        <FormLabel>
+                            {{ t('views.warehouse.fields.contact') }}
+                        </FormLabel>
+                        <FormInput v-model="warehouseForm.contact" type="text"
+                            :placeholder="t('views.warehouse.fields.contact')" />
                     </div>
-                </div>
-            </template>
-
-            <!-- Card 3: Additional Info -->
-            <template #card-items-2>
-                <div class="p-5">
-                    <!-- Remarks -->
                     <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.remarks') }}</FormLabel>
-                        <FormTextarea v-model="warehouseForm.remarks" placeholder="Enter Remarks" rows="3" />
-                        <FormErrorMessages :messages="warehouseForm.errors.remarks" />
+                        <FormLabel>
+                            {{ t('views.warehouse.fields.remarks') }}
+                        </FormLabel>
+                        <FormTextarea v-model="warehouseForm.remarks" type="text"
+                            :placeholder="t('views.warehouse.fields.remarks')" rows="3" />
                     </div>
-
-                    <!-- Status -->
                     <div class="pb-4">
-                        <FormLabel>{{ t('views.warehouse.fields.status') }}</FormLabel>
-                        <FormSelect v-model="warehouseForm.status">
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
+                        <FormLabel :class="{ 'text-danger': warehouseForm.invalid('status') }">
+                            {{ t('views.warehouse.fields.status') }}
+                        </FormLabel>
+                        <FormSelect v-model="warehouseForm.status"
+                            :class="{ 'border-danger': warehouseForm.invalid('status') }"
+                            @change="warehouseForm.validate('status')">
+                            <option value="">{{ t('components.dropdown.placeholder') }}</option>
+                            <option v-for="c in statusDDL" :key="c.code" :value="c.code">{{ t(c.name) }}</option>
                         </FormSelect>
                         <FormErrorMessages :messages="warehouseForm.errors.status" />
                     </div>
                 </div>
             </template>
-
-            <!-- Submit and Reset Buttons -->
             <template #card-items-button>
                 <div class="flex gap-4">
-                    <Button type="submit" href="#" variant="primary" class="w-28 shadow-md" :disabled="warehouseForm.validating || warehouseForm.hasErrors">
+                    <Button type="submit" href="#" variant="primary" class="w-28 shadow-md"
+                        :disabled="warehouseForm.validating || warehouseForm.hasErrors">
                         <Lucide v-if="warehouseForm.validating" icon="Loader" class="animate-spin" />
                         <template v-else>
                             {{ t("components.buttons.submit") }}
@@ -218,4 +268,3 @@ watch(
         </TwoColumnsLayout>
     </form>
 </template>
-

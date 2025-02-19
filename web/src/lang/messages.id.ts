@@ -19,6 +19,7 @@ import profile from "./id/views/profile.json";
 import user from "./id/views/user.json";
 import company from "./id/views/company.json"
 import branch from "./id/views/branch.json"
+import warehouse from "./id/views/warehouse.json"
 import error from "./id/views/error.json"
 
 export default {
@@ -45,6 +46,7 @@ export default {
         "user": user,
         "company": company,
         "branch": branch,
+        "warehouse": warehouse,
         "error": error,
     }
 }
