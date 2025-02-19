@@ -158,7 +158,7 @@ const showNotification = (pTitle: string, pContent: string) => {
   emits('show-notification', n);
 };
 
-const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|'pending'|'dark', pTitle: string, pAlertList: Record<string, Array<string>>|null) => {
+const showAlertPlaceholder = (pAlertType: 'hidden' | 'danger' | 'success' | 'warning' | 'pending' | 'dark', pTitle: string, pAlertList: Record<string, Array<string>> | null) => {
   let ap: AlertPlaceholderProps = {
     alertType: pAlertType,
     title: pTitle,
@@ -204,7 +204,7 @@ const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|
               </Table.Td>
             </Table.Tr>
           </template>
-          <template v-for="( item, itemIdx ) in branchLists.data" :key="item.ulid">
+          <template v-for="(item, itemIdx) in branchLists.data" :key="item.ulid">
             <Table.Tr class="intro-x">
               <Table.Td>{{ item.code }}</Table.Td>
               <Table.Td>{{ item.name }}</Table.Td>
@@ -222,7 +222,7 @@ const showAlertPlaceholder = (pAlertType: 'hidden'|'danger'|'success'|'warning'|
                     <Lucide icon="Info" class="w-4 h-4" />
                   </Button>
                   <Button variant="outline-secondary" @click="editSelected(itemIdx)">
-                    <Lucide icon="CheckSquare" class="w-4 h-4" />
+                    <Lucide icon="Pen" class="w-4 h-4" />
                   </Button>
                   <Button variant="outline-secondary" @click="deleteSelected(itemIdx)">
                     <Lucide icon="Trash2" class="w-4 h-4 text-danger" />
