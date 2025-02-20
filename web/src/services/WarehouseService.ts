@@ -7,10 +7,9 @@ import { Collection } from "../types/resources/Collection";
 import { ServiceResponse } from "../types/services/ServiceResponse";
 import { AxiosError, AxiosResponse, isAxiosError } from "axios";
 import ErrorHandlerService from "./ErrorHandlerService";
-import { ReadAnyRequest } from "../types/services/WarehouseServiceRequest";
 import { StatusCode } from "../types/enums/StatusCode";
 import { client, useForm } from "laravel-precognition-vue";
-
+import { ReadAnyRequest } from "../types/services/ServiceRequest";
 export default class WarehouseService {
     private ziggyRoute: Config;
     private ziggyRouteStore = useZiggyRouteStore();
@@ -58,6 +57,8 @@ export default class WarehouseService {
             queryParams['paginate'] = args.paginate;
             if (args.page) queryParams['page'] = args.page;
             if (args.per_page) queryParams['per_page'] = args.per_page;
+            queryParams['with_trashed'] = args.with_trashed ?? false;
+
 
             const url = route('api.get.db.company.warehouse.read_any', {
                 _query: queryParams

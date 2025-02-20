@@ -6,4 +6,5 @@ export interface ReadAnyRequest {
     paginate: boolean,
     page?: number,
     per_page?: number,
+    with_trashed?: boolean,
 }

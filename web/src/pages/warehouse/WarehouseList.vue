@@ -93,6 +93,7 @@ const getWarehouses = async (search: string, refresh: boolean, paginate: boolean
         paginate: paginate,
         page: page,
         per_page: per_page,
+        with_trashed: false,
     };
 
     let result: ServiceResponse<Collection<Array<Warehouse>> | Resource<Array<Warehouse>> | null> = await warehouseServices.readAny(searchReq);
