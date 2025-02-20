@@ -2,7 +2,6 @@
 // #region Imports
 import { onMounted, ref, computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import BranchService from "@/services/BranchService";
 import DashboardService from "@/services/DashboardService";
 import CacheService from "@/services/CacheService";
 import { DropDownOption } from "@/types/models/DropDownOption";
@@ -82,6 +81,7 @@ onMounted(async () => {
 const setCompanyIdData = () => {
     warehouseForm.setData({
         company_id: selectedUserLocation.value.company.id,
+        branch_id: selectedUserLocation.value.branch.id,
     });
 };
 
@@ -122,7 +122,7 @@ const onSubmit = async () => {
     await warehouseForm.submit().then(() => {
         resetForm();
         emits('update-profile');
-        router.push({ name: 'side-menu-company-branch-list' });
+        router.push({ name: 'side-menu-company-warehouse-list' });
     }).catch(error => {
         let errorList: Record<string, Array<string>> = convertErrorTypeToAlertListType(error as Error);
         showAlertPlaceholder('danger', '', errorList);
