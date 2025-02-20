@@ -72,8 +72,8 @@ onMounted(async () => {
 
     getDDL();
 
-    setCompanyIdData();
     loadFromCache();
+    setCompanyIdData();
 });
 // #endregion
 
