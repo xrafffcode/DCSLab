@@ -9,10 +9,13 @@ use App\Rules\IsValidBranch;
 use App\Rules\IsValidCompany;
 use App\Rules\WarehouseStoreValidCode;
 use App\Rules\WarehouseStoreValidName;
+use App\Rules\WarehouseStoreValidStatus;
 use App\Rules\WarehouseUpdateValidCode;
 use App\Rules\WarehouseUpdateValidName;
+use App\Rules\WarehouseUpdateValidStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
 class WarehouseRequest extends FormRequest
 {
@@ -65,7 +68,7 @@ class WarehouseRequest extends FormRequest
                     'search' => ['nullable', 'string'],
                     'company_id' => ['required', 'integer', 'bail', new IsValidCompany()],
                     'branch_id' => ['nullable', 'integer', 'bail', new IsValidBranch($this->company_id, false)],
-                    'status' => ['nullable', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
+                    'status' => ['nullable', 'integer', 'in:' . implode(',', RecordStatus::toArrayValue())],
 
                     'paginate' => ['required', 'boolean'],
                     'page' => ['nullable', 'required_if:paginate,true', 'numeric', 'min:1'],
@@ -84,7 +87,8 @@ class WarehouseRequest extends FormRequest
                     'city' => ['nullable', 'string', 'max:255'],
                     'contact' => ['nullable', 'string', 'max:255'],
                     'remarks' => ['nullable', 'string', 'max:255'],
-                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
+                    'status' => ['required', new Enum(RecordStatus::class), new WarehouseStoreValidStatus($this->input('default'))],
+
                 ];
             case 'update':
                 return [
@@ -96,12 +100,11 @@ class WarehouseRequest extends FormRequest
                     'city' => ['nullable', 'string', 'max:255'],
                     'contact' => ['nullable', 'string', 'max:255'],
                     'remarks' => ['nullable', 'string', 'max:255'],
-                    'status' => ['required', 'integer', 'in:'.implode(',', RecordStatus::toArrayValue())],
-                ];
-            case 'delete':
-                return [
+                    'status' => ['required', new Enum(RecordStatus::class), new WarehouseUpdateValidStatus($this->input('default'))],
 
                 ];
+            case 'delete':
+                return [];
             default:
                 return [
                     '' => 'required',
@@ -153,6 +156,16 @@ class WarehouseRequest extends FormRequest
                 $this->merge([]);
                 break;
             case 'store':
+                $this->merge([
+                    'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
+                    'branch_id' => $this->has('branch_id') ? HashidsHelper::decodeId($this->branch_id) : null,
+                    'address' => $this->has('address') ? $this['address'] : null,
+                    'city' => $this->has('city') ? $this['city'] : null,
+                    'contact' => $this->has('contact') ? $this['contact'] : null,
+                    'remarks' => $this->has('remarks') ? $this['remarks'] : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
+                ]);
+                break;
             case 'update':
                 $this->merge([
                     'company_id' => $this->has('company_id') ? HashidsHelper::decodeId($this->company_id) : null,
@@ -161,6 +174,7 @@ class WarehouseRequest extends FormRequest
                     'city' => $this->has('city') ? $this['city'] : null,
                     'contact' => $this->has('contact') ? $this['contact'] : null,
                     'remarks' => $this->has('remarks') ? $this['remarks'] : null,
+                    'status' => RecordStatus::isValid($this->status) ? RecordStatus::resolveToEnum($this->status)->value : null,
                 ]);
                 break;
             default:
