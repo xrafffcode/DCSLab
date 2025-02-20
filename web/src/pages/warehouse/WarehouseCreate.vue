@@ -72,8 +72,8 @@ onMounted(async () => {
 
     getDDL();
 
-    setCompanyIdData();
     loadFromCache();
+    setCompanyIdData();
 });
 // #endregion
 
@@ -186,6 +186,7 @@ watch(
                         {{ selectedUserLocation.company.name }}
                     </FormLabel>
                     <FormInput type="hidden" v-model="warehouseForm.company_id" />
+                    <FormInput type="hidden" v-model="warehouseForm.branch_id" />
                 </div>
             </template>
             <template #card-items-1>
